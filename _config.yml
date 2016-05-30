@@ -7,7 +7,8 @@
 
 # Site Settings
 locale                   : "en-US"
-title                    : "IOS XR | Cisco | Software Management | Documentation | xrdocs"
+title                    : "IOS XR Software Management and ZTP @xrdocs"
+title_short              : "Software-Management @xrdocs"
 title_separator          : "|"
 name                     : &name "Cisco Systems Inc"
 description              : &description "Documentation, Blogs and Tutorials on the Software Management and ZTP capabilities in IOS-XR"
