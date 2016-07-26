@@ -1,6 +1,6 @@
 ---
 modified: '2016-07-26 15:51 -0700'
-published: true
+published: false
 permalink: /techdocs/iPXE_Deep_Dive
 excerpt: iPXE Deep Dive
 tags:
