@@ -7,10 +7,7 @@ tags:
   - iosxr
 position: hidden
 ---
-## A New Post
-
-
-Introduction
+## Introduction
 
 iPXE is an open source boot firmware (licensed under the GNU GPL with some portions under GPL-compatible licenses). It is fully backward compatible with PXE but include several enhancement. The enhancement that are important for IOS-XR are the following:
 
