@@ -24,3 +24,12 @@ One or more RPMs
 A Package-mdata.txt that contains a MD5 checksum of all the packages in the tar file.
 
 ![Anatomy of RPM]({{site.baseurl}}/images/RPM.png)
+
+## XR Packages Installation 
+Within IOS-XR, two new CLI commands have been introduced that complement the existing ones: install update and install upgrade, described Table 1. These new commands require an external packages repository accessible through FTP/SFTP/SCP/TFTP or HTTP.
+
+| Command   | Description |
+| install update source <repository> | When no package is specified, update latest SMUs of all installed packages.
+ |
+| install upgrade source <repository> version <ver_num> | Upgrade the base image to the specified version. All installed packages are upgraded to same release as the base package.|
+
