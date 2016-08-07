@@ -1,11 +1,12 @@
 ---
-published: false
+published: true
 date: '2016-08-06 17:06 -0700'
 title: Introduction to RPM
 author: pwariche
 excerpt: Introduction to RPM Package Manager
 tags:
   - iosxr
+  - linux
 ---
 ## Introduction
 
