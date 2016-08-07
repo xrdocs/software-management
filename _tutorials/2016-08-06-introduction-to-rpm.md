@@ -30,6 +30,5 @@ Within IOS-XR, two new CLI commands have been introduced that complement the exi
 
 | Command   | Description |
 | install update source <repository> | When no package is specified, update latest SMUs of all installed packages.
- |
-| install upgrade source <repository> version <ver_num> | Upgrade the base image to the specified version. All installed packages are upgraded to same release as the base package.|
+| install upgrade source <repository> version <ver_num> | Upgrade the base image to the specified version. All installed packages are upgraded to same release as the base package.
 
