@@ -26,10 +26,19 @@ A Software Maintenance Update (SMU) will be published in the form of tape archiv
 ![Anatomy of RPM]({{site.baseurl}}/images/RPM.png)
 
 ## XR Packages Installation 
-Within IOS-XR, two new CLI commands have been introduced that complement the existing ones: install update and install upgrade, described Table 1. These new commands require an external packages repository accessible through FTP/SFTP/SCP/TFTP or HTTP.
+Within IOS-XR, two new CLI commands have been introduced that complement the existing ones: "install update" and "install upgrade", described Table 1. These new commands require an external packages repository accessible through FTP/SFTP/SCP/TFTP or HTTP.
 
 | Command   | Description |
 | install update source <repository> | When no package is specified, update latest SMUs of all installed packages. |
 | install upgrade source <repository> version <ver_num> | Upgrade the base image to the specified version. All installed packages are upgraded to same release as the base package. |
 
-
+```shell
+RP/0/RP0/CPU0:pod-rtr#install  update source ?
+   WORD  Enter source directory for the package(s)
+         Example: 
+          sftp://user@server/directory/
+          scp://user@server/directory/
+          ftp://user@server/directory/
+          tftp://server/directory/
+          http://server/directory/
+ ```
