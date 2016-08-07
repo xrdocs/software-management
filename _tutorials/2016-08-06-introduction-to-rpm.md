@@ -23,6 +23,4 @@ A Readme.txt file describing the content of the SMU
 One or more RPMs
 A Package-mdata.txt that contains a MD5 checksum of all the packages in the tar file.
 
-![<image context>]({{site.baseurl}}/https://github.com/xrdocs/xrdocs-images/blob/gh-pages/assets/tutorial-images/RPM.png)
-
-![RPM.png]({{site.baseurl}}/images/RPM.png)
+![Anatomy of RPM]({{site.baseurl}}/images/RPM.png)
