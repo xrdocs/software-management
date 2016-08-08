@@ -254,7 +254,8 @@ Mar 10 22:41:49 Install operation 25 finished successfully
 
 Any Linux distribution installed with the RPM utilities allows you to look at the content of packages, this is very useful to analyze dependencies and verify package integrity outside of the router. Click on the COMPUTE tab (ciscortr1) and navigate to the web server packages directory. In this example we use the “-l” switch to display the full path of all the files inside the package.
 NOTE: Notice the extra -p switch used to query uninstalled packages.
-```
+
+```shell
 cisco@compute:~$ cd ~/web_server/xrv9k/
 cisco@compute:~/web_server/xrv9k$ rpm -qpl xrv9k-k9sec-1.0.0.0-r600.x86_64.rpm-6.0.0
 /
