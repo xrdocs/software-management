@@ -32,13 +32,156 @@ Within IOS-XR, two new CLI commands have been introduced that complement the exi
 | install update source <repository> | When no package is specified, update latest SMUs of all installed packages. |
 | install upgrade source <repository> version <ver_num> | Upgrade the base image to the specified version. All installed packages are upgraded to same release as the base package. |
 
-```
-RP/0/RP0/CPU0:pod-rtr#install  update source ?
+```RP/0/RP0/CPU0:pod-rtr#install  update source ?
    WORD  Enter source directory for the package(s)   
          Example: 
           sftp://user@server/directory/
           scp://user@server/directory/
           ftp://user@server/directory/
           tftp://server/directory/
-          http://server/directory/;
- ```
+          http://server/directory/
+```
+In the example below the k9sec package is installed using the "install update" command. After initiating the command, you can issue a "show install request" to monitor the status of the package installation.
+
+```
+RP/0/RP0/CPU0:pod-rtr#install update source http://192.168.122.1:8080/xrv9k xrv9k-k9sec
+Sat Feb 13 17:18:59.981 UTC
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Update in progress...
+Scheme : http
+Hostname : 192.168.122.1:8080
+Collecting software state..
+Update packages :
+    xrv9k-k9sec
+Fetching .... xrv9k-k9sec-1.0.0.0-r600.x86_64.rpm-6.0.0
+Adding packages
+    xrv9k-k9sec-1.0.0.0-r600.x86_64.rpm-6.0.0
+Feb 13 17:19:08 Install operation 22 started by root:
+install add source /misc/disk1/install_tmp_staging_area/6.0.0 xrv9k-k9sec-1.0.0.0-r600.x86_64.rpm-6.0.0
+Feb 13 17:19:09 Install operation will continue in the background
+
+Feb 13 17:19:12 Install operation 20 finished successfully
+Install add operation successful
+Activating xrv9k-k9sec-1.0.0.0-r600
+Feb 13 17:19:14 Install operation 23 started by root:
+  install activate pkg xrv9k-k9sec-1.0.0.0-r600
+Feb 13 17:19:14 Package list:
+Feb 13 17:19:14     xrv9k-k9sec-1.0.0.0-r600
+Feb 13 17:19:16 Install operation will continue in the background
+ 
+RP/0/RP0/CPU0:pod-rtr#
+ 
+ 
+This product contains cryptographic features and is subject to United
+States and local country laws governing import, export, transfer and
+use. Delivery of Cisco cryptographic products does not imply third-party
+authority to import, export, distribute or use encryption. Importers,
+exporters, distributors and users are responsible for compliance with
+U.S. and local country laws. By using this product you agree to comply
+with applicable laws and regulations. If you are unable to comply with
+U.S. and local laws, return this product immediately.
+
+A summary of U.S. laws governing Cisco cryptographic products may be
+found at:
+http://www.cisco.com/wwl/export/crypto/tool/stqrg.html
+
+If you require further assistance please contact us by sending email to
+export@cisco.com.
+
+Feb 13 17:20:12 Install operation 21 finished successfully
+```
+
+All the install commands log their progress. You can enter "show install log" to review the installation log file. This command is useful for identifying the reason for any failure.
+
+```
+RP/0/RP0/CPU0:pod-rtr#show install log 21
+Tue Feb 23 17:54:00.961 UTC
+Feb 23 17:51:14 Install operation 21 started by root:
+      install activate pkg xrv9k-k9sec-1.0.0.0-r600
+Feb 23 17:51:14 Package list:
+Feb 23 17:51:14     xrv9k-k9sec-1.0.0.0-r600
+Feb 23 17:51:15 Action 1: install prepare action started
+Feb 23 17:51:17 Install operation will continue in the background
+Feb 23 17:51:17 The prepared software is set to be activated with process restart
+Feb 23 17:51:18 Start preparing software for local installation
+Feb 23 17:51:19 Action 1: install prepare action finished successfully
+Feb 23 17:51:20 Action 2: install activate action started
+Feb 23 17:51:20 The software will be activated with process restart
+Feb 23 17:51:22 Activating XR packages
+Feb 23 17:51:58 0 processes affected at node 0/RP0/CPU0
+Feb 23 17:52:10 Action 2: install activate action finished successfully
+Feb 23 17:52:11 Install operation 21 finished successfully
+Feb 23 17:52:11 Ending operation 21
+Install add operation successful
+```
+
+## XR Package Structure 
+Enter the following commands to better understand the structure of the installed packages. We start by opening a Linux Shell prompt by typing “run” from the IOS XR command line interface. After typing, “run” you are in a full Bash shell environment of the XR container with all the traditional Linux tools at your fingertips. You can return to the IOS XR CLI by typing “exit”. Since all IOS XR packages used the RPM format, we will use the Linux rpm utility to inspect their content. The “-q” switch used below is used to query the installed packages database and the “-i” switch display the general information contained in the metadata of the RPM package. For more information on the rpm utility, you can consult the man page on the COMPUTE shell, simply type “man rpm”.
+RP/0/RP0/CPU0:pod-rtr#run
+Wed Dec  2 03:04:32.231 UTC
+ [xr-vm_node0_RP0_CPU0:~]$rpm -qi xrv9k-k9sec
+Name        : xrv9k-k9sec        Relocations: /opt/cisco/XR/packages/xrv9k-k9sec-1.0.0.0-r600
+Version     : 1.0.0.0                           Vendor: (none)
+Release     : r600                          Build Date: Thu Dec 24 08:46:14 2015
+Install Date: Fri Mar  4 12:18:15 2016      Build Host: iox-lnx-009
+Group       : IOS-XR                        Source RPM: xrv9k-k9sec-1.0.0.0-r600.src.rpm
+Size        : 8616918                License: Copyright (c) 2015 Cisco Systems Inc. All rights reserved.
+Signature   : (none)
+Packager    : alnguyen
+Summary     : Bundle package for iosxr-security
+Architecture: x86_64
+Description :
+Bundle package for iosxr-security
+Build workspace: /auto/srcarchive16/production/6.0.0/xrv9k/workspace
+15. We can also use RPM utilities to query the requirement of the package (“-R” switch), this information is also in the RPM metadata and is crucial for dependency checking. In the example below, the k9sec package depends on three packages, each of them within a certain version range.
+[xr-vm_node0_RP0_CPU0:~]$rpm -qR xrv9k-k9sec
+/bin/sh
+/bin/sh
+/bin/sh
+/bin/sh
+xrv9k-iosxr-fwding >= 1.0.0.0
+xrv9k-iosxr-fwding < 2.0.0.0
+xrv9k-iosxr-infra >= 1.0.0.0
+xrv9k-iosxr-infra < 2.0.0.0
+xrv9k-iosxr-os >= 1.0.0.0
+xrv9k-iosxr-os < 2.0.0.0
+16. All the Cisco packages are in a separate group named IOS-XR. With the “—queryformat” switch we specify the type of field we want to display and how we want to display them. The following command will query all the installed packages and display their groups and names we use the utility grep to filter the output and only display the package belonging to the IOS XR group. Enter the following command to query all the packages from that group:
+[xr-vm_node0_RP0_CPU0:~]$rpm -qa --queryformat '%{group}   %{name}\n' | grep IOS-XR
+IOS-XR   xrv9k-spirit-boot
+IOS-XR   xrv9k-iosxr-routing
+IOS-XR   xrv9k-iosxr-fwding
+IOS-XR   xrv9k-iosxr-infra
+IOS-XR   xrv9k-base
+IOS-XR   xrv9k-bgp
+IOS-XR   xrv9k-common-pd-fib 
+IOS-XR   xrv9k-fwding
+IOS-XR   xrv9k-gcp-fwding
+IOS-XR   xrv9k-gdplane
+IOS-XR   xrv9k-iosxr-os
+IOS-XR   xrv9k-os-support
+IOS-XR   xrv9k-k9sec
+IOS-XR   xrv9k-mgbl
+17. Enter the following command to use RPM and standard Linux tools to review the full history of installed IOS-XR packages:
+[xr-vm_node0_RP0_CPU0:~]$rpm -qa --queryformat '%{installtime} %{group} %{name}-%{version}-%{release} %{installtime:date}\n' | grep IOS-XR | sort -nr | sed -e 's/^[0-9]*\ IOS-XR\ //'
+xrv9k-mgbl-2.0.0.0-r600 Fri Mar  4 12:33:59 2016
+xrv9k-k9sec-1.0.0.0-r600 Fri Mar  4 12:18:15 2016
+xrv9k-os-support-1.0.0.0-r600 Fri Jan 29 02:04:37 2016
+xrv9k-iosxr-os-1.0.0.0-r600 Fri Jan 29 02:04:35 2016
+xrv9k-gdplane-1.0.0.0-r600 Fri Jan 29 02:04:33 2016
+xrv9k-gcp-fwding-1.0.0.0-r600 Fri Jan 29 02:04:33 2016
+xrv9k-fwding-1.0.0.0-r600 Fri Jan 29 02:04:32 2016
+xrv9k-common-pd-fib-1.0.0.0-r600 Fri Jan 29 02:04:32 2016
+xrv9k-bgp-1.0.0.0-r600 Fri Jan 29 02:04:31 2016
+xrv9k-base-1.0.0.0-r600 Fri Jan 29 02:04:31 2016
+xrv9k-iosxr-infra-1.0.0.0-r600 Fri Jan 29 02:04:27 2016
+xrv9k-iosxr-fwding-2.0.0.0-r600 Fri Jan 29 02:04:25 2016
+xrv9k-spirit-boot-1.0.0.0-r600 Fri Jan 29 02:04:24 2016
+xrv9k-iosxr-routing-1.0.0.0-r600 Fri Jan 29 02:04:24 2016
+18. Using the “—requires” switch we can query the RPM database and display the version of installed packages that are fulfilling the dependency of another package. Enter the following command to learn which packages requires xrv9k-iosxr-routing to be present in the system:
+[xr-vm_node0_RP0_CPU0:~]$rpm -q --whatrequires xrv9k-iosxr-routing
+  xrv9k-iosxr-fwding-2.0.0.0-r600.x86_64
+  xrv9k-bgp-1.0.0.0-r600.x86_64
+  xrv9k-mgbl-2.0.0.0-r600.x86_64
+19. Enter the following command to get the version of the package that provides the xrv9k-iosxr-routing functionality:
+[xr-vm_node0_RP0_CPU0:~]$rpm -q --whatprovides xrv9k-iosxr-routing
+  xrv9k-iosxr-routing-1.0.0.0-r600.x86_64
