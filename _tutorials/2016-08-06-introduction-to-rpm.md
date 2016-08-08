@@ -198,16 +198,18 @@ With the “—requires” switch we can query the RPM database and display the 
 
 ```
 [xr-vm_node0_RP0_CPU0:~]$rpm -q --whatrequires xrv9k-iosxr-routing
-  xrv9k-iosxr-fwding-2.0.0.0-r600.x86_64
-  xrv9k-bgp-1.0.0.0-r600.x86_64
-  xrv9k-mgbl-2.0.0.0-r600.x86_64
+xrv9k-iosxr-fwding-2.0.0.0-r600.x86_64
+xrv9k-bgp-1.0.0.0-r600.x86_64
+xrv9k-mgbl-2.0.0.0-r600.x86_64
 ```
 
 With following command we get the version of the package that provides the xrv9k-iosxr-routing functionality:
+
 ```
 [xr-vm_node0_RP0_CPU0:~]$rpm -q --whatprovides xrv9k-iosxr-routing
   xrv9k-iosxr-routing-1.0.0.0-r600.x86_64
 ```
+
 ## Packages Installation from the Shell
 
 You can use the install commands inside the Linux shell of the IOS-XR container to install packages using a shell script.
@@ -247,6 +249,7 @@ Mar 10 22:40:45     xrv9k-eigrp-1.0.0.0-r600
 Mar 10 22:40:48 Install operation will continue in the background
 Mar 10 22:41:49 Install operation 25 finished successfully
 ```
+
 ## Analyzing Package Using Linux
 
 Any Linux distribution installed with the RPM utilities allows you to look at the content of packages, this is very useful to analyze dependencies and verify package integrity outside of the router. Click on the COMPUTE tab (ciscortr1) and navigate to the web server packages directory. In this example we use the “-l” switch to display the full path of all the files inside the package.
@@ -264,8 +267,6 @@ cisco@compute:~/web_server/xrv9k$ rpm -qpl xrv9k-k9sec-1.0.0.0-r600.x86_64.rpm-6
 /opt/cisco/XR/packages/xrv9k-k9sec-1.0.0.0-r600/all/etc
 /opt/cisco/XR/packages/xrv9k-k9sec-1.0.0.0-r600/all/etc/compat-mdata
 <SNIP>
-```
-```
 cisco@compute:~/web_server/xrv9k$ rpm -qpR xrv9k-k9sec-1.0.0.0-r600.x86_64.rpm-6.0.0
 /bin/sh
 /bin/sh
