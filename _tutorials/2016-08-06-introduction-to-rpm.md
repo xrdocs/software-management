@@ -192,6 +192,7 @@ xrv9k-iosxr-infra-1.0.0.0-r600 Fri Jan 29 02:04:27 2016
 xrv9k-iosxr-fwding-2.0.0.0-r600 Fri Jan 29 02:04:25 2016
 xrv9k-spirit-boot-1.0.0.0-r600 Fri Jan 29 02:04:24 2016
 xrv9k-iosxr-routing-1.0.0.0-r600 Fri Jan 29 02:04:24 2016
+```
 
 With the “—requires” switch we can query the RPM database and display the version of installed packages that are fulfilling the dependency of another package. Using the following command we learn which packages requires xrv9k-iosxr-routing to be present in the system:
 
