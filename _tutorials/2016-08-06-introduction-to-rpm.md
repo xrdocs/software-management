@@ -117,7 +117,7 @@ Install add operation successful
 ```
 
 ## XR Package Structure 
-When you enter the Shell of the control plane (accessed by typing "bash" from the CLI) you are in a full Bash shell environment of the XR container with all the traditional Linux tools at your fingertips. (You can return to the IOS XR CLI by typing “exit”).
+When you enter the Shell of the control plane (accessed by typing "bash" or "run" from the CLI) you are in a full Bash shell environment of the XR container with all the traditional Linux tools at your fingertips. (You can return to the IOS XR CLI by typing “exit”).
 Since all IOS XR packages used the RPM format, we will use the Linux rpm utility to inspect their content. The “-q” switch used below is used to query the installed packages database and the “-i” switch display the general information contained in the metadata of the RPM package.
 
 ```
@@ -174,7 +174,9 @@ IOS-XR   xrv9k-k9sec
 IOS-XR   xrv9k-mgbl
 ```
 
-Enter the following command to use RPM and standard Linux tools to review the full history of installed IOS-XR packages:
+With the Help of standard Linux tools we can review the full history of installed IOS-XR packages:
+
+```
 [xr-vm_node0_RP0_CPU0:~]$rpm -qa --queryformat '%{installtime} %{group} %{name}-%{version}-%{release} %{installtime:date}\n' | grep IOS-XR | sort -nr | sed -e 's/^[0-9]*\ IOS-XR\ //'
 xrv9k-mgbl-2.0.0.0-r600 Fri Mar  4 12:33:59 2016
 xrv9k-k9sec-1.0.0.0-r600 Fri Mar  4 12:18:15 2016
@@ -190,11 +192,90 @@ xrv9k-iosxr-infra-1.0.0.0-r600 Fri Jan 29 02:04:27 2016
 xrv9k-iosxr-fwding-2.0.0.0-r600 Fri Jan 29 02:04:25 2016
 xrv9k-spirit-boot-1.0.0.0-r600 Fri Jan 29 02:04:24 2016
 xrv9k-iosxr-routing-1.0.0.0-r600 Fri Jan 29 02:04:24 2016
-18. Using the “—requires” switch we can query the RPM database and display the version of installed packages that are fulfilling the dependency of another package. Enter the following command to learn which packages requires xrv9k-iosxr-routing to be present in the system:
+
+With the “—requires” switch we can query the RPM database and display the version of installed packages that are fulfilling the dependency of another package. Using the following command we learn which packages requires xrv9k-iosxr-routing to be present in the system:
+
+```
 [xr-vm_node0_RP0_CPU0:~]$rpm -q --whatrequires xrv9k-iosxr-routing
   xrv9k-iosxr-fwding-2.0.0.0-r600.x86_64
   xrv9k-bgp-1.0.0.0-r600.x86_64
   xrv9k-mgbl-2.0.0.0-r600.x86_64
-19. Enter the following command to get the version of the package that provides the xrv9k-iosxr-routing functionality:
+```
+
+With following command we get the version of the package that provides the xrv9k-iosxr-routing functionality:
+```
 [xr-vm_node0_RP0_CPU0:~]$rpm -q --whatprovides xrv9k-iosxr-routing
   xrv9k-iosxr-routing-1.0.0.0-r600.x86_64
+```
+## Packages Installation from the Shell
+
+You can use the install commands inside the Linux shell of the IOS-XR container to install packages using a shell script.
+
+```
+[xr-vm_node0_RP0_CPU0:~]$#install update source http://192.168.122.1:8080/xrv9k xrv9k-eigrp
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Update in progress...
+Scheme : http
+Hostname : 192.168.122.1:8080
+Collecting software state..
+
+Update packages :
+	xrv9k-eigrp
+Fetching .... xrv9k-eigrp-1.0.0.0-r600.x86_64.rpm-6.0.0
+Adding packages 
+	xrv9k-eigrp-1.0.0.0-r600.x86_64.rpm-6.0.0
+Mar 10 22:40:38 Install operation 24 started by root:
+ install add source /misc/disk1/install_tmp_staging_area/6.0.0 xrv9k-eigrp-1.0.0.0-r600.x86_64.rpm-6.0.0 
+Mar 10 22:40:40 Install operation will continue in the background
+Mar 10 22:40:43 Install operation 24 finished successfully
+
+Install add operation successful
+Activating xrv9k-eigrp-1.0.0.0-r600
+Mar 10 22:40:45 Install operation 30 started by root:
+  install activate pkg xrv9k-eigrp-1.0.0.0-r600 
+Mar 10 22:40:45 Package list:
+Mar 10 22:40:45     xrv9k-eigrp-1.0.0.0-r600
+Mar 10 22:40:48 Install operation will continue in the background
+Mar 10 22:40:43 Install operation 24 finished successfully
+Install add operation successful
+Activating xrv9k-eigrp-1.0.0.0-r600
+Mar 10 22:40:45 Install operation 25 started by root:
+  install activate pkg xrv9k-eigrp-1.0.0.0-r600 
+Mar 10 22:40:45 Package list:
+Mar 10 22:40:45     xrv9k-eigrp-1.0.0.0-r600
+Mar 10 22:40:48 Install operation will continue in the background
+Mar 10 22:41:49 Install operation 25 finished successfully
+```
+## Analyzing Package Using Linux
+
+Any Linux distribution installed with the RPM utilities allows you to look at the content of packages, this is very useful to analyze dependencies and verify package integrity outside of the router. Click on the COMPUTE tab (ciscortr1) and navigate to the web server packages directory. In this example we use the “-l” switch to display the full path of all the files inside the package.
+NOTE: Notice the extra -p switch used to query uninstalled packages.
+```
+cisco@compute:~$ cd ~/web_server/xrv9k/
+cisco@compute:~/web_server/xrv9k$ rpm -qpl xrv9k-k9sec-1.0.0.0-r600.x86_64.rpm-6.0.0
+/
+/opt
+/opt/cisco
+/opt/cisco/XR
+/opt/cisco/XR/packages
+/opt/cisco/XR/packages/xrv9k-k9sec-1.0.0.0-r600
+/opt/cisco/XR/packages/xrv9k-k9sec-1.0.0.0-r600/all
+/opt/cisco/XR/packages/xrv9k-k9sec-1.0.0.0-r600/all/etc
+/opt/cisco/XR/packages/xrv9k-k9sec-1.0.0.0-r600/all/etc/compat-mdata
+<SNIP>
+```
+```
+cisco@compute:~/web_server/xrv9k$ rpm -qpR xrv9k-k9sec-1.0.0.0-r600.x86_64.rpm-6.0.0
+/bin/sh
+/bin/sh
+/bin/sh
+/bin/sh
+xrv9k-iosxr-fwding >= 2.0.0.0
+xrv9k-iosxr-fwding < 3.0.0.0
+xrv9k-iosxr-infra >= 1.0.0.0
+xrv9k-iosxr-infra < 2.0.0.0
+xrv9k-iosxr-os >= 1.0.0.0
+xrv9k-iosxr-os < 2.0.0.0
+```
+
+NOTE: Run these RPM utilities off-box on any Linux system that has the RPM utility installed. Experiment with some of the RPM commands to create your own dependency management tool for XR packages.
