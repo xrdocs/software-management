@@ -34,9 +34,7 @@ Within IOS-XR, two new CLI commands have been introduced that complement the exi
 
 ```
 RP/0/RP0/CPU0:pod-rtr#install  update source ?
-
-   WORD  Enter source directory for the package(s)
-   
+   WORD  Enter source directory for the package(s)   
          Example: 
           sftp://user@server/directory/
           scp://user@server/directory/
