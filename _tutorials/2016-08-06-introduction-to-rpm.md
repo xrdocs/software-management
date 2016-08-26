@@ -1,7 +1,7 @@
 ---
 published: true
 date: '2016-08-06 17:06 -0700'
-title: Introduction to RPM
+title: IOS-XR and RPM Package Manager
 author: Patrick Warichet
 excerpt: Introduction to RPM Package Manager
 tags:
