@@ -7,6 +7,8 @@ excerpt: Introduction to RPM Package Manager
 tags:
   - iosxr
   - linux
+  - rpm
+  - yum
 ---
 ## Introduction
 
