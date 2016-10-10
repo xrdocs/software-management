@@ -126,7 +126,8 @@ ZTP terminated
 RP/0/RP0/CPU0:venus#
 ```
 
-**ztp breakout:** will peform a 4x10 breakout detection
+**ztp breakout:** Performs a 4x10 breakout detection on all 40 Gig interfaces, by default if no link is detected on any of the four 10Gig interfaces, the port will remain in 40 Gig mode.
+The subcommand nosignal-stay-in-breakout-mode will force the port in breakout out mode even if there is no link signal detected but will place the interfaces in shutdown mode. The subcommand nosignal-stay-in-state-noshut will leave the port in breakout mode but will place the four 10Gig interface in no shutdown mode.
 
 ```
 RP/0/RP0/CPU0:venus#ztp breakout ?
