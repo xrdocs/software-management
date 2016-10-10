@@ -31,7 +31,7 @@ The basic configuration described below provides a fixed IP address and a config
 host ncs-5001-rp0 {
    hardware ethernet e4:c7:22:be:10:ba;
    fixed-address 172.30.12.54;
-   filename "http://172.30.0.22/configs/ncs5001-1.config";
+   <mark>filename "http://172.30.0.22/configs/ncs5001-1.config";</mark>
 }
 </code>
 A more elaborate example that takes into account option 77 or option 15 for IPv6 (user-class) embedded in the dhcp request sent by the client, ZTP embed the string “exr-config” in the DHCP request as described below. The if statement also take into account the capability to re-image the system using iPXE (see iPXE deep dive document)
