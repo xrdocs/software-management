@@ -85,7 +85,7 @@ EOF
 xrapply /tmp/config
 ```
 
-**xrapply_with_reason: Same as above, but specify a reason for commit history tracking**
+**xrapply_with_reason:** Same as above, but specify a reason for commit history tracking
 
 ```
 cat >/tmp/config <<EOF
@@ -95,20 +95,20 @@ EOF
 xrapply_with_reason "this is an important name change" /tmp/config
 ```
 
-**xrapply_string: Is a one liner to enable easy apply of configuration. Use \n to indicate new lines continuing the configuration.**
+**xrapply_string:** Is a one liner to enable easy apply of configuration. Use \n to indicate new lines continuing the configuration.
 
 ```
 xrapply_string "hostname mars\n interface TenGigE0/0/0/0\n ipv4 address 172.30.0.144/24\n”
 ```
 
-**xrapply_string_with_reason: As above, but supplies a note for commit history:**
+**xrapply_string_with_reason:** As above, but supplies a note for commit history:
 
 ```
 xrapply_string_with_reason ”system renamed again" "hostname venus\n interface TenGigE0/0/0/0\n ipv4 address 172.30.0.144/24\n”
 ```
 
 ## ZTP CLI Commands
-**ztp initiate: Invokes a new ZTP DHCP session, logs will go to the console and /disk0:/ztp/ztp.log**
+**ztp initiate:** Invokes a new ZTP DHCP session, logs will go to the console and /disk0:/ztp/ztp.log
 
 ztp initiate allows the execution of a script even of the system has already been configured. This command is useful for testing ZTP without forcing a reload.
 
@@ -116,7 +116,7 @@ ztp initiate allows the execution of a script even of the system has already bee
 RP/0/RP0/CPU0:venus#ztp initiate debug verbose interface TenGigE 0/0/0/0 Invoke ZTP? (this may change your configuration) [confirm] [y/n] :
 ```
 
-**ztp terminate: Terminates any ZTP session in progress**
+**ztp terminate:** Terminates any ZTP session in progress
 
 ```
 RP/0/RP0/CPU0:venus#ztp terminate verbose
@@ -126,7 +126,7 @@ ZTP terminated
 RP/0/RP0/CPU0:venus#
 ```
 
-**ztp breakout: will peform a 4x10 breakout detection**
+**ztp breakout:** will peform a 4x10 breakout detection
 
 ```
 RP/0/RP0/CPU0:venus#ztp breakout ?
@@ -138,7 +138,7 @@ nosignal-stay-in-state-noshut  On no signal, prefer interfaces to be noshut(cisc
 verbose  Run with logging to the console(cisco-support)                           
 ```
 
-**ztp clean: Remove all ZTP files saved on disk**
+**ztp clean:** Remove all ZTP files saved on disk
 
 ```
 RP/0/RP0/CPU0:venus#ztp clean verbose
@@ -147,4 +147,3 @@ Remove all ZTP temporary files and logs? [confirm] [y/n] :y
 All ZTP files have been removed.
 If you now wish ZTP to run again from boot, do 'conf t/commit replace' followed by reload.
 ```
-
