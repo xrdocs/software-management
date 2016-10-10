@@ -12,8 +12,8 @@ tags:
 
 ## Purpose of ZTP
 ZTP was design to perform 2 different operations
-Download and apply an initial configuration.
-Download and execute a shell script
+- Download and apply an initial configuration.
+- Download and execute a shell script
 
 ## How ZTP works
 The ZTP process is executed or invoked from the control plane LXC Linux shell. Prior to IOS-XR 6.1.1 ZTP was executed within the default network namespace and could not access directly the data interfaces. Since 6.1.1 ZTP is executed inside the global-VRF network namespace with full access to all the data interfaces. This document is based on the IOS-XR 6.1.1 implementation.
