@@ -166,6 +166,7 @@ to be added
 ### More Complex Example
 In this example, the user has create a CVS file that contains the serial number followed by the hostname, upon bootup the system will provide its serial number and query the back-end database using HTTP POST, once it obtains its hostname it will perfrom a version check, if the version on the system does not match the desired version, the system will change the boot order forcing a boot using iPXE that will hopefully re-image the system to the desired version. If the system is running the correct version the script proceed by installing the K9sec package and create a generic RSA key for SSH it will then add the local repository for third party packages and install midnight commander. The script finish its execution after downloading and applying a simple configuration.
 
+**ZTP Script
 ```bash
 #!/bin/bash
 #############################################################################
@@ -332,4 +333,30 @@ download_config;
 apply_config;
 ztp_log "Autoprovision complete...";
 exit 0
+```
+**Backend PHP script
+```php
+<?php
+$file = 'inventory.txt';
+//$searchfor = 'FOC1947R143';
+$searchfor = ($_POST['serial']);
+
+// the following line prevents the browser from parsing this as HTML.
+header('Content-Type: text/plain');
+// get the file contents, assuming the file to be readable (and exist)
+$contents = file_get_contents($file);
+// escape special characters in the query
+$pattern = preg_quote($searchfor, '/');
+// finalise the regular expression, matching the whole line
+$pattern = "/^.*$pattern.*\$/m";
+// search, and store first matching occurences in $matches
+if(preg_match($pattern, $contents, $matches)){
+   //match the last element of the  line
+   preg_match('/[^,]*$/', $matches[0], $results);
+   echo $results[0];
+}
+else{
+   echo "Not found";
+}
+?>
 ```
