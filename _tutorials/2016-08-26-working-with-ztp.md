@@ -106,6 +106,7 @@ xrapply_string_with_reason ”system renamed again" "hostname venus\n interface 
 
 ## ZTP CLI Commands
 **ztp initiate: Invokes a new ZTP DHCP session, logs will go to the console and /disk0:/ztp/ztp.log**
+
 ztp initiate allows the execution of a script even of the system has already been configured. This command is useful for testing ZTP without forcing a reload.
 
 ```
