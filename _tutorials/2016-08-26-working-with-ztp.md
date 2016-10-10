@@ -8,6 +8,8 @@ tags:
   - iosxr
   - cisco
 ---
+{% include toc icon="table" title="IOS-XR: ZTP" %}
+
 ## Purpose of ZTP
 ZTP was design to perform 2 different operations
 •	Download and apply an initial configuration.
