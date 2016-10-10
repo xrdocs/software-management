@@ -119,7 +119,8 @@ xrapply_string_with_reason ”system renamed again" "hostname venus\n interface 
 ztp initiate allows the execution of a script even of the system has already been configured. This command is useful for testing ZTP without forcing a reload.
 
 ```
-RP/0/RP0/CPU0:venus#ztp initiate debug verbose interface TenGigE 0/0/0/0 Invoke ZTP? (this may change your configuration) [confirm] [y/n] :
+RP/0/RP0/CPU0:venus#ztp initiate debug verbose interface TenGigE 0/0/0/0
+Invoke ZTP? (this may change your configuration) [confirm] [y/n] :
 ```
 
 **ztp terminate:** Terminates any ZTP session in progress
@@ -129,7 +130,6 @@ RP/0/RP0/CPU0:venus#ztp terminate verbose
 Mon Oct 10 16:52:38.507 UTC
 Terminate ZTP? (this may leave your system in a partially configured state) [confirm] [y/n] :y
 ZTP terminated
-RP/0/RP0/CPU0:venus#
 ```
 
 **ztp breakout:** Performs a 4x10 breakout detection on all 40 Gig interfaces, by default if no link is detected on any of the four 10Gig interfaces, the port will remain in 40 Gig mode.
@@ -164,6 +164,8 @@ In the following example we will review the execution of a simple configuration 
 to be added
 
 ### More Complex Example
+In this example, the user has create a CVS file that contains the serial number followed by the hostname, upon bootup the system will provide its serial number and query the back-end database using HTTP POST, once it obtains its hostname it will perfrom a version check, if the version on the system does not match the desired version, the system will change the boot order forcing a boot using iPXE that will hopefully re-image the system to the desired version. If the system is running the correct version the script proceed by installing the K9sec package and create a generic RSA key for SSH it will then add the local repository for third party packages and install midnight commander. The script finish its execution after downloading and applying a simple coinfiguration.
+
 ```bash
 #!/bin/bash
 #############################################################################
