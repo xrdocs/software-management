@@ -154,3 +154,180 @@ Remove all ZTP temporary files and logs? [confirm] [y/n] :y
 All ZTP files have been removed.
 If you now wish ZTP to run again from boot, do 'conf t/commit replace' followed by reload.
 ```
+
+## ZTP Logging
+ZTP logs its operation on the flash file system in the directory /disk0:/ztp/. ZTP logs all the transaction with the DHCP server and all the state transition. Prior executions of ZTP are also logged in /disk0:/ztp/old_logs/
+
+### Simple ZTP Example
+In the following example we will review the execution of a simple configuration script downloaded from a data interface using the command “ztp initiate interface Ten 0/0/0/0”
+
+to be added
+
+### More Complex Example
+```bash
+#!/bin/bash
+#############################################################################
+# *** Be careful this is powerful and can potentially destroy your system ***
+#                *** !!! Use at your own risk !!! ***
+#
+# Script file should be saved on the backend HTTP server
+#
+# Tested on Skywarp with IOS-XR 6.1.1
+#
+#############################################################################
+export LOGFILE=/disk0:/ztp/user-script.log
+export HTTP_SERVER=http://172.30.0.22
+export SYSLOG_SERVER=172.30.0.22
+export SYSLOG_PORT=514
+export CONFIG_PATH=configs
+export SCRIPT_PATH=scripts
+export RPM_PATH="packages/ncs5k/6.1.1"
+export PHP_SCRIPT="php/device_name.php"
+export DESIRED_VER="6.1.1"
+
+## ztp_helper is inside the Fretta Code-base - ASSUMPTION
+source ztp_helper.sh
+
+function ztp_log() {
+    # Send logging information to local file ans syslog server
+    syslog "$1"
+    echo "$(date +"%b %d %H:%M:%S") "$1 >> $LOGFILE
+}
+
+function syslog() {
+    # Send syslog messages with netcat (nc)
+  echo "ztp-script: "$1 | nc -u -q1 $SYSLOG_SERVER $SYSLOG_PORT
+}
+
+function get_hostname(){
+    # Use serial number to query a remote database to get hostname using HTTP POST
+    local sn=$(dmidecode | grep -m 1 "Serial Number:" | awk '{print $NF}');
+    local result="`wget -O- --post-data="serial=$sn" ${HTTP_SERVER}/${PHP_SCRIPT}`";
+    if [ "$result" != "Not found" ]; then
+            DEVNAME=$result;
+            return 0
+    else
+            ztp_log "Serial $sn not found, hostname not set";
+            return 1
+    fi
+}
+
+function download_config(){
+    # Download config using hostname
+    ztp_log "### Downloading system config ###";
+    /usr/bin/wget ${HTTP_SERVER}/${CONFIG_PATH}/${DEVNAME}.config -O /disk0:/new-config 2>&1 >> $LOGFILE
+    if [[ "$?" != 0 ]]; then
+        ztp_log "### Error downloading system config ###"
+    else
+        ztp_log "### Downloading system config complete ###";
+    fi
+}
+
+function apply_config(){
+    # Apply new config
+    ztp_log "### Applying system config (best effort), use -a for pseudo atomic ###";
+    xrapply_with_reason "Initial ZTP configuration" /disk0:/new-config 2>&1 >> $LOGFILE;
+    ztp_log "!!! Checking error !!!";
+    xrcmd "show configuration failed" >> $LOGFILE
+    ztp_log "!!! Review above output !!!";
+    ztp_log "### Applying system config complete ###";
+}
+
+function install_k9sec_pkg(){
+    # Install the K9 package from repository, create a RSA key modulus 1024
+    K9SEC_RPM=ncs5k-k9sec-3.1.0.0-r611.x86_64.rpm
+    ztp_log "### XR K9SEC INSTALL ###"
+    /usr/bin/wget ${HTTP_SERVER}/${RPM_PATH}/${K9SEC_RPM} -O /disk0:/$K9SEC_RPM 2>&1
+    if [[ "$?" != 0 ]]; then
+        ztp_log "### Error downloading $K9SEC_RPM ###"
+    else
+        ztp_log "### Downloading $K9SEC_PKG complete ###";
+    fi
+  #xrcmd "install add source /disk0: $K9SEC_RPM" 2>&1 >> $LOGFILE
+  #xrcmd "install activate $K9SEC" 2>&1 >> $LOGFILE
+  xrcmd "install update source /disk0:/ $K9SEC_RPM" 2>&1 >> $LOGFILE
+  complete=0
+  while [ "$complete" = 0 ]; do
+        complete=`xrcmd "show install active" | grep k9sec | head -n1 | wc -l`
+        ztp_log "Waiting for k9sec package to be activated"
+        sleep 5
+    done
+    if [[ -z $(xrcmd "show crypto key mypubkey rsa") ]]; then
+        echo "1024" | xrcmd "crypto key generate rsa"
+    else
+        echo -ne "yes\n 1024\n" | xrcmd "crypto key generate rsa"
+    fi
+    rm -f /disk0:/$K9SEC_RPM
+    ztp_log "### XR K9SEC INSTALL COMPLETE ###"
+}
+
+function check_version(){
+    local current_ver=`xrcmd "show version" | grep Version | grep Cisco | cut -d " " -f 6`;
+    ztp_log "current=$current_ver, desired=$DESIRED_VER";
+    if [ "$DESIRED_VER" != "$current_version" ]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+function reboot_ipxe(){
+    # Do not use in production 
+    ztp_log "### Mounting EFIvar and changing boot order"
+    local EFI_FILESYS="/sys/firmware/efi/efivars"
+    if [ ! -d $EFI_FILESYS ]; then
+        ztp_log "EFI mount point not present"
+    fi 
+    /bin/mount -t efivarfs efivarfs $EFI_FILESYS
+    if [[ "$?" != 0 ]]; then
+    ztp_log "Error mounting efivars filesystem";
+  fi
+  local iPXE=$(/usr/sbin/efibootmgr | grep IPXE | awk -v FS="(Boot|*)" '{print $2}')
+  local MMC=$(/usr/sbin/efibootmgr | grep "HS-SD/MMC" | awk -v FS="(Boot|*)" '{print $2}')
+  local Shell=$(/usr/sbin/efibootmgr | grep Shell | awk -v FS="(Boot|*)" '{print $2}')
+    /usr/sbin/efibootmgr -o $iPXE,$MMC,$Shell
+    if [[ "$?" != 0 ]]; then
+    ztp_log "Error changing boot order";
+  fi
+    ztp_log "### Resetting the system";
+    echo 1 > /proc/sys/kernel/sysrq 
+    echo b > /proc/sysrq-trigger
+    ztp_log "Unable to reset the system";
+}
+
+function add_repo(){
+    /usr/bin/yum-config-manager --add-repo ${HTTP_SERVER}/${RPM_PATH} 2>&1
+}
+
+function install_mc(){
+    if /usr/bin/yum list installed "mc" >/dev/null 2>&1; then
+        ztp_log "### Installing midnight commander";
+        /usr/bin/yum install mc -y 2>&1
+    else
+        ztp_log "### Midnight commander already installed ###"
+    fi
+}
+
+# ==== Script entry point ====
+get_hostname;
+if [[ "$?" != 0 ]]; then
+    ztp_log "No valid hostname found terminating ZTP";
+    exit 1
+fi
+ztp_log "Hello from ${DEVNAME}!!!";
+check_version;
+if  [[ "$?" != 0 ]]; then
+    ztp_log "Version mismatch, we will upgrade using iPXE";
+    reboot_ipxe;
+else
+    ztp_log "Version match, proceeding to configuration";
+fi
+ztp_log "Starting autoprovision process...";
+install_k9sec_pkg;
+add_repo;
+install_mc;
+download_config;
+apply_config;
+ztp_log "Autoprovision complete...";
+exit 0
+```
