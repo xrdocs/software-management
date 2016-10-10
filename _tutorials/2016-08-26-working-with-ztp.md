@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 date: '2016-08-26 10:00 -0700'
 title: Working with ZTP
 author: Patrick Warichet
