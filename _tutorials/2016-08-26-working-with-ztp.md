@@ -65,6 +65,7 @@ host ncs-5001-rp0 {
    }
 }
 ```
+
 ### HTTP Server requirement
 The HTTP server should be reachable from the management interface or from a data interface if invoked manually and should be readable.
 ## ZTP utilities
