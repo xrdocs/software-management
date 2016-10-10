@@ -71,6 +71,7 @@ The HTTP server should be reachable from the management interface or from a data
 
 ## ZTP utilities
 ZTP includes a set of CLI commands and a set of helpers to use within the user script. The CLI command “ztp initiate” can be used to manually trigger the ZTP process, this is particularly useful to test user script or if some manual operation are required before provisioning the box.
+
 ### ztp_helper.sh
 ztp_helper.sh is a shell script that can be sourced by the user script that provides simple tools to access some XR functionalities.
 
