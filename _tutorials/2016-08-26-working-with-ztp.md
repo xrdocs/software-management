@@ -71,8 +71,11 @@ ztp_helper.sh is a shell script that can be sourced by the user script that prov
 
 **xrcmd: Runs an XR exec command**
 
+```
 xrcmd “show running”
-xrapply: Applies the block of configuration, specified in a file:
+```
+
+**xrapply: Applies the block of configuration, specified in a file:**
 
 ```
 cat >/tmp/config <<EOF
