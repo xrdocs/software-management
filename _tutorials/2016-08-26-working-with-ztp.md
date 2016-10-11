@@ -212,33 +212,33 @@ function get_hostname(){
             DEVNAME=$result;
             return 0
     else
-            ztp_log "Serial $sn not found, hostname not set";
-            return 1
+    	ztp_log "Serial $sn not found, hostname not set";
+        return 1
     fi
 }
 
 function download_config(){
-    # Download config using hostname
+	# Download config using hostname
     ztp_log "### Downloading system config ###";
     /usr/bin/wget ${HTTP_SERVER}/${CONFIG_PATH}/${DEVNAME}.config -O /disk0:/new-config 2>&1 >> $LOGFILE
     if [[ "$?" != 0 ]]; then
-        ztp_log "### Error downloading system config ###"
+    	ztp_log "### Error downloading system config ###"
     else
         ztp_log "### Downloading system config complete ###";
     fi
 }
 
 function apply_config(){
-  # Apply initial configuration
-  ztp_log "### Applying system config (best effort), use -a for pseudo atomic ###";
-  xrapply_with_reason "Initial ZTP configuration" /disk0:/new-config 2>&1 >> $LOGFILE;
-  ztp_log "### Checking for errors ###";
-  local config_status=$(xrcmd "show configuration failed");
-  if [[ $config_status ]]; then
-    echo $config_status  >> $LOGFILE
-    ztp_log "!!! Error encounter applying configuration file, review the log !!!!";
-  fi
-  ztp_log "### Applying system config complete ###";
+	# Apply initial configuration
+    ztp_log "### Applying system config (best effort), use -a for pseudo atomic ###";
+    xrapply_with_reason "Initial ZTP configuration" /disk0:/new-config 2>&1 >> $LOGFILE;
+    ztp_log "### Checking for errors ###";
+    local config_status=$(xrcmd "show configuration failed");
+    if [[ $config_status ]]; then
+    	echo $config_status  >> $LOGFILE
+        ztp_log "!!! Error encounter applying configuration file, review the log !!!!";
+    fi
+    ztp_log "### Applying system config complete ###";
 }
 
 function install_k9sec_pkg(){
