@@ -268,10 +268,10 @@ function install_k9sec_pkg(){
 function check_version(){
     local current_ver=`xrcmd "show version" | grep Version | grep Cisco | cut -d " " -f 6`;
     ztp_log "current=$current_ver, desired=$DESIRED_VER";
-    if [ "$DESIRED_VER" != "$current_version" ]; then
-        return 1
-    else
+    if [ "$DESIRED_VER" = "$current_version" ]; then
         return 0
+    else
+        return 1
     fi
 }
 
