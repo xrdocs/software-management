@@ -372,6 +372,8 @@ FOC1947R143,ncs-5001-c
 ```
 
 **Logging output**
+
+```
 Oct 11 11:05:38 172.30.0.54 ztp-script: Hello from ncs-5001-c!!!
 Oct 11 11:05:40 172.30.0.54 ztp-script: current=6.1.1, desired=6.1.1
 Oct 11 11:05:41 172.30.0.54 ztp-script: Starting autoprovision process...
@@ -386,3 +388,4 @@ Oct 11 11:06:06 172.30.0.54 ztp-script: ### Applying initial system configuratio
 Oct 11 11:06:11 172.30.0.54 ztp-script: !!! Checking for errors !!!
 Oct 11 11:06:14 172.30.0.54 ztp-script: ### Applying system config complete ###
 Oct 11 11:06:15 172.30.0.54 ztp-script: Autoprovision complete...
+```
