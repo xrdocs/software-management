@@ -251,7 +251,7 @@ function install_k9sec_pkg(){
         ztp_log "### Downloading $K9SEC_PKG complete ###";
     fi
   xrcmd "install update source /disk0:/ $K9SEC_RPM" 2>&1 >> $LOGFILE
-  complete=0
+  local complete=0
   while [ "$complete" = 0 ]; do
         complete=`xrcmd "show install active" | grep k9sec | head -n1 | wc -l`
         ztp_log "Waiting for k9sec package to be activated"
