@@ -188,6 +188,7 @@ export SCRIPT_PATH=scripts
 export RPM_PATH="packages/ncs5k/6.1.1"
 export PHP_SCRIPT="php/device_name.php"
 export DESIRED_VER="6.1.1"
+K9SEC_RPM=ncs5k-k9sec-3.1.0.0-r611.x86_64.rpm
 
 ## ztp_helper is inside the Fretta Code-base - ASSUMPTION
 source ztp_helper.sh
@@ -231,7 +232,7 @@ function apply_config(){
   # Apply initial configuration
   ztp_log "### Applying system config (best effort), use -a for pseudo atomic ###";
   xrapply_with_reason "Initial ZTP configuration" /disk0:/new-config 2>&1 >> $LOGFILE;
-  ztp_log "!!! Checking for errors !!!";
+  ztp_log "### Checking for errors ###";
   local config_status=$(xrcmd "show configuration failed");
   if [[ $config_status ]]; then
     echo $config_status  >> $LOGFILE
@@ -242,7 +243,6 @@ function apply_config(){
 
 function install_k9sec_pkg(){
     # Install the K9 package from repository, create a RSA key modulus 1024
-    K9SEC_RPM=ncs5k-k9sec-3.1.0.0-r611.x86_64.rpm
     ztp_log "### XR K9SEC INSTALL ###"
     /usr/bin/wget ${HTTP_SERVER}/${RPM_PATH}/${K9SEC_RPM} -O /disk0:/$K9SEC_RPM 2>&1
     if [[ "$?" != 0 ]]; then
