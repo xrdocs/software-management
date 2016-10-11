@@ -166,7 +166,7 @@ to be added
 ### More Complex Example
 In this example, the user has create a CVS file that contains the serial number followed by the hostname, upon bootup the system will provide its serial number and query the back-end database using HTTP POST, once it obtains its hostname it will perfrom a version check, if the version on the system does not match the desired version, the system will change the boot order forcing a boot using iPXE that will hopefully re-image the system to the desired version. If the system is running the correct version the script proceed by installing the K9sec package and create a generic RSA key for SSH it will then add the local repository for third party packages and install midnight commander. The script finish its execution after downloading and applying a simple configuration.
 
-**ZTP Script
+**ZTP Script** ncs-5001-rp0_ztp.sh
 
 ```bash
 #!/bin/bash
@@ -336,7 +336,7 @@ ztp_log "Autoprovision complete...";
 exit 0
 ```
 
-**Backend PHP script device_name.php
+**Backend PHP script** device_name.php
 
 ```php
 <?php
@@ -362,7 +362,7 @@ else{
 ?>
 ```
 
-**CVS file inventory.php
+**CVS file** inventory.php
 
 ```
 FOC2647D246,ncs-5001-a
