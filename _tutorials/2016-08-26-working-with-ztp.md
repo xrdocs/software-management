@@ -228,13 +228,16 @@ function download_config(){
 }
 
 function apply_config(){
-    # Apply new config
-    ztp_log "### Applying system config (best effort), use -a for pseudo atomic ###";
-    xrapply_with_reason "Initial ZTP configuration" /disk0:/new-config 2>&1 >> $LOGFILE;
-    ztp_log "!!! Checking error !!!";
-    xrcmd "show configuration failed" >> $LOGFILE
-    ztp_log "!!! Review above output !!!";
-    ztp_log "### Applying system config complete ###";
+  # Apply initial configuration
+  ztp_log "### Applying system config (best effort), use -a for pseudo atomic ###";
+  xrapply_with_reason "Initial ZTP configuration" /disk0:/new-config 2>&1 >> $LOGFILE;
+  ztp_log "!!! Checking for errors !!!";
+  local config_status=$(xrcmd "show configuration failed");
+  if [[ $config_status ]]; then
+    echo $config_status  >> $LOGFILE
+    ztp_log "!!! Error encounter applying configuration file, review the log !!!!";
+  fi
+  ztp_log "### Applying system config complete ###";
 }
 
 function install_k9sec_pkg(){
@@ -247,8 +250,6 @@ function install_k9sec_pkg(){
     else
         ztp_log "### Downloading $K9SEC_PKG complete ###";
     fi
-  #xrcmd "install add source /disk0: $K9SEC_RPM" 2>&1 >> $LOGFILE
-  #xrcmd "install activate $K9SEC" 2>&1 >> $LOGFILE
   xrcmd "install update source /disk0:/ $K9SEC_RPM" 2>&1 >> $LOGFILE
   complete=0
   while [ "$complete" = 0 ]; do
