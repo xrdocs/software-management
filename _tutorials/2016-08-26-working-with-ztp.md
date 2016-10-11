@@ -334,13 +334,13 @@ apply_config;
 ztp_log "Autoprovision complete...";
 exit 0
 ```
-**Backend PHP script
+
+**Backend PHP script device_name.php
+
 ```php
 <?php
 $file = 'inventory.txt';
-//$searchfor = 'FOC1947R143';
 $searchfor = ($_POST['serial']);
-
 // the following line prevents the browser from parsing this as HTML.
 header('Content-Type: text/plain');
 // get the file contents, assuming the file to be readable (and exist)
@@ -359,4 +359,12 @@ else{
    echo "Not found";
 }
 ?>
+```
+
+**CVS file inventory.php
+
+```
+FOC2647D246,ncs-5001-a
+FOC1568P682,ncs-5001-b
+FOC1947R143,ncs-5001-c
 ```
