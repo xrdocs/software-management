@@ -219,18 +219,18 @@ function get_hostname(){
 
 function download_config(){
 	# Download config using hostname
-    ztp_log "### Downloading system config ###";
+    ztp_log "### Downloading system configuration ###";
     /usr/bin/wget ${HTTP_SERVER}/${CONFIG_PATH}/${DEVNAME}.config -O /disk0:/new-config 2>&1 >> $LOGFILE
     if [[ "$?" != 0 ]]; then
-    	ztp_log "### Error downloading system config ###"
+    	ztp_log "### Error downloading system configuration ###"
     else
-        ztp_log "### Downloading system config complete ###";
+        ztp_log "### Downloading system configuration complete ###";
     fi
 }
 
 function apply_config(){
 	# Apply initial configuration
-    ztp_log "### Applying system config (best effort), use -a for pseudo atomic ###";
+    ztp_log "### Applying initial system configuration ###";
     xrapply_with_reason "Initial ZTP configuration" /disk0:/new-config 2>&1 >> $LOGFILE;
     ztp_log "### Checking for errors ###";
     local config_status=$(xrcmd "show configuration failed");
@@ -238,7 +238,7 @@ function apply_config(){
     	echo $config_status  >> $LOGFILE
         ztp_log "!!! Error encounter applying configuration file, review the log !!!!";
     fi
-    ztp_log "### Applying system config complete ###";
+    ztp_log "### Applying system configuration complete ###";
 }
 
 function install_k9sec_pkg(){
@@ -370,3 +370,19 @@ FOC2647D246,ncs-5001-a
 FOC1568P682,ncs-5001-b
 FOC1947R143,ncs-5001-c
 ```
+
+**Logging output**
+Oct 11 11:05:38 172.30.0.54 ztp-script: Hello from ncs-5001-c!!!
+Oct 11 11:05:40 172.30.0.54 ztp-script: current=6.1.1, desired=6.1.1
+Oct 11 11:05:41 172.30.0.54 ztp-script: Starting autoprovision process...
+Oct 11 11:05:42 172.30.0.54 ztp-script: ### XR K9SEC INSTALL ###
+Oct 11 11:05:44 172.30.0.54 ztp-script: ### Downloading complete ###
+Oct 11 11:05:55 172.30.0.54 ztp-script: Waiting for k9sec package to be activated
+Oct 11 11:06:01 172.30.0.54 ztp-script: ### XR K9SEC INSTALL COMPLETE ###
+Oct 11 11:06:03 172.30.0.54 ztp-script: ### Installing midnight commander ###
+Oct 11 11:06:04 172.30.0.54 ztp-script: ### Downloading system configuration ###
+Oct 11 11:06:05 172.30.0.54 ztp-script: ### Downloading system configuration complete ###
+Oct 11 11:06:06 172.30.0.54 ztp-script: ### Applying initial system configuration ###
+Oct 11 11:06:11 172.30.0.54 ztp-script: !!! Checking for errors !!!
+Oct 11 11:06:14 172.30.0.54 ztp-script: ### Applying system config complete ###
+Oct 11 11:06:15 172.30.0.54 ztp-script: Autoprovision complete...
