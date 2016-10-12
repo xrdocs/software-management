@@ -65,7 +65,7 @@ Once the option is selected, iPXE will initialize the management interfaces, dis
 
 When presented with the iPXE command line, you are in the iPXE environment, there are multiple commands that can be used for manual booting and for diagnosing problems. Commands can also be used as part of an iPXE script (see section iPXE with chain loading).
 
-You can use the help command to show a list of all available commands. Full documentation for each command is provided in the iPXE command reference http://ipxe.org/cmd.
+You can use the help command to show a list of all available commands. Full documentation for each command is provided in the iPXE command reference [http://ipxe.org/cmd](http://ipxe.org/cmd).
 
 ## iPXE DHCPv4 Request
 
@@ -153,13 +153,10 @@ iPXE includes a number of options in the initial IPv4 DHCP request, the relevant
 
 Option 60: "vendor-class-identifier" Identify 4 elements separated by columns:
 
-     1 The type of client: e.g.: PXEClient
-     
-     2 The architecture of The system (Arch): e.g.: 00009 Identify an EFI system using a x86-64 CPU
-
-     3 The Universal Network Driver Interface (UNDI): e.g.: 003010 (first 3 octets identify the major version and last 3 octets identify the minor version)
-
-     4 The Product Identifier (PID): e.g.: NCS-5001
+1 The type of client: e.g.: PXEClient
+2 The architecture of The system (Arch): e.g.: 00009 Identify an EFI system using a x86-64 CPU
+3 The Universal Network Driver Interface (UNDI): e.g.: 003010 (first 3 octets identify the major version and last 3 octets identify the minor version)
+4 The Product Identifier (PID): e.g.: NCS-5001
 
 Option 61: "dhcp-client-identifier" Identify the Serial Number of the system
 
@@ -236,21 +233,15 @@ In is response the DHCP server will place the bootfile URI in option 67 "filenam
 The initial DHCPv6 solicit has the relevant option highlighted
 
 Option 1: "client-identifier" equivalent to DHCPv4 option 61 but with the following format:
-
      DUID Type: integer 16 e.g.: 0002 (assigned by vendor)
-
      Enterprise Id: integer 32 e.g.: 00000009 (Cisco Systems)
-
      Client Identifier: string e.g.: FOC1947R143
 
 Option 15: "dhcp6.user-class" equivalent to DHCPv4 option 77 but the first 2 Octets define the length of the string
 
 Option 16: "vendor-class-identifier" equivalent to DHCPv4 option 60 but with the following format:
-
      Enterprise Id: integer 32 e.g.:00000009 (Cisco Systems)
-
      Length: integer 16
-
      Vendor: string e.g.: NCS-5001
 
 Option 59: "dhcp6.bootfile-url" equivalent to DHCPv4 option 67
@@ -264,47 +255,30 @@ The DHCPv6 server will include option 59 "dhcp6.bootfile-url" in its response co
 
 In this first examples, iPXE features are not used but the usage is similar to PXE boot. In the following examples we will rely solely on the DHCP server configuration to provide the elements necessary to identify the boot ISO for the device.
 
- 
 ## DHCP Server Configuration
+
 ### DHCPv4
 
 Using the options above we can configure isc-dhcpd to adequately provide the URI to boot the system, the common statements for the Network and the Pool are shown below:
 
 ```
     ######### Network 172.30.12.0/24 ################
-
     shared-network 172-30-12-0 {
-
             subnet 172.30.12.0 netmask 255.255.255.0 {
-
                     option subnet-mask 255.255.255.0;
-
                     option broadcast-address 172.30.12.255;
-
                     option routers 172.30.12.1;
-
                     option domain-name-servers 172.30.0.25;
-
                     option domain-name "cisco.local";
-
             }
-
     ######## Pool #########
-
             pool {
-
                     range 172.30.12.10 172.30.12.100;
-
                     next-server 172.30.0.22;
-
                     if exists user-class and option user-class = "iPXE" {
-
                             filename = "http://172.30.0.22/ncs5k-mini-4";
-
                     } else if exists user-class and option user-class = "exr-config" {
-
                             filename = "http://172.30.0.22/scripts/ncs-ztp.sh";
-
                     }
 ```
 
@@ -314,38 +288,24 @@ If we want to add more granularity to the process we can define a class and usin
 
 ```
     ######### Class #########
-
        class "ncs-5k" {
-
           match if substring (option vendor-class-identifier, 0, 9) = "PXEClient";
-
              if substring (option vendor-class-identifier, 37, 6) = "NCS-50" {
-
                 filename = "http://172.30.0.22/ncs5k-mini-3";
-
              }
-
           }
-
 ```
 
 Granularity of the boot image can be even more specific, the traditional approach is to use the mac address with a host definition inside the pool, as illustrated below
 
 ```
     ######## Hosts #########
-
     host ncs-5001-a {
-
        hardware ethernet c4:72:95:a7:ef:c2;
-
        if exists user-class and option user-class = "iPXE" {
-
           filename = "http://172.30.0.22/ncs5k-mini-1";
-
        }
-
        fixed-address 172.30.12.50;
-
     }
 ```
 
@@ -353,56 +313,36 @@ Using the host statement we provide a fixed address which can be useful for DNS,
 
 ```
     host ncs-5001-b {
-
        option dhcp-client-identifier "FOC1947R144";
-
        if exists user-class and option user-class = "iPXE" {
-
           filename = "http://172.30.0.22/ncs5k-mini-2";
-
        }
-
        fixed-address 172.30.12.52;
-
     }
 ```
 
 Using the different options and the flexibility of the ISC dhcp server we can achieve various degrees of granularity for the system we want to iPXE boot, but using DHCP options does not scale and each change require to restart the DHCP service. It offers the advantage to be identical to PXE and is easy to do for small to medium size network.
+
 ### DHCPv6
 
 The ISC-DHCP service is mono stack, to support IPv6 a second instance of the service needs to be launched, both instance should use different configuration file. The common configuration statement for the DHCPv6 is as follow:
 
 ```
     shared-network FD-30-12 {
-
        subnet6 fd:30:12::/64 {
-
           # Range for clients
-
           range6 fd:30:12::1024 fd:30:12::1124;
-
           # Range for clients requesting a temporary address
-
           range6 fd:30:12::/64 temporary;
-
           # Additional options
-
           option dhcp6.name-servers fd:30::172:30:0:25;
-
           option dhcp6.domain-search "cisco.local"; 
-
           if exists dhcp6.user-class and substring(option dhcp6.user-class, 2, 4) = "iPXE" {
-
              option dhcp6.bootfile-url = "http://[fd:30::172:30:0:22]/ncs5k-mini-4";
-
           } else if exists dhcp6.user-class and substring(option dhcp6.user-class, 0, 10) = "exr-config" {
-
              option dhcp6.bootfile-url = "http://[fd:30::172:30:0:22]/scripts/ncs-ztp.sh";
-
           }
-
        }
-
     }
 ```
 
@@ -431,57 +371,46 @@ If there are no router present on the segment, you will have to launch the Route
        MinRtrAdvInterval 5;
        MaxRtrAdvInterval 60;
        AdvSendAdvert on;
-
        AdvOtherConfigFlag on;
-
        IgnoreIfMissing off;
-
        prefix FD:30:12::/64 {
-
        };
-
     };
+```
 
 Granularity in identifying the boot image is similar to IPv4, A class that encompass all NCS-5K series can be defined as follow (ipv6 class support is available starting isc-dhcp-server 4.3.4):
-
+```
     ######### Class #########
-
     class "ncs-5k" {
-
        match if exists vendor-class-identifier and substring(vendor-class-identifier, 6, 6) = "NCS-50";
-
           if exists dhcp6.user-class and substring(option dhcp6.user-class, 2, 4) = "iPXE" {
-
              filename = "http://[fd:30::172.30.0.22]/ncs5k-mini-3";
-
           }
-
     }
+```
 
 Granularity to the host level can be achieve by using the serial number as identifier since the client sends the serial number as part of the client-id a simple solution is simply to match the complete hex data for of the option.
 
+```
     host ncs-5001-b {
-
        host-identifier option dhcp6.client-id 00:02:00:00:00:09:46:4f:43:31:39:34:37:52:31:34:33:00;
-
        if exists dhcp6.user-class and substring(option dhcp6.user-class, 2, 4) = "iPXE" {
-
           option dhcp6.bootfile-url = "http://[fd:30::172:30:0:22]/ncs5k-mini-2";
-
        }
-
        fixed-address6 fd:30:12::172.30.12.52;
-
     }
+```
 
 Refer to the section iPXE DHCPv6 Request on how to decode the dhcp6.client-id or use xxd to translate it in ascii.
 
-    cisco@magoo-6$ echo "00:02:00:00:00:09:46:4f:43:31:39:34:37:52:31:34:33" | xxd -pe -r && echo -e
+```bash
+cisco@magoo-6$ echo "00:02:00:00:00:09:46:4f:43:31:39:34:37:52:31:34:33" | xxd -pe -r && echo -e
         FOC1947R143
-    cisco@magoo-6$ echo -n "FOC1947R143" | od -A n -t x1 | sed 's/^ /00:02:00:00:00:09:/' | sed 's/ /:/g'
+cisco@magoo-6$ echo -n "FOC1947R143" | od -A n -t x1 | sed 's/^ /00:02:00:00:00:09:/' | sed 's/ /:/g'
     00:02:00:00:00:09:46:4f:43:31:39:34:37:52:31:34:33
+```
 
-Dynamic Scripting - Embedding iPXE variables in URL
+### Dynamic Scripting - Embedding iPXE variables in URL
 
 The URL provided by the DHCP server does not have to be a static. For example, you could direct iPXE to boot from the URL
 
@@ -492,21 +421,17 @@ Which would expand to a URL such as
     http://172.30.0.22/boot.php?mac=c4:72:95:a7:ef:c0&product=NCS5001&serial=FOC1947R143
 
 The boot.php program running on the web server could dynamically generate a script based on the information provided in the URL. For example, boot.php could look up the serial number in a MySQL database to determine the correct target to boot from, and then dynamically generate a script such as
-
-     
-
+    
+```php
     <?php
     header ( "Content-type: text/plain" );
-
     echo "#!ipxe \n";
-
     echo "set myURL http://172.30.0.22/Cisco/NCS/NCS5001/FOC1947R143 \n";
-
     echo "boot myURL \n";
-
     ?>
+```
 
-iPXE with Chainloading
+## iPXE with Chainloading
 
 Chainloading is the capability to jump from one boot statement to another, using chainloading and the embedded scripting capability of iPXE we can have a very detail and complex selection mechanism for the boot image. In the following example we will use the boot file structure illustrated below and we will use the initial DHCP configuration described earlier but in place of providing the URI for an ISO the DHCP server will provide the URI to a iPXE boot script (boot.ipxe).
 
@@ -515,55 +440,33 @@ The file boot.ipxe file is a script that will identify the correct image based o
 The script is evaluated from the top and works for both IPv4 and IPv6
 iPXE Script
 
+```
     !ipxe
-
      
-
     # Global variables used by all other iPXE scripts
-
     chain --autofree boot.ipxe.cfg ||
-
      
-
     # Boot <boot-url>/<boot-dir>/hostname-<hostname>.ipxe
-
     # if hostname DHCP variable is set and script is present
-
     isset ${hostname} && chain --replace --autofree ${boot-dir}hostname-${hostname}.ipxe ||
-
      
-
     # Boot <boot-url>/<boot-dir>/uuid-<UUID>.ipxe
-
     # if SMBIOS UUID variable is set and script is present (not usable see CSCuz28164)
-
     isset ${uuid} && chain --replace --autofree ${boot-dir}uuid-${uuid}.ipxe ||
-
      
-
     # Boot <boot-url>/<boot-dir>/mac-010203040506.ipxe if script is present
-
     chain --replace --autofree ${boot-dir}mac-${mac:hexraw}.ipxe ||
-
      
-
     # Boot <boot-url>/<boot-dir>/serial-FOC1947R143.ipxe if script is present
-
     isset ${serial} && chain --replace --autofree ${boot-dir}serial-${serial}.ipxe ||
-
      
-
     # Boot <boot-url>/<boot-dir>/pid-<product>.ipxe if script is present
-
     isset ${product} && chain --replace --autofree ${boot-dir}pid-${product}.ipxe ||
-
      
-
     # Boot <boot-url>/menu.ipxe script if all other options have been exhausted
-
     chain --replace --autofree ${menu-url} ||
-
     chain --replace --autofree ${menu-url6} ||
+```
 
 The first action of the script is to import a set of variables from boot.ipxe.cfg this will set ${boot-url} / ${boot-url6} and other variables.
 
@@ -573,17 +476,14 @@ If the variable has been set, the script attempts to jump to a secondary boot fi
 
 Here is an example of a secondary boot script based on the serial number of the device, as you can see this script points to the last element of the chain: the ISO boot file.
 
+```
     cisco@magoo-6:/var/www/html/ipxe$ cat serial-FOC1947R143.ipxe
-
     #!ipxe
-
     echo
-
     echo Booting NCS5K Mini ISO 6.0.0 from ISO for ${initiator}
-
     chain --replace --autofree  ${boot-url}ncs5k-mini-x.iso-6.0.0 ||
-
     chain --replace --autofree  ${boot-url6}ncs5k-mini-x.iso-6.0.0
+```
 
 Finally if all boot items have failed, the menu.ipxe script is executed and propose an interactive menu-driven list of boot options.
 
@@ -591,288 +491,156 @@ Below is the example script for the boot menu, this example is adapted from http
 
 Each menu items can be associated with a shortcut key and navigation between items is done using the up and down arrows, for xrv9k image we have to use the sanboot option, for NCS-5K and NCS-5500 device we use the boot keyword.
 
+```
     !ipxe
-
     # Variables are specified in boot.ipxe.cfg
-
     # Some menu defaults
-
     set menu-timeout 30000
-
     set submenu-timeout ${menu-timeout}
-
     isset ${menu-default} || set menu-default exit
-
     ###################### MAIN MENU ####################################
-
     :start
-
     menu iPXE boot menu for ${initiator}
-
     item --gap --             ------------------------- XRV9K Boot Menu ------------------------------
-
     item --key a sunstone-mini              Boot xrv9k Mini 6.0.0 ISO
-
     item --key d sunstone-latest            Boot xrv9k Mini 6.1.1 ISO Latest build
-
     item --key e sunstone-disk              Boot xrv9k from local disk
-
     item --gap --             ------------------------ NCS5000 Boot Menu -----------------------------
-
     item --key f ncs5000-6.0.0              Boot ncs-5000 Mini 6.0.0 ISO
-
     item --key g ncs5000-6.1.1              Boot ncs-5000 Mini 6.1.1 ISO
-
     item --gap --             ------------------------ NCS5500 Boot Menu -----------------------------
-
     item --key h ncs5500-6.0.0              Boot ncs-5500 Mini 6.0.0 ISO
-
     item --key i ncs5500-6.1.1              Boot ncs-5500 Mini 6.1.1. Latest ISO
-
     item --gap --             ------------------------- Advanced options -----------------------------
-
     item --key j config                     Configure settings
-
     item shell                              Drop to iPXE shell
-
     item reboot                             Reboot System
-
     item
-
     item --key x exit                       Exit iPXE and continue BIOS boot
-
     choose --timeout ${menu-timeout} --default ${menu-default} selected || goto cancel
-
     set menu-timeout 0
-
     goto ${selected}
-
      
-
     :cancel
-
     echo You cancelled the menu, dropping you to a shell
-
      
-
     :shell
-
     echo Type 'exit' to get the back to the menu
-
     shell
-
     set menu-timeout 0
-
     set submenu-timeout 0
-
     goto start
-
      
-
     :failed
-
     echo Booting failed, dropping to shell
-
     goto shell
-
      
-
     :reboot
-
     reboot
-
      
-
     :exit
-
     exit
-
      
-
     :config
-
     config
-
     goto start
-
      
-
     :back
-
     set submenu-timeout 0
-
     clear submenu-default
-
     goto start
-
      
-
     ############ MAIN MENU ITEMS ############
-
      
-
     :sunstone-mini
-
     echo Booting XRV9K Mini 6.0.0 from ISO for ${initiator}
-
     sanboot ${sanboot-url}xrv9k-mini-x.iso-6.0.0 ||
-
     sanboot ${sanboot-url6}xrv9k-mini-x.iso-6.0.0 || goto failed
-
     goto start
-
      
-
     :sunstone-latest
-
     echo Booting XRV9K Mini 6.1.1 latest developer release from ISO for ${initiator}
-
     sanboot ${sanboot-url}xrv9k-mini-latest.iso ||
-
     sanboot ${sanboot-url6}xrv9k-mini-latest.iso || goto failed
-
     goto start
-
      
-
     :ncs5000-6.0.0
-
     echo
-
     echo Booting NCS-5K Mini ISO 6.0.0 from ISO for ${initiator}
-
     boot ${boot-url}ncs5000-mini.official ||
-
     boot ${boot-url6}ncs5000-mini.official || goto failed
-
     goto start
-
      
-
     :ncs5000-6.1.1
-
     echo
-
     echo Booting NCS-5K Mini ISO 6.1.1 from ISO for ${initiator}
-
     boot ${boot-url}ncs5000-mini.latest ||
-
     boot ${boot-url6}ncs5000-mini.latest || goto failed
-
     goto start
-
      
-
     :ncs5500-6.0.0
-
     echo
-
     echo Booting NCS-5500 Mini ISO 6.0.0 from ISO for ${initiator}
-
     boot ${boot-url}ncs5500-mini.official ||
-
     boot ${boot-url6}ncs5500-mini.official || goto failed
-
     goto start
-
      
-
     :ncs5500-6.1.1
-
     echo
-
     echo Booting NCS-5500 Mini ISO 6.1.1 from ISO for ${initiator}
-
     boot ${boot-url}ncs5500-mini.latest ||
-
     boot ${boot-url6}ncs5500-mini.latest || goto failed
-
     goto start
-
      
-
     :sunstone-disk
-
     echo Start XRV9K from disk
-
     sanboot --no-describe --drive 0x80 || goto failed  
-
     goto start
+```
 
 Here is a screenshots of the boot process with only the DHCPv6 service active and no valid boot file present.
 
-iPXE> autoboot net0                                                  <- autoboot from the mgmt interface 
-
+```
+iPXE> autoboot net0                                          <- autoboot from the mgmt interface 
 net0: c4:72:95:a7:ef:c0 using dh8900cc on PCI01:00.1 (open)
-
   [Link:up, TX:108 TXE:0 RX:5188624 RXE:5186887]
-
 Configuring (net0 c4:72:95:a7:ef:c0).......... ok
-
 net0: fe80::c672:95ff:fea7:efc0/64
-
-net0: fd:30:12::1124/64 gw fe80::fa72:eaff:fe8b:ce80                 <- ipv6 statefull address assignment 
-
+net0: fd:30:12::1124/64 gw fe80::fa72:eaff:fe8b:ce80         <- ipv6 statefull address assignment 
 Filename: http://[fd:30::172:30:0:22]/boot.ipxe                    <- ipv6 boot URI from DHCPv6
-
 http://[fd:30::172:30:0:22]/boot.ipxe... ok                        <- boot script is downloaded 
-
 /boot.ipxe.cfg... ok                                                 <- boot variable are chained
-
 /ipxe/uuid-03000200-0400-0500-0006-000700080009.ipxe... No such file or directory (http://ipxe.org/2d0c618e)
-
 /ipxe/mac-c47295a7efc0.ipxe... No such file or directory (http://ipxe.org/2d0c618e)
-
 /ipxe/serial-FOC1947R143.ipxe... No such file or directory (http://ipxe.org/2d0c618e)
-
 /ipxe/pid-NCS-5001.ipxe... No such file or directory (http://ipxe.org/2d0c618e)
-
 http://172.30.0.22/menu.ipxe... Network unreachable (http://ipxe.org/280a6090)
-
 http://[fd:30::172:30:0:22]/menu.ipxe... ok                         <- boot menu is executed
-
  
 <SNIP>
                  iPXE boot menu for NCS-5001 - FOC1947R143
-
  
-
 ------------------------- XRV9K Boot Menu ------------------------------ 
-
 Boot xrv9k Mini 6.0.0 ISO
-
 Boot xrv9k Mini 6.1.1 ISO Latest build
-
 Boot xrv9k from local disk
-
 ------------------------ NCS5000 Boot Menu -----------------------------
-
 Boot ncs-5000 Mini 6.0.0 ISO
-
 Boot ncs-5000 Mini 6.1.1 ISO Latest build
-
 ------------------------ NCS5500 Boot Menu -----------------------------
-
 Boot ncs-5500 Mini 6.0.0 ISO
-
 Boot ncs-5500 Mini 6.1.1 Latest build
-
 ------------------------- Advanced options -----------------------------
-
 Configure settings
-
 Drop to iPXE shell
-
 Reboot System
-
  
-
 Exit iPXE and continue BIOS boot
-
- 
+```
 
 If we select the entry "Boot ncs-5000 Mini 6.0.0 ISO", the script will first attempt to boot using the IPv4 address, since our device did not receive a valid IPv4 address it will attempt to use the IPv6 address and start the NOS installation.
 
+```
     Booting Skywarp Mini ISO 6.0.0 from ISO for NCS-5001 - FOC1947R143
 
     http://172.30.0.22/ncs5000-mini.official... Network unreachable (http://ipxe.org/280a6090)
@@ -880,11 +648,12 @@ If we select the entry "Boot ncs-5000 Mini 6.0.0 ISO", the script will first att
     http://[fd:30::172:30:0:22]/ncs5000-mini.official... ok
 
     Booting iso-image@0x42e2cb000(835930112), bzImage@0x42e2f7000(4473806)
+```
 
-Conclusions
+## Conclusions
 
 iPXE offers a wide variety of configuration paradigm that can be used in large deployment, with its scripting capability, iPXE is independent of DHCP configuration and can achieve very good granularity based on model number, serial number, mac-address, host name, etc.
 
 Creation of boot file can be automated easily on the back-end side without restarting any services. On the HTTP server symbolic link can be used to move devices from one ISO to another without reconfiguration. with its backward compatibility with PXE and its low resources requirement, it is a very good alternative to ONIE.
 
-Future enhancement to the boot process including secure boot will bring even more security to the iPXE without using HTTPS see https://wiki.cisco.com/display/FRE/Secure+Boot+on+eXR+platforms
+Future enhancement to the boot process including secure boot will bring even more security to the iPXE without using HTTPS.
