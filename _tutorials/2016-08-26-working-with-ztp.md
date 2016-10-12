@@ -20,16 +20,16 @@ ZTP was designed to perform 2 different operations:
 The ZTP process is executed or invoked inside the control plane LXC Linux shell. Prior to IOS-XR 6.1.1 ZTP was executed within the default network namespace and could not access directly the data interfaces. Starting with IOS-XR 6.1.1, ZTP is executed inside the global-VRF network namespace with full access to all the data interfaces.This document is based on the IOS-XR 6.1.1 implementation.
 ZTP is launched from the Linux service manager process (init daemon) when the system reaches level 999 (last processes to be scheduled for execution). At the beginning of its execution, ZTP will scan the configuration for the presence of a username, if there are no username configured,  ZTP will fork a DHCP client for both IPv4 and IPv6 simultaneously and wait for a response.
 
----
-Note: In IOS-XR release 6.1.1 ZTP can also be invoked from the command line interpreter in this case it will start its execution even if a username or a configuration is present in the system. 
-
----
 If the DHCP response contains an option 67 (option 59 for IPv6), ZTP will download the file using the URI provided by option 67 (or option 59 for IPv6).
 If the file received is not a text file or the file is larger than 100 MB ZTP will erase the file and terminate its execution.
 Otherwise it will analyze the first line of the text file received, if the first line of the file starts with **"!! IOS XR"**, it will consider it as a configuration file and pass it to the command line interpreter for syntax verification and commit it.
 If the first line starts with **"#!/bin/bash"** or **"#!/bin/sh"** ZTP will assume this is a script and start the execution, as illustrate below.
 If the text file cannot be interpreted as a shell script of a configuration file, ZTP will erase the file and terminate its execution.
 The script can use all the Linux tools available in the Control Plane LXC and perform addition HTTP GET using wget or curl for example to install package and/or download and apply configuration blocks. 
+
+---
+Note: In IOS-XR release 6.1.1 ZTP can also be invoked from the command line interpreter in this case it will start its execution even if a username or a configuration is present in the system. 
+---
 
 ## ZTP requirement
 ZTP requires 2 external services: a dhcp server and an http server, as illustrated above, the support for tftp has been dropped for security and reliability reasons.
