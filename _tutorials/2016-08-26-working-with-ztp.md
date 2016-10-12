@@ -22,8 +22,8 @@ ZTP is launched from the Linux service manager process (init daemon) when the sy
 
 ---
 Note: In IOS-XR release 6.1.1 ZTP can also be invoked from the command line interpreter in this case it will start its execution even if a username or a configuration is present in the system. 
----
 
+---
 If the DHCP response contains an option 67 (option 59 for IPv6), ZTP will download the file using the URI provided by option 67 (or option 59 for IPv6).
 If the file received is not a text file or the file is larger than 100 MB ZTP will erase the file and terminate its execution.
 Otherwise it will analyze the first line of the text file received, if the first line of the file starts with **"!! IOS XR"**, it will consider it as a configuration file and pass it to the command line interpreter for syntax verification and commit it.
