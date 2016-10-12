@@ -18,7 +18,6 @@ ZTP was designed to perform 2 different operations:
 
 ## How ZTP works
 The ZTP process is executed or invoked inside the control plane LXC Linux shell. Prior to IOS-XR 6.1.1 ZTP was executed within the default network namespace and could not access directly the data interfaces. Starting with IOS-XR 6.1.1, ZTP is executed inside the global-VRF network namespace with full access to all the data interfaces.This document is based on the IOS-XR 6.1.1 implementation.
-
 ZTP is launched from the Linux service manager process (init daemon) when the system reaches level 999 (last processes to be scheduled for execution). At the beginning of its execution, ZTP will scan the configuration for the presence of a username, if there are no username configured,  ZTP will fork a DHCP client for both IPv4 and IPv6 simultaneously and wait for a response.
 
 ---
