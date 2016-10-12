@@ -404,9 +404,9 @@ host ncs-5001-b {
 Refer to the section iPXE DHCPv6 Request on how to decode the dhcp6.client-id or use xxd to translate it in ascii.
 
 ```bash
-cisco@magoo-6$ echo "00:02:00:00:00:09:46:4f:43:31:39:34:37:52:31:34:33" | xxd -pe -r && echo -e
+cisco@galaxy-42$ echo "00:02:00:00:00:09:46:4f:43:31:39:34:37:52:31:34:33" | xxd -pe -r && echo -e
         FOC1947R143
-cisco@magoo-6$ echo -n "FOC1947R143" | od -A n -t x1 | sed 's/^ /00:02:00:00:00:09:/' | sed 's/ /:/g'
+cisco@galaxy-42$ echo -n "FOC1947R143" | od -A n -t x1 | sed 's/^ /00:02:00:00:00:09:/' | sed 's/ /:/g'
     00:02:00:00:00:09:46:4f:43:31:39:34:37:52:31:34:33
 ```
 
