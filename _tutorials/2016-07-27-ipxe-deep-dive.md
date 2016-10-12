@@ -325,25 +325,25 @@ Using the different options and the flexibility of the ISC dhcp server we can ac
 
 ### DHCPv6
 
-The ISC-DHCP service is mono stack, to support IPv6 a second instance of the service needs to be launched, both instance should use different configuration file. The common configuration statement for the DHCPv6 is as follow:
+The ISC-DHCP service is mono stack, to support IPv6 a second instance of the service needs to be launched, both instances should use different configuration file. The common configuration statement for the DHCPv6 is as follow:
 
 ```
-    shared-network FD-30-12 {
-       subnet6 fd:30:12::/64 {
-          # Range for clients
-          range6 fd:30:12::1024 fd:30:12::1124;
-          # Range for clients requesting a temporary address
-          range6 fd:30:12::/64 temporary;
-          # Additional options
-          option dhcp6.name-servers fd:30::172:30:0:25;
-          option dhcp6.domain-search "cisco.local"; 
-          if exists dhcp6.user-class and substring(option dhcp6.user-class, 2, 4) = "iPXE" {
-             option dhcp6.bootfile-url = "http://[fd:30::172:30:0:22]/ncs5k-mini-4";
-          } else if exists dhcp6.user-class and substring(option dhcp6.user-class, 0, 10) = "exr-config" {
-             option dhcp6.bootfile-url = "http://[fd:30::172:30:0:22]/scripts/ncs-ztp.sh";
-          }
-       }
-    }
+shared-network FD-30-12 {
+   subnet6 fd:30:12::/64 {
+      # Range for clients
+      range6 fd:30:12::1024 fd:30:12::1124;
+      # Range for clients requesting a temporary address
+      range6 fd:30:12::/64 temporary;
+      # Additional options
+      option dhcp6.name-servers fd:30::172:30:0:25;
+      option dhcp6.domain-search "cisco.local"; 
+      if exists dhcp6.user-class and substring(option dhcp6.user-class, 2, 4) = "iPXE" {
+         option dhcp6.bootfile-url = "http://[fd:30::172:30:0:22]/ncs5k-mini-4";
+      } else if exists dhcp6.user-class and substring(option dhcp6.user-class, 0, 10) = "exr-config" {
+         option dhcp6.bootfile-url = "http://[fd:30::172:30:0:22]/scripts/ncs-ztp.sh";
+      }
+   }
+}
 ```
 
 The DHCP configuration for IPv6 is similar to IPv4, the first 2 octets of the user-class define the length of the string, so we need to use the substring() statement to match "iPXE". Another difference is the square brackets used to represent the IPv6 address in isc-dhcp configuration file. iPXE cannot used SLAAC and you need to disable SLAAC on the first hop router and force statefull IPv6 address assignment on the segment. For reference here is a snippet of an Cisco IOS configuration. since the DHCP and HTTP server are on a different subnet a helper-address and a relay address have been configured for DHCPv4 and DHCPv6.
@@ -379,26 +379,27 @@ If there are no router present on the segment, you will have to launch the Route
 ```
 
 Granularity in identifying the boot image is similar to IPv4, A class that encompass all NCS-5K series can be defined as follow (ipv6 class support is available starting isc-dhcp-server 4.3.4):
+
 ```
-    ######### Class #########
-    class "ncs-5k" {
-       match if exists vendor-class-identifier and substring(vendor-class-identifier, 6, 6) = "NCS-50";
-          if exists dhcp6.user-class and substring(option dhcp6.user-class, 2, 4) = "iPXE" {
-             filename = "http://[fd:30::172.30.0.22]/ncs5k-mini-3";
-          }
-    }
+######### Class #########
+class "ncs-5k" {
+   match if exists vendor-class-identifier and substring(vendor-class-identifier, 6, 6) = "NCS-50";
+      if exists dhcp6.user-class and substring(option dhcp6.user-class, 2, 4) = "iPXE" {
+         filename = "http://[fd:30::172.30.0.22]/ncs5k-mini-3";
+      }
+}
 ```
 
 Granularity to the host level can be achieve by using the serial number as identifier since the client sends the serial number as part of the client-id a simple solution is simply to match the complete hex data for of the option.
 
 ```
-    host ncs-5001-b {
-       host-identifier option dhcp6.client-id 00:02:00:00:00:09:46:4f:43:31:39:34:37:52:31:34:33:00;
-       if exists dhcp6.user-class and substring(option dhcp6.user-class, 2, 4) = "iPXE" {
-          option dhcp6.bootfile-url = "http://[fd:30::172:30:0:22]/ncs5k-mini-2";
-       }
-       fixed-address6 fd:30:12::172.30.12.52;
-    }
+host ncs-5001-b {
+   host-identifier option dhcp6.client-id 00:02:00:00:00:09:46:4f:43:31:39:34:37:52:31:34:33:00;
+   if exists dhcp6.user-class and substring(option dhcp6.user-class, 2, 4) = "iPXE" {
+      option dhcp6.bootfile-url = "http://[fd:30::172:30:0:22]/ncs5k-mini-2";
+   }
+   fixed-address6 fd:30:12::172.30.12.52;
+}
 ```
 
 Refer to the section iPXE DHCPv6 Request on how to decode the dhcp6.client-id or use xxd to translate it in ascii.
@@ -414,11 +415,11 @@ cisco@magoo-6$ echo -n "FOC1947R143" | od -A n -t x1 | sed 's/^ /00:02:00:00:00:
 
 The URL provided by the DHCP server does not have to be a static. For example, you could direct iPXE to boot from the URL
 
-    http://172.30.0.22/boot.php?mac=${net0/mac}&product=${product:uristring}&serial=${serial:uristring}
+http://172.30.0.22/boot.php?mac=${net0/mac}&product=${product:uristring}&serial=${serial:uristring}
 
 Which would expand to a URL such as
 
-    http://172.30.0.22/boot.php?mac=c4:72:95:a7:ef:c0&product=NCS5001&serial=FOC1947R143
+http://172.30.0.22/boot.php?mac=c4:72:95:a7:ef:c0&product=NCS5001&serial=FOC1947R143
 
 The boot.php program running on the web server could dynamically generate a script based on the information provided in the URL. For example, boot.php could look up the serial number in a MySQL database to determine the correct target to boot from, and then dynamically generate a script such as
     
@@ -438,9 +439,10 @@ Chainloading is the capability to jump from one boot statement to another, using
 The file boot.ipxe file is a script that will identify the correct image based on available iPXE variable, it starts with the "!ipxe" statement and include statement like chain isset, etc.. All the iPXE statements are documented in the iPXE - open source boot firmware [cmd]
 
 The script is evaluated from the top and works for both IPv4 and IPv6
-iPXE Script
 
-```
+### iPXE Script
+
+```ipxe
     !ipxe
      
     # Global variables used by all other iPXE scripts
