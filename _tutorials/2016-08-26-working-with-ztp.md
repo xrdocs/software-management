@@ -169,14 +169,12 @@ In the following example we will review the execution of a simple configuration 
 #
 # Script file should be saved on the backend HTTP server
 #
-# Tested on Skywarp with IOS-XR 6.1.1
+# Tested on NCS-5501 with IOS-XR 6.1.1
 #
 #############################################################################
 
 source ztp_helper.sh
-
 config_file="/tmp/config.txt"
-
 interfaces=$(xrcmd "show interfaces brief")
 
 function activate_all_if(){
@@ -192,7 +190,6 @@ if [ -f $config_file ]; then
   rm -f $config_file
 fi
 activate_all_if;
-
 ```
 
 ### More Complex Example
@@ -208,7 +205,7 @@ In this example, the user has create a CVS file that contains the serial number 
 #
 # Script file should be saved on the backend HTTP server
 #
-# Tested on Skywarp with IOS-XR 6.1.1
+# Tested on NCS-5501 with IOS-XR 6.1.1
 #
 #############################################################################
 export LOGFILE=/disk0:/ztp/user-script.log
