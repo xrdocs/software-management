@@ -159,9 +159,41 @@ If you now wish ZTP to run again from boot, do 'conf t/commit replace' followed 
 ZTP logs its operation on the flash file system in the directory /disk0:/ztp/. ZTP logs all the transaction with the DHCP server and all the state transition. Prior executions of ZTP are also logged in /disk0:/ztp/old_logs/
 
 ### Simple ZTP Example
-In the following example we will review the execution of a simple configuration script downloaded from a data interface using the command “ztp initiate interface Ten 0/0/0/0”
+In the following example we will review the execution of a simple configuration script downloaded from a data interface using the command “ztp initiate interface Ten 0/0/0/0 verbose”, this script will unshut all the interfaces of the system and configure a load interval of 30 sec on all of them.
 
-to be added
+```bash
+#!/bin/bash
+#############################################################################
+# *** Be careful this is powerful and can potentially destroy your system ***
+#                *** !!! Use at your own risk !!! ***
+#
+# Script file should be saved on the backend HTTP server
+#
+# Tested on Skywarp with IOS-XR 6.1.1
+#
+#############################################################################
+
+source ztp_helper.sh
+
+config_file="/tmp/config.txt"
+
+interfaces=$(xrcmd "show interfaces brief")
+
+function activate_all_if(){
+  arInt=($(echo $interfaces | grep -oE '(Te|Fo|Hu)[0-9]*/[0-9]*/[0-9]*/[0-9]*'))
+  for int in ${arInt[*]}; do
+    echo -ne "interface $int\n no shutdown\n load-interval 30\n" >> $config_file
+  done
+  xrapply_with_reason "Initial ZTP configuration" $config_file
+}
+
+### Script entry point
+if [ -f $config_file ]; then
+  rm -f $config_file
+fi
+activate_all_if;
+
+```
 
 ### More Complex Example
 In this example, the user has create a CVS file that contains the serial number followed by the hostname, upon bootup the system will provide its serial number and query the back-end database using HTTP POST, once it obtains its hostname it will perfrom a version check, if the version on the system does not match the desired version, the system will change the boot order forcing a boot using iPXE that will hopefully re-image the system to the desired version. If the system is running the correct version the script proceed by installing the K9sec package and create a generic RSA key for SSH it will then add the local repository for third party packages and install midnight commander. The script finish its execution after downloading and applying a simple configuration.
@@ -386,6 +418,6 @@ Oct 11 11:06:04 172.30.0.54 ztp-script: ### Downloading system configuration ###
 Oct 11 11:06:05 172.30.0.54 ztp-script: ### Downloading system configuration complete ###
 Oct 11 11:06:06 172.30.0.54 ztp-script: ### Applying initial system configuration ###
 Oct 11 11:06:11 172.30.0.54 ztp-script: !!! Checking for errors !!!
-Oct 11 11:06:14 172.30.0.54 ztp-script: ### Applying system config complete ###
+Oct 11 11:06:14 172.30.0.54 ztp-script: ### Applying system configuration complete ###
 Oct 11 11:06:15 172.30.0.54 ztp-script: Autoprovision complete...
 ```
