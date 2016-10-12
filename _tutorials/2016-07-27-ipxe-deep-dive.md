@@ -248,9 +248,8 @@ Option 59: "dhcp6.bootfile-url" equivalent to DHCPv4 option 67
 
 Option 60: "dhcp6.bootfile-parameter"  required to be present but not in use.
 
-The DHCPv6 server will include option 59 "dhcp6.bootfile-url" in its response containing the full URL of the boot image e.g.: http://[fd:30::172:30:0:22]/ncs5k/6.0.0/ncs5k-mini-x.iso-6.0.0
+The DHCPv6 server will include option 59 "dhcp6.bootfile-url" in its response containing the full URL of the boot image e.g.: [http://[fd:30::172:30:0:22]/ncs5k/6.0.0/ncs5k-mini-x.iso-6.0.0] (http://[fd:30::172:30:0:22]/ncs5k/6.0.0/ncs5k-mini-x.iso-6.0.0)
 
- 
 ## iPXE without Chainloading
 
 In this first examples, iPXE features are not used but the usage is similar to PXE boot. In the following examples we will rely solely on the DHCP server configuration to provide the elements necessary to identify the boot ISO for the device.
@@ -262,24 +261,24 @@ In this first examples, iPXE features are not used but the usage is similar to P
 Using the options above we can configure isc-dhcpd to adequately provide the URI to boot the system, the common statements for the Network and the Pool are shown below:
 
 ```
-    ######### Network 172.30.12.0/24 ################
-    shared-network 172-30-12-0 {
-            subnet 172.30.12.0 netmask 255.255.255.0 {
-                    option subnet-mask 255.255.255.0;
-                    option broadcast-address 172.30.12.255;
-                    option routers 172.30.12.1;
-                    option domain-name-servers 172.30.0.25;
-                    option domain-name "cisco.local";
-            }
-    ######## Pool #########
-            pool {
-                    range 172.30.12.10 172.30.12.100;
-                    next-server 172.30.0.22;
-                    if exists user-class and option user-class = "iPXE" {
-                            filename = "http://172.30.0.22/ncs5k-mini-4";
-                    } else if exists user-class and option user-class = "exr-config" {
-                            filename = "http://172.30.0.22/scripts/ncs-ztp.sh";
-                    }
+######### Network 172.30.12.0/24 ################
+shared-network 172-30-12-0 {
+   subnet 172.30.12.0 netmask 255.255.255.0 {
+      option subnet-mask 255.255.255.0;
+      option broadcast-address 172.30.12.255;
+      option routers 172.30.12.1;
+      option domain-name-servers 172.30.0.25;
+      option domain-name "cisco.local";
+   }
+   ####### Pool #########
+        pool {
+           range 172.30.12.10 172.30.12.100;
+           next-server 172.30.0.22;
+           if exists user-class and option user-class = "iPXE" {
+              filename = "http://172.30.0.22/ncs5k-mini-4";
+           } else if exists user-class and option user-class = "exr-config" {
+              filename = "http://172.30.0.22/scripts/ncs-ztp.sh";
+           }
 ```
 
 In the example above option 77 is used to provide the bootfile to the system, the if-then-else statement is required to prevent the DHCP server to provide the (large) bootfile to the auto-configuration process. With this configuration all system in iPXE mode will receive a DHCP offer with identical bootfile URI.
@@ -287,38 +286,38 @@ In the example above option 77 is used to provide the bootfile to the system, th
 If we want to add more granularity to the process we can define a class and using option 60 to only target a specific product or a family of products using the PID embedded in the the request. in the match statement we first verify that the system is in iPXE mode by matching the beginning of the vendor-class-identifier "PXEClient" than we match the first 6 octets of the PID portion "NCS-50", this will match all the NCS-5K routers (NCS-5001, NCS-5002, NCS-5011) and provide them the same bootfile URI, the "if" statement can be more specific to only match NCS-5001 product and additional "else-if" statement can be added to match other products.
 
 ```
-    ######### Class #########
-       class "ncs-5k" {
-          match if substring (option vendor-class-identifier, 0, 9) = "PXEClient";
-             if substring (option vendor-class-identifier, 37, 6) = "NCS-50" {
-                filename = "http://172.30.0.22/ncs5k-mini-3";
-             }
-          }
+######### Class #########
+   class "ncs-5k" {
+      match if substring (option vendor-class-identifier, 0, 9) = "PXEClient";
+         if substring (option vendor-class-identifier, 37, 6) = "NCS-50" {
+            filename = "http://172.30.0.22/ncs5k-mini-3";
+         }
+      }
 ```
 
 Granularity of the boot image can be even more specific, the traditional approach is to use the mac address with a host definition inside the pool, as illustrated below
 
 ```
-    ######## Hosts #########
-    host ncs-5001-a {
-       hardware ethernet c4:72:95:a7:ef:c2;
-       if exists user-class and option user-class = "iPXE" {
-          filename = "http://172.30.0.22/ncs5k-mini-1";
-       }
-       fixed-address 172.30.12.50;
-    }
+######## Hosts #########
+host ncs-5001-a {
+   hardware ethernet c4:72:95:a7:ef:c2;
+   if exists user-class and option user-class = "iPXE" {
+      filename = "http://172.30.0.22/ncs5k-mini-1";
+   }
+   fixed-address 172.30.12.50;
+}
 ```
 
 Using the host statement we provide a fixed address which can be useful for DNS, we still need to verify that option 77 is set to iPXE in the request to only provide the bootfile when required. The disadvantage of using the mac-address is that it is not necessary know in advance and is not written on the packaging box if this is the initial bootup of the system, another approach would be to use the uuid (option 97) or the serial number embedded in option 61.
 
 ```
-    host ncs-5001-b {
-       option dhcp-client-identifier "FOC1947R144";
-       if exists user-class and option user-class = "iPXE" {
-          filename = "http://172.30.0.22/ncs5k-mini-2";
-       }
-       fixed-address 172.30.12.52;
-    }
+host ncs-5001-b {
+   option dhcp-client-identifier "FOC1947R144";
+   if exists user-class and option user-class = "iPXE" {
+      filename = "http://172.30.0.22/ncs5k-mini-2";
+   }
+   fixed-address 172.30.12.52;
+}
 ```
 
 Using the different options and the flexibility of the ISC dhcp server we can achieve various degrees of granularity for the system we want to iPXE boot, but using DHCP options does not scale and each change require to restart the DHCP service. It offers the advantage to be identical to PXE and is easy to do for small to medium size network.
@@ -390,7 +389,7 @@ class "ncs-5k" {
 }
 ```
 
-Granularity to the host level can be achieve by using the serial number as identifier since the client sends the serial number as part of the client-id a simple solution is simply to match the complete hex data for of the option.
+Granularity to the host level can be achieve by using the serial number as identifier since the client sends the serial number as part of the client-id a simple solution is to match the complete hex data of the option.
 
 ```
 host ncs-5001-b {
@@ -442,7 +441,7 @@ The script is evaluated from the top and works for both IPv4 and IPv6
 
 ### iPXE Script
 
-```ipxe
+```
     !ipxe
      
     # Global variables used by all other iPXE scripts
