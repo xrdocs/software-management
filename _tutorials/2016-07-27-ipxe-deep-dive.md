@@ -175,115 +175,63 @@ In is response the DHCP server will place the bootfile URI in option 67 "filenam
 
 ## iPXE DHCPv6 Request
 
+```
     DHCPv6
-
         Message type: Relay-forw (12)
-
         Hopcount: 0
-
         Link address: fd:30:12::1 (fd:30:12::1)
-
         Peer address: fe80::c672:95ff:fea7:efc0 (fe80::c672:95ff:fea7:efc0)
-
         Relay Message
-
             Option: Relay Message (9)
-
             Length: 88
-
             Value: 011ac36d00010012000200000009464f4331393437523134...
-
             DHCPv6
-
                 Message type: Solicit (1)
-
                 Transaction ID: 0x1ac36d
-
                 Client Identifier
-
                     Option: Client Identifier (1)
-
                     Length: 18
-
                     Value: 000200000009464f43313934375231343300
-
                     DUID: 000200000009464f43313934375231343300
-
                     DUID Type: assigned by vendor based on Enterprise number (2)
-
                     Enterprise ID: ciscoSystems (9)
-
                     Identifier: 464f43313934375231343300 (FOC1947R143)
-
                 Identity Association for Non-temporary Address
-
                     Option: Identity Association for Non-temporary Address (3)
-
                     Length: 12
-
                     Value: 1d4098ed0000000000000000
-
                     IAID: 1d4098ed
-
                     T1: 0
-
                     T2: 0
-
                 Option Request
-
                     Option: Option Request (6)
-
                     Length: 8
-
                     Value: 00170018003b003c
-
                     Requested Option code: DNS recursive name server (23)
-
                     Requested Option code: Domain Search List (24)
-
                     Requested Option code: Bootfile URL(59)
-
                     Requested Option code: Bootfile Prameters (60)
-
                 User Class
-
                     Option: User Class (15)
-
                     Length: 6
-
                     Value: 000469505845 : "iPXE"
-
                 Vendor Class
-
                     Option: Vendor Class (16)
-
                     Length: 14
-
                     Value: 0000000900084e43532d35303031
-
                     Enterprise ID: ciscoSystems (9)
-
                     vendor-class-data: NCS-5001
-
                 Elapsed time
-
                     Option: Elapsed time (8)
-
                     Length: 2
-
                     Value: 0000
-
                     Elapsed-time: 0 ms
-
         Interface-Id
-
             Option: Interface-Id (18)
-
             Length: 4
-
             Value: 0000001d
-
             Interface-ID: 
+```
 
 The initial DHCPv6 solicit has the relevant option highlighted
 
