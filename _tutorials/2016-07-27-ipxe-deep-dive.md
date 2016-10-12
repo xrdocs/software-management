@@ -49,7 +49,7 @@ result Card reload request on all succeeded.
 
 If the system is just being powered on, you can get to the device firmware by pressing `<ESC>` or `<DEL>` after it has completed the hardware diagnostic. You will be presented with the Boot selection menu. To force the device to boot using iPXE select the first entry "UEFI: Built-in EFI IPXE"
 
-Once the option is selected, iPXE will initialize the management interfaces, display the features options that were included in the iPXE firmware and propose you to jump into the iPXE prompt by pressing <CTRL>B
+Once the option is selected, iPXE will initialize the management interfaces, display the features options that were included in the iPXE firmware and propose you to jump into the iPXE prompt by pressing `<CTRL>B`
 
 ```
 iPXE initialising devices...
@@ -148,24 +148,23 @@ After Initializing the management Interface Ethernet driver, iPXE will send a DH
 
 iPXE includes a number of options in the initial IPv4 DHCP request, the relevant ones are highlighted
 
-Option 60: "vendor-class-identifier" Identify 4 elements separated by columns:
-
+** Option 60:** "vendor-class-identifier" Identify 4 elements separated by columns:
 1 The type of client: e.g.: PXEClient
 2 The architecture of The system (Arch): e.g.: 00009 Identify an EFI system using a x86-64 CPU
 3 The Universal Network Driver Interface (UNDI): e.g.: 003010 (first 3 octets identify the major version and last 3 octets identify the minor version)
 4 The Product Identifier (PID): e.g.: NCS-5001
 
-Option 61: "dhcp-client-identifier" Identify the Serial Number of the system
+**Option 61:** "dhcp-client-identifier" Identify the Serial Number of the system
 
-Option 66 and 67: are used for TFTP, the first one request the TFTP server name while the second request the filename
+**Option 66 and 67:** are used for TFTP, the first one request the TFTP server name while the second request the filename
 
-Option 77: "user-class" Identify the mode of the system: e.g.: iPXE
+**Option 77:** "user-class" Identify the mode of the system: e.g.: iPXE
 
-Option 97: "uuid" Identify the Universally Unique Identifier a 128-bit value (not usable at this time see CSCuz28164 for details)
+**Option 97:** "uuid" Identify the Universally Unique Identifier a 128-bit value (not usable at this time)
 
-Option 128 - 135: Reserved for PXE boot variables but not in use.
+**Option 128 - 135:** Reserved for PXE boot variables but not in use.
 
-In is response the DHCP server will place the bootfile URI in option 67 "filename" or "bootfile-name" e.g.:http://172.30.0.22/ncs5k/6.0.0/ncs5k-mini-x.iso-6.0.0
+In is response the DHCP server will place the bootfile URI in option 67 "filename" or "bootfile-name" e.g.:[http://172.30.0.22/ncs5k/6.0.0/ncs5k-mini-x.iso-6.0.0](http://172.30.0.22/ncs5k/6.0.0/ncs5k-mini-x.iso-6.0.0)
 
 ## iPXE DHCPv6 Request
 
