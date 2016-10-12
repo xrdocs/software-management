@@ -50,7 +50,7 @@ By default all NCS series router boot from the local disk, there are 2 options t
     result Card reload request on all succeeded.
 ```
 
-If the system is just being powered on, you can get to the device firmware by pressing <ESC> or <DEL> after it has completed the hardware diagnostic. You will be presented with the Boot selection menu. To force the device to boot using iPXE select the first entry "UEFI: Built-in EFI IPXE"
+If the system is just being powered on, you can get to the device firmware by pressing `<ESC>` or `<DEL>` after it has completed the hardware diagnostic. You will be presented with the Boot selection menu. To force the device to boot using iPXE select the first entry "UEFI: Built-in EFI IPXE"
 
 Once the option is selected, iPXE will initialize the management interfaces, display the features options that were included in the iPXE firmware and propose you to jump into the iPXE prompt by pressing <CTRL>B
 
