@@ -75,7 +75,7 @@ host ncs-5001-rp0 {
 ```
 
 ---
-Note: The DHCP configuration examples described in this document use the open-source isc-dhcp-server syntax.
+**Note:** The DHCP configuration examples described in this document use the open-source isc-dhcp-server syntax.
 
 ---
 
