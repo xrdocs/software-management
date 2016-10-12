@@ -190,6 +190,7 @@ if [ -f $config_file ]; then
   rm -f $config_file
 fi
 activate_all_if;
+exit 0
 ```
 
 ### More Complex Example
