@@ -433,9 +433,9 @@ The boot.php program running on the web server could dynamically generate a scri
 
 ## iPXE with Chainloading
 
-Chainloading is the capability to jump from one boot statement to another, using chainloading and the embedded scripting capability of iPXE we can have a very detail and complex selection mechanism for the boot image. In the following example we will use the boot file structure illustrated below and we will use the initial DHCP configuration described earlier but in place of providing the URI for an ISO the DHCP server will provide the URI to a iPXE boot script (boot.ipxe).
+Chainloading is the capability to jump from one boot statement to another. Using chainloading and the embedded scripting capability of iPXE we can have a very detail and complex selection mechanism for the boot image. In the following example we will use the boot file structure illustrated below and we will use the initial DHCP configuration described earlier but in place of providing the URI for an ISO the DHCP server will provide the URI to a iPXE boot script (boot.ipxe).
 
-The file boot.ipxe file is a script that will identify the correct image based on available iPXE variable, it starts with the "!ipxe" statement and include statement like chain isset, etc.. All the iPXE statements are documented in the iPXE - open source boot firmware [cmd]
+The file boot.ipxe file is a script that will identify the correct image based on available iPXE variable, it starts with the "!ipxe" statement and include statement like chain isset, etc.. All the iPXE statements are documented in the iPXE - [open source boot firmware](http://ipxe.org/cmd)
 
 The script is evaluated from the top and works for both IPv4 and IPv6
 
