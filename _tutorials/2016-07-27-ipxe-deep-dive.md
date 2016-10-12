@@ -478,7 +478,7 @@ If the variable has been set, the script attempts to jump to a secondary boot fi
 Here is an example of a secondary boot script based on the serial number of the device, as you can see this script points to the last element of the chain: the ISO boot file.
 
 ```
-cisco@magoo-6:/var/www/html/ipxe$ cat serial-FOC1947R143.ipxe
+cisco@galaxy-42:/var/www/html/ipxe$ cat serial-FOC1947R143.ipxe
 #!ipxe
 echo
 echo Booting NCS5K Mini ISO 6.0.0 from ISO for ${initiator}
@@ -602,21 +602,21 @@ goto start
 Here is a screenshots of the boot process with only the DHCPv6 service active and no valid boot file present.
 
 ```
-iPXE> autoboot net0                                          <- autoboot from the mgmt interface 
+iPXE> autoboot net0                                             <- autoboot from the mgmt interface 
 net0: c4:72:95:a7:ef:c0 using dh8900cc on PCI01:00.1 (open)
   [Link:up, TX:108 TXE:0 RX:5188624 RXE:5186887]
 Configuring (net0 c4:72:95:a7:ef:c0).......... ok
 net0: fe80::c672:95ff:fea7:efc0/64
-net0: fd:30:12::1124/64 gw fe80::fa72:eaff:fe8b:ce80         <- ipv6 statefull address assignment 
-Filename: http://[fd:30::172:30:0:22]/boot.ipxe              <- ipv6 boot URI from DHCPv6
-http://[fd:30::172:30:0:22]/boot.ipxe... ok                  <- boot script is downloaded 
-/boot.ipxe.cfg... ok                                         <- boot variable are chained
+net0: fd:30:12::1124/64 gw fe80::fa72:eaff:fe8b:ce80            <- ipv6 statefull address assignment 
+Filename: http://[fd:30::172:30:0:22]/boot.ipxe                 <- ipv6 boot URI from DHCPv6
+http://[fd:30::172:30:0:22]/boot.ipxe... ok                     <- boot script is downloaded 
+/boot.ipxe.cfg... ok                                            <- boot variable are chained
 /ipxe/uuid-03000200-0400-0500-0006-000700080009.ipxe... No such file or directory (http://ipxe.org/2d0c618e)
 /ipxe/mac-c47295a7efc0.ipxe... No such file or directory (http://ipxe.org/2d0c618e)
 /ipxe/serial-FOC1947R143.ipxe... No such file or directory (http://ipxe.org/2d0c618e)
 /ipxe/pid-NCS-5001.ipxe... No such file or directory (http://ipxe.org/2d0c618e)
 http://172.30.0.22/menu.ipxe... Network unreachable (http://ipxe.org/280a6090)
-http://[fd:30::172:30:0:22]/menu.ipxe... ok                   <- boot menu is executed
+http://[fd:30::172:30:0:22]/menu.ipxe... ok                      <- boot menu is executed
  
 <SNIP>
                  iPXE boot menu for NCS-5001 - FOC1947R143
