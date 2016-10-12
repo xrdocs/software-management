@@ -14,11 +14,8 @@ tags:
 iPXE is an open source boot firmware (licensed under the GNU GPL with some portions under GPL-compatible licenses). It is fully backward compatible with PXE but include several enhancement. The enhancement that are important for IOS-XR are the following:
 
 - Boot from a web server via HTTP
-
 - control the boot process with scripts
-
 - control the boot process with menus
-
 - DNS support
 
 iPXE is included in the network card of the management interfaces only and support for iPXE boot is included in the system firmware (UEFI) of the NCS1K, NCS5k and NCS5500 series routers. All these systems are equipped with a UEFI 64-bits firmware (aka BIOS).
@@ -41,13 +38,13 @@ It is important to note that a different dhcp client will start at the end of th
 By default all NCS series router boot from the local disk, there are 2 options to force the system to boot using iPXE: If the device is already booted you can issue the command "hw-module location <location> bootmedia network reload" in admin mode to force the system to reboot in iPXE mode.
 
 ```
-    RP/0/RP0/CPU0:ios#admin
-    Sun Apr 10 00:56:08.037 UTC
-    root connected from 127.0.0.1 using console on xr-vm_node0_RP0_CPU0
-    sysadmin-vm:0_RP0# hw-module location all bootmedia network reload
-    Sun Apr  10 00:56:24.167 UTC
-    Reload hardware module ? [no,yes] yes
-    result Card reload request on all succeeded.
+RP/0/RP0/CPU0:ios#admin
+Sun Apr 10 00:56:08.037 UTC
+root connected from 127.0.0.1 using console on xr-vm_node0_RP0_CPU0
+sysadmin-vm:0_RP0# hw-module location all bootmedia network reload
+Sun Apr  10 00:56:24.167 UTC
+Reload hardware module ? [no,yes] yes
+result Card reload request on all succeeded.
 ```
 
 If the system is just being powered on, you can get to the device firmware by pressing `<ESC>` or `<DEL>` after it has completed the hardware diagnostic. You will be presented with the Boot selection menu. To force the device to boot using iPXE select the first entry "UEFI: Built-in EFI IPXE"
@@ -55,12 +52,12 @@ If the system is just being powered on, you can get to the device firmware by pr
 Once the option is selected, iPXE will initialize the management interfaces, display the features options that were included in the iPXE firmware and propose you to jump into the iPXE prompt by pressing <CTRL>B
 
 ```
-    iPXE initialising devices...
-    ok
-    iPXE 1.0.0+ (aa070) -- Open Source Network Boot Firmware -- http://ipxe.org
-    Features: DNS HTTP TFTP VLAN EFI ISO9660 NBI Menu
-    Press Ctrl-B to drop to iPXE shell
-    iPXE>
+iPXE initialising devices...
+ok
+iPXE 1.0.0+ (aa070) -- Open Source Network Boot Firmware -- http://ipxe.org
+Features: DNS HTTP TFTP VLAN EFI ISO9660 NBI Menu
+Press Ctrl-B to drop to iPXE shell
+iPXE>
 ```
 
 When presented with the iPXE command line, you are in the iPXE environment, there are multiple commands that can be used for manual booting and for diagnosing problems. Commands can also be used as part of an iPXE script (see section iPXE with chain loading).
