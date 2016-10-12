@@ -391,6 +391,7 @@ class "ncs-5k" {
 Granularity to the host level can be achieve by using the serial number as identifier since the client sends the serial number as part of the client-id a simple solution is to match the complete hex data of the option.
 
 ```
+######## Hosts #########
 host ncs-5001-b {
    host-identifier option dhcp6.client-id 00:02:00:00:00:09:46:4f:43:31:39:34:37:52:31:34:33:00;
    if exists dhcp6.user-class and substring(option dhcp6.user-class, 2, 4) = "iPXE" {
