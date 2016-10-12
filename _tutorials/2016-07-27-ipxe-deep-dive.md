@@ -2,10 +2,12 @@
 published: true
 date: '2016-07-27 13:58 -0700'
 title: iPXE Deep Dive
-author: pwariche
+author: Patrick Warichet
 excerpt: iPXE Deep Dive
 tags:
   - iosxr
+  - cisco
+  - iPXE
 ---
 {% include toc icon="table" title="IOS-XR: iPXE Deep Dive" %}
 
@@ -597,7 +599,7 @@ goto start
 
 Here is a screenshots of the boot process with only the DHCPv6 service active and no valid boot file present.
 
-```ipxe
+```
 iPXE> autoboot net0                                          <- autoboot from the mgmt interface 
 net0: c4:72:95:a7:ef:c0 using dh8900cc on PCI01:00.1 (open)
   [Link:up, TX:108 TXE:0 RX:5188624 RXE:5186887]
