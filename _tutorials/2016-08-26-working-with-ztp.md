@@ -29,6 +29,7 @@ The script can use all the Linux tools available in the Control Plane LXC and pe
 
 ---
 Note: In IOS-XR release 6.1.1 ZTP can also be invoked from the command line interpreter in this case it will start its execution even if a username or a configuration is present in the system. 
+
 ---
 
 ## ZTP requirement
