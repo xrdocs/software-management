@@ -309,6 +309,7 @@ host ncs-5001-a {
 Using the host statement we provide a fixed address which can be useful for DNS, we still need to verify that option 77 is set to iPXE in the request to only provide the bootfile when required. The disadvantage of using the mac-address is that it is not necessary know in advance and is not written on the packaging box if this is the initial bootup of the system, another approach would be to use the uuid (option 97) or the serial number embedded in option 61.
 
 ```
+######## Hosts #########
 host ncs-5001-b {
    option dhcp-client-identifier "FOC1947R144";
    if exists user-class and option user-class = "iPXE" {
