@@ -238,18 +238,18 @@ K9SEC_RPM=ncs5k-k9sec-3.1.0.0-r611.x86_64.rpm
 source ztp_helper.sh
 
 function ztp_log() {
-    # Send logging information to local file ans syslog server
+    # Sends logging information to local file and syslog server
     syslog "$1"
     echo "$(date +"%b %d %H:%M:%S") "$1 >> $LOGFILE
 }
 
 function syslog() {
-    # Send syslog messages with netcat (nc)
+    # Sends syslog messages with netcat (nc)
   echo "ztp-script: "$1 | nc -u -q1 $SYSLOG_SERVER $SYSLOG_PORT
 }
 
 function get_hostname(){
-    # Use serial number to query a remote database to get hostname using HTTP POST
+    # Uses serial number to query a remote database and get hostname using HTTP POST
     local sn=$(dmidecode | grep -m 1 "Serial Number:" | awk '{print $NF}');
     local result="`wget -O- --post-data="serial=$sn" ${HTTP_SERVER}/${PHP_SCRIPT}`";
     if [ "$result" != "Not found" ]; then
@@ -262,7 +262,7 @@ function get_hostname(){
 }
 
 function download_config(){
-	# Download config using hostname
+	# Downloads config using hostname
     ztp_log "### Downloading system configuration ###";
     /usr/bin/wget ${HTTP_SERVER}/${CONFIG_PATH}/${DEVNAME}.config -O /disk0:/new-config 2>&1 >> $LOGFILE
     if [[ "$?" != 0 ]]; then
@@ -273,7 +273,7 @@ function download_config(){
 }
 
 function apply_config(){
-	# Apply initial configuration
+	# Applies initial configuration
     ztp_log "### Applying initial system configuration ###";
     xrapply_with_reason "Initial ZTP configuration" /disk0:/new-config 2>&1 >> $LOGFILE;
     ztp_log "### Checking for errors ###";
@@ -286,7 +286,7 @@ function apply_config(){
 }
 
 function install_k9sec_pkg(){
-    # Install the K9 package from repository, create a RSA key modulus 1024
+    # Installs the k9sec package from repository, create a RSA key modulus 1024
     ztp_log "### XR K9SEC INSTALL ###"
     /usr/bin/wget ${HTTP_SERVER}/${RPM_PATH}/${K9SEC_RPM} -O /disk0:/$K9SEC_RPM 2>&1
     if [[ "$?" != 0 ]]; then
@@ -311,6 +311,7 @@ function install_k9sec_pkg(){
 }
 
 function check_version(){
+	# returns 0 is version matches, 1 otherwise
     local current_ver=`xrcmd "show version" | grep Version | grep Cisco | cut -d " " -f 6`;
     ztp_log "current=$current_ver, desired=$DESIRED_VER";
     if [ "$DESIRED_VER" = "$current_version" ]; then
@@ -321,7 +322,7 @@ function check_version(){
 }
 
 function reboot_ipxe(){
-    # Do not use in production 
+    # Do not use in production, may not be supported on NCS-5508 
     ztp_log "### Mounting EFIvar and changing boot order"
     local EFI_FILESYS="/sys/firmware/efi/efivars"
     if [ ! -d $EFI_FILESYS ]; then
@@ -345,10 +346,12 @@ function reboot_ipxe(){
 }
 
 function add_repo(){
+	# add a local repo to yum package manager
     /usr/bin/yum-config-manager --add-repo ${HTTP_SERVER}/${RPM_PATH} 2>&1
 }
 
 function install_mc(){
+	# uses yum to install packages and dependant package(s) automatically
     if /usr/bin/yum list installed "mc" >/dev/null 2>&1; then
         ztp_log "### Installing midnight commander";
         /usr/bin/yum install mc -y 2>&1
