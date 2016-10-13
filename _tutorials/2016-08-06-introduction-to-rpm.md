@@ -10,6 +10,8 @@ tags:
   - rpm
   - yum
 ---
+{% include toc icon="table" title="IOS-XR and RPM package manager" %}
+
 ## Introduction
 
 With IOS XR 6.0, the Package Installation Envelope (PIE) format has been discarded in favor of the RPM Package Manager (RPM) format. This move aligns IOS XR 6.0  and above more closely with RPM-based Linux distribution like Red Hat or Centos. RPM is a free software project and is released under GPL. Briefly, RPMs contain the following elements:
@@ -142,6 +144,7 @@ Build workspace: /auto/srcarchive16/production/6.0.0/xrv9k/workspace
 ```
 
 We can also use RPM utilities to query the requirement of the package (“-R” switch), this information is also in the RPM metadata and is crucial for dependency checking. In the example below, the k9sec package depends on three packages, each of them within a certain version range.
+
 ```
 [xr-vm_node0_RP0_CPU0:~]$rpm -qR xrv9k-k9sec
 /bin/sh
@@ -283,4 +286,7 @@ xrv9k-iosxr-os >= 1.0.0.0
 xrv9k-iosxr-os < 2.0.0.0
 ```
 
+---
 NOTE: Run these RPM utilities off-box on any Linux system that has the RPM utility installed. Experiment with some of the RPM commands to create your own dependency management tool for XR packages.
+---
+vb                                     b     bv 
