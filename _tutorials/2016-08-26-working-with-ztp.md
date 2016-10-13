@@ -416,7 +416,7 @@ else{
 ?>
 ```
 
-**CVS file** inventory.php
+**CSV file** inventory.php
 
 ```
 FOC2647D246,ncs-5001-a
