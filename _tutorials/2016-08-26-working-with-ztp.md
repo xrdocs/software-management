@@ -84,10 +84,10 @@ host ncs-5001-rp0 {
 The HTTP server should be reachable from the management interface or from a data interface if invoked manually and should be readable.
 
 ## ZTP utilities
-ZTP includes a set of CLI commands and a set of helpers to use within the user script. The CLI command “ztp initiate” can be used to manually trigger the ZTP process, this is particularly useful to test user script or if some manual operation are required before provisioning the box.
+ZTP includes a set of CLI commands and a set of shell utilities that can be sourced within the user script.
 
 ### ztp_helper.sh
-ztp_helper.sh is a shell script that can be sourced by the user script that provides simple tools to access some XR functionalities.
+ztp_helper.sh is a shell script that can be sourced by the user script, it provides simple utilities to access some XR functionalities. These utilities are: 
 
 **xrcmd:** Runs an XR exec command
 
@@ -115,13 +115,13 @@ EOF
 xrapply_with_reason "this is an important name change" /tmp/config
 ```
 
-**xrapply_string:** Is a one liner to enable easy apply of configuration. Use \n to indicate new lines continuing the configuration.
+**xrapply_string:** Applies a block of configuration specified in a string. Use "\n" to delimit line of configuration statement.
 
 ```
 xrapply_string "hostname mars\n interface TenGigE0/0/0/0\n ipv4 address 172.30.0.144/24\n”
 ```
 
-**xrapply_string_with_reason:** As above, but supplies a note for commit history:
+**xrapply_string_with_reason:** As above, but specify a reason for commit history tracking:
 
 ```
 xrapply_string_with_reason ”system renamed again" "hostname venus\n interface TenGigE0/0/0/0\n ipv4 address 172.30.0.144/24\n”
@@ -130,7 +130,7 @@ xrapply_string_with_reason ”system renamed again" "hostname venus\n interface 
 ## ZTP CLI Commands
 **ztp initiate:** Invokes a new ZTP DHCP session, logs will go to the console and /disk0:/ztp/ztp.log
 
-ztp initiate allows the execution of a script even of the system has already been configured. This command is useful for testing ZTP without forcing a reload.
+ztp initiate allows the execution of a script even of the system has already been configured. This command is useful for testing ZTP without forcing a reload. This command is particularly useful to test scripts or if some manual operations are required before provisioning the box.
 
 ```
 RP/0/RP0/CPU0:venus#ztp initiate debug verbose interface TenGigE 0/0/0/0
@@ -147,7 +147,7 @@ ZTP terminated
 ```
 
 **ztp breakout:** Performs a 4x10 breakout detection on all 40 Gig interfaces, by default if no link is detected on any of the four 10Gig interfaces, the port will remain in 40 Gig mode.
-The subcommand nosignal-stay-in-breakout-mode will force the port in breakout out mode even if there is no link signal detected but will place the interfaces in shutdown mode. The subcommand nosignal-stay-in-state-noshut will leave the port in breakout mode but will place the four 10Gig interface in no shutdown mode.
+The subcommand nosignal-stay-in-breakout-mode will force the port in breakout mode even if there is no link signal detected but will place the interfaces in shutdown mode. The subcommand nosignal-stay-in-state-noshut will leave the port in breakout mode but will place the four 10Gig interface in no shutdown mode.
 
 ```
 RP/0/RP0/CPU0:venus#ztp breakout ?
@@ -210,7 +210,9 @@ exit 0
 ```
 
 ### More Complex Example
-In this example, the user has placed on the HTTP server a CVS file that contains devices serial number followed by the hostname. It also created a basic configuration file on the HTTP server. After bootup ZTP will provide its serial number and query the back-end database using HTTP POST, once it obtains its hostname it will perform a version check, if the version on the system does not match the desired version, the system will change the boot order forcing a reboot using iPXE that will hopefully re-image the system to the desired version. If the system is running the correct version the script proceed by installing the k9sec package and create a generic RSA key for SSH. It will then add a local repository for third party packages and install midnight commander and its dependant packages. The script finishes its execution after downloading and applying the configuration.
+In this example, the HTTP server hosts a CSV file that contains devices serial number followed by the hostname. The HTTP server also contains a basic configuration file that need to be applied. Finally a local repository accessible by HTTP contains IOS-XR and third party packages to be installed.
+After bootup ZTP will provide its serial number and query the back-end database using HTTP POST, once it obtains its hostname it will perform a version check, if the version on the system does not match the desired version, the system will change the boot order forcing a reboot using iPXE that will hopefully re-image the system to the desired version.
+If the system is running the correct version the script proceed by installing the k9sec package and create a generic RSA key for SSH. It will then add a local repository for third party packages and install midnight commander and its dependent packages. The script finishes its execution after downloading and applying the configuration.
 
 **ZTP Script** ncs-5001-rp0_ztp.sh
 
