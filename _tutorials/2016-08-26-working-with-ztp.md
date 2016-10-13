@@ -201,7 +201,9 @@ function activate_all_if(){
 
 ### Script entry point
 if [ -f $config_file ]; then
-  rm -f $config_file
+  /bin/rm -f $config_file
+else
+  /bin/touch $config_file
 fi
 activate_all_if;
 exit 0
