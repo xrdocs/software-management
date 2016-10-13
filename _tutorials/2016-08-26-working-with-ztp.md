@@ -28,7 +28,6 @@ If the text file cannot be interpreted as a shell script of a configuration file
 The script can use all the Linux tools available in the Control Plane LXC and perform addition HTTP GET using wget or curl for example to install package and/or download and apply configuration blocks. 
 
 ![ZTP flow of operations]({{site.baseurl}}/images/ztp-flow.png)
-
 ---
 **Note:** In IOS-XR release 6.1.1 ZTP can also be invoked from the command line interpreter in this case it will start its execution even if a username or a configuration is present in the system. 
 
