@@ -289,4 +289,3 @@ xrv9k-iosxr-os < 2.0.0.0
 ---
 NOTE: Run these RPM utilities off-box on any Linux system that has the RPM utility installed. Experiment with some of the RPM commands to create your own dependency management tool for XR packages.
 ---
-vb                                     b     bv 
