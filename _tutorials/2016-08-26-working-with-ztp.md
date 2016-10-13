@@ -211,7 +211,9 @@ exit 0
 
 ### More Complex Example
 In this example, the HTTP server hosts a CSV file that contains devices serial number followed by the hostname. The HTTP server also contains a basic configuration file that need to be applied. Finally a local repository accessible by HTTP contains IOS-XR and third party packages to be installed.
+
 After bootup ZTP will provide its serial number and query the back-end database using HTTP POST, once it obtains its hostname it will perform a version check, if the version on the system does not match the desired version, the system will change the boot order forcing a reboot using iPXE that will hopefully re-image the system to the desired version.
+
 If the system is running the correct version the script proceed by installing the k9sec package and create a generic RSA key for SSH. It will then add a local repository for third party packages and install midnight commander and its dependent packages. The script finishes its execution after downloading and applying the configuration.
 
 **ZTP Script** ncs-5001-rp0_ztp.sh
