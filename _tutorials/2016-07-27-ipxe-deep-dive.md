@@ -31,11 +31,16 @@ iPXE enumerates all Ethernet interfaces net0, net1, net2, ...
 In the following examples we will use a NCS-5001 router.  This device is equipped with 2 management interfaces but we will use only one of these two interfaces, It is recommended to place each interfaces in different subnet to facilitate the management process and improve redundancy.
 
 The following diagram show the topology used for all examples. Both the DHCP and HTTP server are on a different subnet than the NCS-5001
-Boot Process
+
+![topology.png]({{site.baseurl}}/images/topology.png)
+
+## Boot Process
 
 The IOS-XR 6.0 boot process is illustrated below, iPXE requires two external services, a DHCP server (e.g. isc-dhcpd) and a HTTP server (e.g. Apache)
 
 It is important to note that a different dhcp client will start at the end of the boot process. This second dhcp client will facilitate auto provisioning the system.
+
+![boot-process.png]({{site.baseurl}}/images/boot-process.png)
 
 By default all NCS series router boot from the local disk, there are 2 options to force the system to boot using iPXE: If the device is already booted you can issue the command "hw-module location <location> bootmedia network reload" in admin mode to force the system to reboot in iPXE mode.
 
