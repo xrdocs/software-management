@@ -26,7 +26,7 @@ Otherwise it will analyze the first line of the text file received, if the first
 If the first line starts with **"#!/bin/bash"** or **"#!/bin/sh"** ZTP will assume this is a script and start the execution, as illustrate below.
 If the text file cannot be interpreted as a shell script of a configuration file, ZTP will erase the file and terminate its execution.
 The script can use all the Linux tools available in the Control Plane LXC and perform addition HTTP GET using wget or curl for example to install package and/or download and apply configuration blocks. 
-![ZTP flow of operations]({{site.baseurl}}/images/ztp-flow.png)
+![ztp-flow.png]({{site.baseurl}}/images/ztp-flow.png)
 
 ---
 **Note:** In IOS-XR release 6.1.1 ZTP can also be invoked from the command line interpreter in this case it will start its execution even if a username or a configuration is present in the system. 
