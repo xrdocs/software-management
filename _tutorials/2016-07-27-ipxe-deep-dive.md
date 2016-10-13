@@ -30,8 +30,7 @@ iPXE enumerates all Ethernet interfaces net0, net1, net2, ...
 
 In the following examples we will use a NCS-5001 router.  This device is equipped with 2 management interfaces but we will use only one of these two interfaces, It is recommended to place each interfaces in different subnet to facilitate the management process and improve redundancy.
 
-The following diagram show the topology used for all examples. Both the DHCP and HTTP server are on a different subnet than the NCS-5001
-
+The following diagram show the topology used for all examples. Both the DHCP and HTTP server are on a different subnet than the NCS-5001.
 ![topology.png]({{site.baseurl}}/images/topology.png)
 
 ## Boot Process
@@ -39,7 +38,6 @@ The following diagram show the topology used for all examples. Both the DHCP and
 The IOS-XR 6.0 boot process is illustrated below, iPXE requires two external services, a DHCP server (e.g. isc-dhcpd) and a HTTP server (e.g. Apache)
 
 It is important to note that a different dhcp client will start at the end of the boot process. This second dhcp client will facilitate auto provisioning the system.
-
 ![boot-process.png]({{site.baseurl}}/images/boot-process.png)
 
 By default all NCS series router boot from the local disk, there are 2 options to force the system to boot using iPXE: If the device is already booted you can issue the command "hw-module location <location> bootmedia network reload" in admin mode to force the system to reboot in iPXE mode.
@@ -55,6 +53,7 @@ result Card reload request on all succeeded.
 ```
 
 If the system is just being powered on, you can get to the device firmware by pressing `<ESC>` or `<DEL>` after it has completed the hardware diagnostic. You will be presented with the Boot selection menu. To force the device to boot using iPXE select the first entry "UEFI: Built-in EFI IPXE"
+![bios.png]({{site.baseurl}}/images/bios.png)
 
 Once the option is selected, iPXE will initialize the management interfaces, display the features options that were included in the iPXE firmware and propose you to jump into the iPXE prompt by pressing `<CTRL>B`
 
@@ -439,6 +438,7 @@ The boot.php program running on the web server could dynamically generate a scri
 ## iPXE with Chainloading
 
 Chainloading is the capability to jump from one boot statement to another. Using chainloading and the embedded scripting capability of iPXE we can have a very detail and complex selection mechanism for the boot image. In the following example we will use the boot file structure illustrated below and we will use the initial DHCP configuration described earlier but in place of providing the URI for an ISO the DHCP server will provide the URI to a iPXE boot script (boot.ipxe).
+![chainloading.png]({{site.baseurl}}/images/chainloading.png)
 
 The file boot.ipxe file is a script that will identify the correct image based on available iPXE variable, it starts with the "!ipxe" statement and include statement like chain isset, etc.. All the iPXE statements are documented in the iPXE command section [open source boot firmware](http://ipxe.org/cmd)
 
