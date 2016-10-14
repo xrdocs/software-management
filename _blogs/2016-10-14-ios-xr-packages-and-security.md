@@ -67,7 +67,7 @@ Some third party packages embed a RSA/SHA-1signature, to install these packages,
 On the local repository server, you can verify if the package has been signed by the provider.
 
 ```shell
-cisco@magoo-6:~$ rpm -qpi  puppet-agent-1.4.1-1.cisco_wrlinux7.x86_64.rpm | grep Signature
+cisco@galaxy-42:~$ rpm -qpi  puppet-agent-1.4.1-1.cisco_wrlinux7.x86_64.rpm | grep Signature
 warning: puppet-agent-1.4.1-1.cisco_wrlinux7.x86_64.rpm: Header V4 RSA/SHA1 Signature, key ID 4bd6ec30: NOKEY
 Signature   : RSA/SHA1, Thu 24 Mar 2016 03:05:33 PM PDT, Key ID 1054b7a24bd6ec30
 ```
@@ -77,9 +77,9 @@ Signature   : RSA/SHA1, Thu 24 Mar 2016 03:05:33 PM PDT, Key ID 1054b7a24bd6ec30
 On the local repository download and import the public key from the package provider, this step can be performed multiple time to verify the integrity of all packages in the local repository.
 
 ```shell
-pwariche@magoo-6:~$ wget http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs
-pwariche@magoo-6:~$ rpm --import RPM-GPG-KEY-puppetlab
-pwariche@magoo-6:~$ rpm -Kv  puppet-agent-1.4.1-1.cisco_wrlinux7.x86_64.rpm
+cisco@galaxy-42:~$ wget http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs
+cisco@galaxy-42:~$ rpm --import RPM-GPG-KEY-puppetlab
+cisco@galaxy-42:~$ rpm -Kv  puppet-agent-1.4.1-1.cisco_wrlinux7.x86_64.rpm
 puppet-agent-1.4.1-1.cisco_wrlinux7.x86_64.rpm:
      Header V4 RSA/SHA1 Signature, key ID 4bd6ec30: OK
      Header SHA1 digest: OK (fd954ea78e24ea32fdbaf3be045087ffe4c277ae)
@@ -94,7 +94,7 @@ On the Router, create a .repo file in /etc/yum/repos.d that enable key verificat
 ```
 [puppetlabs]
 name=puppetlabs
-baseurl=http://magoo-6.cisco.com/Packages
+baseurl=http://galaxy-42.cisco.com/Packages
 gpgcheck=1
 gpgkey=http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs
 enabled=1
@@ -109,6 +109,7 @@ xr-vm_node0_RP0_CPU0:~# yum-config-manager --enable --add-repo http://172.30.0.2
 ```
 
 4. **Package Installation from local repository**
+
 ```
 xr-vm_node0_RP0_CPU0:~# yum install puppet-agent
 
