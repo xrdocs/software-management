@@ -62,7 +62,7 @@ Some third party packages embed a RSA/SHA-1signature, to install these packages,
 
 #### Example for the puppet client
 
-1. **Key Presence**
+**1) Key Presence**
 
 On the local repository server, you can verify if the package has been signed by the provider.
 
@@ -72,7 +72,7 @@ warning: puppet-agent-1.4.1-1.cisco_wrlinux7.x86_64.rpm: Header V4 RSA/SHA1 Sign
 Signature   : RSA/SHA1, Thu 24 Mar 2016 03:05:33 PM PDT, Key ID 1054b7a24bd6ec30
 ```
 
-2. **Key Verification**
+**2) Key Verification**
 
 On the local repository download and import the public key from the package provider, this step can be performed multiple time to verify the integrity of all packages in the local repository.
 
@@ -87,7 +87,7 @@ puppet-agent-1.4.1-1.cisco_wrlinux7.x86_64.rpm:
      MD5 digest: OK (5eb0292058ba82449b7fb6eaa62fc102)
 ```
 
-3.a **Create a Repository Pointer**
+**3a) Create a Repository Pointer**
 
 On the Router, create a .repo file in /etc/yum/repos.d that enable key verification of packages, keys can also be copied on a local repository if this repository is secure.
 
@@ -100,7 +100,7 @@ gpgkey=http://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs
 enabled=1
 ```
 
-3.b **Alternate method to create a repository pointer with yum-config-manager**
+**3b) Alternate method to create a repository pointer with yum-config-manager**
 
 yum-config-manager is a Linux shell tool that help create modify or disable repository pointers, in the following example it will create a new entry in the directory /etc/yum/repos.d but will not include the gpg check option, the gpgcheck option can be added maually to the created file or enabled globally in /etc/yum.conf
 
@@ -108,7 +108,7 @@ yum-config-manager is a Linux shell tool that help create modify or disable repo
 xr-vm_node0_RP0_CPU0:~# yum-config-manager --enable --add-repo http://172.30.0.22/xrv9k/Packages
 ```
 
-4. **Package Installation from local repository**
+**4) Package Installation from local repository**
 
 ```
 xr-vm_node0_RP0_CPU0:~# yum install puppet-agent
