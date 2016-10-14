@@ -359,10 +359,10 @@ function add_repo(){
 function install_mc(){
 	# uses yum to install packages and dependant package(s) automatically
     if /usr/bin/yum list installed "mc" >/dev/null 2>&1; then
-        ztp_log "### Installing midnight commander";
+    	ztp_log "### Installing midnight commander";
         /usr/bin/yum install mc -y 2>&1
     else
-        ztp_log "### Midnight commander already installed ###"
+    	ztp_log "### Midnight commander already installed ###"
     fi
 }
 
