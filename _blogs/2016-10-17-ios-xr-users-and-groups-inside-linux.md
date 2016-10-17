@@ -32,21 +32,21 @@ Inside Linux, nine special groups are created by default, each of these groups m
 In the following example, the administrator creates a user "test10" member of the maintenance group, which allow the user to enter the Linux shell as root (uid/gid: 0) via the run command, the user "test10" (uid: 1010) is member of the group "test10" (gid:1019) and secondary group maintenance (gid:1001)
 
 ```
-    RP/0/RP0/CPU0:pod-rtr(config)#username test10 group maintenance
-    RP/0/RP0/CPU0:pod-rtr(config)#username test10 password test10
-    RP/0/RP0/CPU0:pod-rtr(config)#commit
-    RP/0/RP0/CPU0:pod-rtr(config)#end
-    RP/0/RP0/CPU0:pod-rtr#exit
-    ...
-    Username: test10
-    Password:
-    RP/0/RP0/CPU0:pod-rtr#run
-    Tue Mar 29 03:06:41.759 UTC
+RP/0/RP0/CPU0:pod-rtr(config)#username test10 group maintenance
+RP/0/RP0/CPU0:pod-rtr(config)#username test10 password test10
+RP/0/RP0/CPU0:pod-rtr(config)#commit
+RP/0/RP0/CPU0:pod-rtr(config)#end
+RP/0/RP0/CPU0:pod-rtr#exit
+...
+Username: test10
+Password:
+RP/0/RP0/CPU0:pod-rtr#run
+Tue Mar 29 03:06:41.759 UTC
 
-	[xr-vm_node0_RP0_CPU0:~]$id
-    uid=0(root) gid=0(root) groups=0(root)
-    [xr-vm_node0_RP0_CPU0:~]$id test10
-    uid=1010(test10) gid=1019(test10) groups=1019(test10),1001(maintenance)
+[xr-vm_node0_RP0_CPU0:~]$id
+uid=0(root) gid=0(root) groups=0(root)
+[xr-vm_node0_RP0_CPU0:~]$id test10
+uid=1010(test10) gid=1019(test10) groups=1019(test10),1001(maintenance)
 ```
 
 ## Gaining Root Privilege
@@ -58,9 +58,9 @@ These measures ensure that only the users with access to the "run" or "bash" com
 A common practice is to allow all members of the sudo group (GID: 27) root privileges. This is done by un-commenting the line "#%sudo ALL=(ALL) ALL" as root in the /etc/sudoers file and add users to the sudo group.
 
 ```
-    [xr-vm_node0_RP0_CPU0:~]$usermod -a -G sudo test10
-    [xr-vm_node0_RP0_CPU0:~]$id test10
-    uid=1010(test10) gid=1019(test10) groups=1019(test10),27(sudo),1001(maintenance)
+[xr-vm_node0_RP0_CPU0:~]$usermod -a -G sudo test10
+[xr-vm_node0_RP0_CPU0:~]$id test10
+uid=1010(test10) gid=1019(test10) groups=1019(test10),27(sudo),1001(maintenance)
 ```
 
 After the line has been modified any user member of the sudo group can gain root privilege using the sudo command. Sudo logs each command, providing a clear audit trail of who did what, Sudo uses timestamp files to implement a "ticketing" system. When a user invokes sudo and enters their password, they are granted a ticket for 5 minutes. for more information on sudoers visit [sudo main page](https://www.sudo.ws/sudo.html "sudo main page")
