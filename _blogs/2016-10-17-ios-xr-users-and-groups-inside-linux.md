@@ -15,7 +15,7 @@ By default, any user created inside XR is automatically replicated including tha
 
 This allows basic access into the Linux shell for all XR configured user, the administrator can create multiple users directly from the XR console if desired.
 
-Inside Linux, nine special groups are created by default, each of these groups maps to one of the default XR groups. When the administrator creates a user belonging to one of the default XR group, that user get replicated inside Linux and added to that special Linux group. In addition, XR users that are member of certain default group are granted root access to Linux when they issue the "run" command (see table below).
+Inside Linux, nine special groups are created by default, each of these groups maps to one of the default XR groups. When the administrator creates a user belonging to one of the default XR group, that user get replicated inside Linux and added to that special Linux group. In addition, XR users that are member of certain default group are granted root access to Linux when they issue the "bash" or "run" command (see table below).
 
 | **XR Group**| **Linux Group**| **GID**| **Role**| **Access Linux from XR**
 | cisco-support| cisco-support| 1000| Cisco support personnel tasks| n/a (add-on group for root-lr users)
@@ -51,7 +51,7 @@ uid=1010(test10) gid=1019(test10) groups=1019(test10),1001(maintenance)
 
 ## Gaining Root Privilege
 
-Inside Linux the file /etc/sudoers only allows root  do everything on any machine as any user (root ALL=(ALL) ALL). No other user can gain root privilege by default, The administrator will have to modify the /etc/sudoers as root to allow other users to gain root access via the sudo command.
+Inside Linux the file /etc/sudoers only allows root to do everything on any machine as any user ```"root ALL=(ALL) ALL"```. No other user can gain root privilege by default, The administrator will have to modify the /etc/sudoers as root to allow other users to gain root access via the sudo command.
 
 These measures ensure that only the users with access to the "run" or "bash" command can create initial users in the Linux shell and provide sudo access.
 
