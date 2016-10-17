@@ -55,7 +55,7 @@ Inside Linux the file /etc/sudoers only allows root  do everything on any machin
 
 These measures ensure that only the users with access to the "run" or "bash" command can create initial users in the Linux shell and provide sudo access.
 
-A common practice is to allow all members of the sudo group (GID: 27) root privileges. This is done by un-commenting the line "#%sudo ALL=(ALL) ALL" as root in the /etc/sudoers file and add users to the sudo group.
+A common practice is to allow all members of the sudo group (GID: 27) root privileges. This is done by un-commenting the line ```"#%sudo ALL=(ALL) ALL"``` as root in the "/etc/sudoers" file and add users to the sudo group.
 
 ```
 [xr-vm_node0_RP0_CPU0:~]$usermod -a -G sudo test10
