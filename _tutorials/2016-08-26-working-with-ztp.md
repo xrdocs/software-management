@@ -47,7 +47,7 @@ host ncs-5001-rp0 {
 }
 ```
 
-A more elaborate example that takes into account option 77 or option 15 for IPv6 (user-class) embedded in the dhcp request sent by the client, ZTP embed the string “exr-config” in the DHCP request as described below. The if statement also take into account the capability to re-image the system using iPXE (see iPXE deep dive document)
+A more elaborate example that takes into account option 77 or option 15 for IPv6 (user-class) embedded in the dhcp request sent by the client, ZTP embed the string “exr-config” in the DHCP request as described below. The if statement also take into account the capability to re-image the system using iPXE (see [iPXE deep dive](https://xrdocs.github.io/software-management/tutorials/2016-07-27-ipxe-deep-dive/ "iPXE deep dive") document)
 
 ```
 host ncs-5001-rp0 {
