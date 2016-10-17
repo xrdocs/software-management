@@ -20,14 +20,14 @@ Inside Linux, nine special groups are created by default, each of these groups m
 | XR Group| Linux Group| GID| Role| Access Linux from XR
 | cisco-support| cisco-support| 1000| Cisco support personnel tasks| n/a (add-on group for root-lr users)
 | maintenance| maintenance| 1001| Yes
-| netadmin| netadmin|1002|Network administrator tasks|No
-| provisioning|provisioning|1003|Yes
-| retrieve|retrieval|1004|No
-| root-lr|root-lr|1005|Secure domain router administrator tasks|Yes
-| n/a|root-system|1006|System-wide administrator tasks	Compatibility with previous IOS-XR
-| serviceadmin|serviceadmin	1007	Service administration tasks	No
-| sysadmin	sysadmin	1008	System administrator tasks	No
-| operator	operator	37	Operator day-to-day tasks (demo)	No
+| netadmin| netadmin| 1002| Network administrator tasks| No
+| provisioning| provisioning| 1003| Yes
+| retrieve| retrieval| 1004| No
+| root-lr| root-lr| 1005| Secure domain router administrator tasks| Yes
+| n/a| root-system| 1006|System-wide administrator tasks| Compatibility with previous IOS-XR
+| serviceadmin| serviceadmin| 1007|	Service administration tasks| No
+| sysadmin|	sysadmin| 1008|	System administrator tasks| No
+| operator|	operator| 37| Operator day-to-day tasks (demo)| No
 
  
 
