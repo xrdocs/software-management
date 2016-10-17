@@ -373,7 +373,7 @@ if [[ "$?" != 0 ]]; then
     ztp_log "No valid hostname found terminating ZTP";
     exit 1
 fi
-ztp_log "Hello from ${DEVNAME}!!!";
+ztp_log "Hello from ${DEVNAME} !!!";
 check_version;
 if  [[ "$?" != 0 ]]; then
     ztp_log "Version mismatch, we will upgrade using iPXE";
@@ -417,7 +417,7 @@ else{
 ?>
 ```
 
-**CSV file** inventory.php
+**CSV file** inventory.txt
 
 ```
 FOC2647D246,ncs-5001-a
@@ -428,8 +428,9 @@ FOC1947R143,ncs-5001-c
 **Logging output**
 
 ```
-Oct 11 11:05:38 172.30.0.54 ztp-script: Hello from ncs-5001-c!!!
+Oct 11 11:05:38 172.30.0.54 ztp-script: Hello from ncs-5001-c !!!
 Oct 11 11:05:40 172.30.0.54 ztp-script: current=6.1.1, desired=6.1.1
+Oct 11 11:05:40 172.30.0.54 ztp-script: Version match, proceeding to configuration
 Oct 11 11:05:41 172.30.0.54 ztp-script: Starting autoprovision process...
 Oct 11 11:05:42 172.30.0.54 ztp-script: ### XR K9SEC INSTALL ###
 Oct 11 11:05:44 172.30.0.54 ztp-script: ### Downloading complete ###
