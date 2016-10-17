@@ -1,7 +1,13 @@
 ---
-published: false
+published: true
 date: '2016-10-17 11:46 -0700'
 title: IOS-XR users and groups inside Linux
+author: Patrick Warichet
+tags:
+  - iosxr
+  - cisco
+  - linux
+excerpt: How IOS-XR users and groups maps to Linux
 ---
 ## XR and Linux Users
 
