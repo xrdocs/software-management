@@ -17,14 +17,14 @@ ZTP was designed to perform 2 different operations:
 2. Download and execute a shell script.
 
 ## How ZTP works
-The ZTP process is executed or invoked inside the control plane LXC Linux shell. Prior to IOS-XR 6.1.1 ZTP was executed within the default network namespace and could not access directly the data interfaces. Starting with IOS-XR 6.1.1, ZTP is executed inside the global-VRF network namespace with full access to all the data interfaces.This document is based on the IOS-XR 6.1.1 implementation.
-ZTP is launched from the Linux service manager process (init daemon) when the system reaches level 999 (last processes to be scheduled for execution). At the beginning of its execution, ZTP will scan the configuration for the presence of a username, if there are no username configured, ZTP will fork a DHCP client for both IPv4 and IPv6 simultaneously and wait for a response.
+The ZTP process is executed or invoked inside the control plane LXC Linux shell. Prior to IOS-XR 6.1.1 ZTP was executed within the default network namespace and could not access directly the data interfaces. Starting with IOS-XR 6.1.1, ZTP is executed inside the global-VRF network namespace with full access to all the data interfaces. This document is based on the IOS-XR 6.1.1 implementation.
+ZTP is launched from XR process manager (processmgr)when the system reaches level 999 (last processes to be scheduled for execution). At the beginning of its execution, ZTP will scan the configuration for the presence of a username. If there are no username configured, ZTP will fork a DHCP client on the management interface for IPv4 and IPv6 simultaneously, and wait for a response.
 
 If the DHCP response contains an option 67 (option 59 for IPv6), ZTP will download the file using the URI provided by option 67 (or option 59 for IPv6).
 If the file received is not a text file or the file is larger than 100 MB ZTP will erase the file and terminate its execution.
 Otherwise it will analyze the first line of the text file received, if the first line of the file starts with **"!! IOS XR"**, it will consider it as a configuration file and pass it to the command line interpreter for syntax verification and commit it.
 If the first line starts with **"#!/bin/bash"** or **"#!/bin/sh"** ZTP will assume this is a script and start the execution, as illustrate below.
-If the text file cannot be interpreted as a shell script of a configuration file, ZTP will erase the file and terminate its execution.
+If the text file cannot be interpreted as a shell script or a configuration file, ZTP will erase the file and terminate its execution.
 The script can use all the Linux tools available in the Control Plane LXC and perform addition HTTP GET using wget or curl for example to install package and/or download and apply configuration blocks. 
 ![ztp-flow.png]({{site.baseurl}}/images/ztp-flow.png "ZTP operation flow")
 
@@ -130,7 +130,7 @@ xrapply_string_with_reason ”system renamed again" "hostname venus\n interface 
 ## ZTP CLI Commands
 **ztp initiate:** Invokes a new ZTP DHCP session, logs will go to the console and /disk0:/ztp/ztp.log
 
-ztp initiate allows the execution of a script even of the system has already been configured. This command is useful for testing ZTP without forcing a reload. This command is particularly useful to test scripts or if some manual operations are required before provisioning the box.
+ztp initiate allows the execution of a script even of the system has already been configured. This command is useful for testing ZTP without forcing a reload. This command is particularly useful to test scripts or if some manual operations are required before provisioning the box. With ZTP initiate you can specify any data interfaces on the system to be used for the whole ZTP process.
 
 ```
 RP/0/RP0/CPU0:venus#ztp initiate debug verbose interface TenGigE 0/0/0/0
@@ -148,6 +148,7 @@ ZTP terminated
 
 **ztp breakout:** Performs a 4x10 breakout detection on all 40 Gig interfaces, by default if no link is detected on any of the four 10Gig interfaces, the port will remain in 40 Gig mode.
 The subcommand nosignal-stay-in-breakout-mode will force the port in breakout mode even if there is no link signal detected but will place the interfaces in shutdown mode. The subcommand nosignal-stay-in-state-noshut will leave the port in breakout mode but will place the four 10Gig interface in no shutdown mode.
+The command "ztp breakout" may not be supported on the ASR9K routers.
 
 ```
 RP/0/RP0/CPU0:venus#ztp breakout ?
