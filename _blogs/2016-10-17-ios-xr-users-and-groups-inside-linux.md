@@ -66,6 +66,6 @@ uid=1010(test10) gid=1019(test10) groups=1019(test10),27(sudo),1001(maintenance)
 After the line has been modified any user member of the sudo group can gain root privilege using the sudo command. Sudo logs each command, providing a clear audit trail of who did what, Sudo uses timestamp files to implement a "ticketing" system. When a user invokes sudo and enters their password, they are granted a ticket for 5 minutes. for more information on sudoers visit [sudo main page](https://www.sudo.ws/sudo.html "sudo main page")
 
 ---
-Update: Since 6.1.1 All members of the the sudo group can gain root privilege using "sudo" by default.
+**Update:** Since 6.1.1 All members of the the sudo group can gain root privilege using "sudo" by default.
 
 ---
