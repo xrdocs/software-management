@@ -67,5 +67,5 @@ After the line has been modified any user member of the sudo group can gain root
 
 ---
 Update: Since 6.1.1 All members of the the sudo group can gain root privilege using "sudo" by default.
----
 
+---
