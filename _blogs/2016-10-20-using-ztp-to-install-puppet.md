@@ -1,7 +1,14 @@
 ---
-published: false
+published: true
 date: '2016-10-20 14:47 -0700'
 title: Using ZTP to install Puppet
+tags:
+  - iosxr
+  - linux
+  - puppet
+  - ZTP
+author: Patrick Warichet
+excerpt: Installation of the puppet agent using ZTP
 ---
 ## Introduction
 Puppet can potentically manage any resource defined on a node. Puppet can manage complex and distributed components to ensure service consistency and availability. In short, Puppet uses a configuration policy (a recipe) to bring system into compliance.
