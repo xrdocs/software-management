@@ -34,7 +34,7 @@ Puppet requires all hostnames to be resolved. The script relies on a DNS server 
 
 YUM_REPO="http://172.30.0.22/packages/puppet"
 YUM_PUPPET="/etc/yum/repos.d/puppet.repo"
-PUPPET_SRV="cumulus-master.cisco.local"
+PUPPET_SRV="puppet-master.cisco.local"
 PUPPET_CONF="/etc/puppetlabs/puppet/puppet.conf"
 DOMAIN="cisco.local"
 DOMAIN_SRV=172.30.0.25
