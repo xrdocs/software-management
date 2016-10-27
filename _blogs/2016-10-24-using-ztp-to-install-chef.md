@@ -38,6 +38,7 @@ Example for Ubuntu Xenial(Chef version 12.9.1)
 wget https://packages.chef.io/stable/ubuntu/16.04/chef-server-core_12.9.1-1_amd64.deb
 ```
 2. Install the server:
+
 ```
 sudo dpkg -i chef-server-core_*.deb
 ```
