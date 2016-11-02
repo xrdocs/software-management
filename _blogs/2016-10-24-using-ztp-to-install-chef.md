@@ -26,6 +26,7 @@ Automated configuration management tools play a vital role in managing complex e
 **Visibility:** Configuration management tools include auditing and reporting capabilities, changes can be automatically logged in all relevant tracking systems.
 
 ## Chef Infrastructure
+Chef requires the follwing components a server, one or more workastation and one or more nodes, The instruction below used Ubuntu Xenial for both the server and the workstation to mange the IOS-XR nodes.
 ### Installing the Chef Server
 
 The Chef server is the central place that govern interaction between all workstations and managed nodes. Changes made in the workstations are uploaded to the Chef server, which is then accessed by the chef-client and used to configure individual nodes.
@@ -67,6 +68,65 @@ sudo chef-server-ctl org-create shortname fullname --association_user username -
 ```
 With the Chef server installed and the needed RSA keys generated, you can move on to configuring your workstation, where all major work will be performed for your Chef’s nodes.
 
-### Install the Chef Workstation
+### Installing and Setting up the Chef Workstation
 
-Your Chef workstation will be where you create and configure any recipes, cookbooks, attributes, and other changes made to your Chef configurations. Although this can be a local machine of any OS, there is some benefit to keeping a remote server as your workstation since it can be accessed from anywhere.
+Your Chef workstation will be where you create and configure any recipes, cookbooks, attributes, and other changes made to your Chef configurations. Although this can be the same machine that host the server, it is recommended to keep the server and the workstation seperated.
+
+1 Download the latest [Chef Development Kit](https://downloads.chef.io/chef-dk/ "Chef Development Kit"):
+
+```
+wget https://packages.chef.io/stable/ubuntu/12.04/chefdk_0.19.6-1_amd64.deb
+```
+2 Install ChefDK:
+
+```
+sudo dpkg -i chefdk_*.deb
+```
+3 Verify the components of the development kit:
+
+```
+chef verify
+```
+cisco@magoo-6:~$ chef verify
+Running verification for component 'berkshelf'
+Running verification for component 'test-kitchen'
+Running verification for component 'tk-policyfile-provisioner'
+Running verification for component 'chef-client'
+Running verification for component 'chef-dk'
+Running verification for component 'chef-provisioning'
+Running verification for component 'chefspec'
+Running verification for component 'generated-cookbooks-pass-chefspec'
+Running verification for component 'rubocop'
+Running verification for component 'fauxhai'
+Running verification for component 'knife-spork'
+Running verification for component 'kitchen-vagrant'
+Running verification for component 'package installation'
+Running verification for component 'openssl'
+Running verification for component 'inspec'
+Running verification for component 'delivery-cli'
+Running verification for component 'git'
+Running verification for component 'opscode-pushy-client'
+Running verification for component 'chef-sugar'
+
+Verification of component 'test-kitchen' succeeded.
+Verification of component 'chef-dk' succeeded.
+Verification of component 'chefspec' succeeded.
+Verification of component 'rubocop' succeeded.
+Verification of component 'knife-spork' succeeded.
+Verification of component 'openssl' succeeded.
+Verification of component 'delivery-cli' succeeded.
+Verification of component 'opscode-pushy-client' succeeded.
+Verification of component 'berkshelf' succeeded.
+Verification of component 'fauxhai' succeeded.
+Verification of component 'inspec' succeeded.
+Verification of component 'chef-sugar' succeeded.
+Verification of component 'tk-policyfile-provisioner' succeeded.
+Verification of component 'chef-provisioning' succeeded.
+Verification of component 'kitchen-vagrant' succeeded.
+Verification of component 'git' succeeded.
+Verification of component 'chef-client' succeeded.
+Verification of component 'package installation' succeeded.
+Verification of component 'generated-cookbooks-pass-chefspec' succeeded.
+cisco@magoo-6:~$
+```
+
