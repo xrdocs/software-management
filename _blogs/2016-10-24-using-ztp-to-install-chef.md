@@ -106,7 +106,8 @@ Running verification for component 'delivery-cli'
 Running verification for component 'git'
 Running verification for component 'opscode-pushy-client'
 Running verification for component 'chef-sugar'
-
+.................
+---------------------------------------------
 Verification of component 'test-kitchen' succeeded.
 Verification of component 'chef-dk' succeeded.
 Verification of component 'chefspec' succeeded.
@@ -145,12 +146,12 @@ Using a text editor create a knife configuration file named knife.rb in to your 
 log_level                :info
 log_location             STDOUT
 node_name                'username'
-client_key               '~/chef-repo/.chef/username.pem'
+client_key               '/home/cisco/chef-repo/.chef/username.pem'
 validation_client_name   'shortname-validator'
-validation_key           '~/chef-repo/.chef/shortname.pem'
+validation_key           '/home/cisco/chef-repo/.chef/shortname.pem'
 chef_server_url          'https://chef-server/organizations/shortname'
-syntax_check_cache_path  '~/chef-repo/.chef/syntax_check_cache'
-cookbook_path [ '~/chef-repo/cookbooks' ]
+syntax_check_cache_path  '/home/cisco/chef-repo/.chef/syntax_check_cache'
+cookbook_path [ '/home/cisco/chef-repo/cookbooks' ]
 ```
 Replace username,shortname with the values used in the steps "Create a User and Organization"
 Move uo to the chef-repo and copy the needed SSL certificates from the server:
@@ -228,7 +229,7 @@ start_services;
 exit 0
 ```
 
-On the workstation, we bootstrap the node using knife, it is important to note that since the Chef client will run inside the Linux shell. Inside the Linux shell the default port for the ssh server is 57722 and ssh using the root user is disabled. Fortunatly IOS-XR root-lr users are not root when they ssh into the system (see my previous blog [IOS-XR  Users and Groups](https://xrdocs.github.io/software-management/blogs/2016-10-17-ios-xr-users-and-groups-inside-linux/ "IOS-XR Users and Groups"))
+On the workstation, we bootstrap the node using knife. It is important to note that since the Chef client will run inside the Linux shell. Inside the Linux shell the default port for the ssh server is 57722 and ssh using the root user is disabled. Fortunatly IOS-XR root-lr users are not root when they ssh into the system (see my previous blog [IOS-XR  Users and Groups](https://xrdocs.github.io/software-management/blogs/2016-10-17-ios-xr-users-and-groups-inside-linux/ "IOS-XR Users and Groups")) since we need root access to bootstrap the client we have to use --sudo and provide the user password.
 
 ```
 knife bootstrap 172.30.12.54 --sudo -p 57722 -x admin -P cisco123 --node-name ncs-5001-c
@@ -253,5 +254,56 @@ Enter your password:
 172.30.12.54 Chef Client finished, 0/0 resources updated in 04 seconds
 cisco@magoo-6:~/chef-repo/.chef$ knife node list
 ncs-5001-c
+```
+
+## Creating a simple recipe
+
+We use the command "chef generate cookbook" to configure our cookbook, once create we change to the recipes folder and edit the default.rb recipe. 
 
 ```
+~/chef-repo/cookbooks$ chef generate cookbook ios-xr
+Generating cookbook ciscolab
+- Ensuring correct cookbook file content
+- Ensuring delivery configuration
+- Ensuring correct delivery build cookbook content
+
+Your cookbook is ready. Type `cd ios-xr` to enter it.
+
+There are several commands you can run to get started locally developing and testing your cookbook.
+Type `delivery local --help` to see a full list.
+
+Why not start by writing a test? Tests for the default recipe are stored at:
+
+test/recipes/default_test.rb
+
+If you'd prefer to dive right in, the default recipe can be found at:
+
+recipes/default.rb
+
+~/chef-repo/cookbooks$ cd ios-xr/recipes/
+~/chef-repo/cookbooks$ vi default.rb
+```
+Inside the recipe we can source IOS-XR ztp_helper.sh and use "xrcmd", "xrapply", etc.  
+
+```
+#
+# Cookbook Name:: ios-xr
+# Recipe:: default
+#
+# Copyright 2016, YOUR_COMPANY_NAME
+#
+# All rights reserved - Do Not Redistribute
+#
+execute "configure-lo0" do
+        command "source ztp_helper.sh && xrapply_string_with_reason \"First Chef recipe\"  \"interface Looopback0\n ip address 1.1.1.1/32\""
+        action :run
+end
+```
+
+We push the recipe to the Chef server
+
+~/chef-repo/cookbooks/ios-xr/recipes$ knife cookbook upload ios-xr
+Uploading ios-xr         [0.1.0]
+Uploaded 1 cookbook.
+
+
