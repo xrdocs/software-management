@@ -86,8 +86,7 @@ sudo dpkg -i chefdk_*.deb
 
 ```
 chef verify
-```
-cisco@magoo-6:~$ chef verify
+cisco@chef-workstation:~$ chef verify
 Running verification for component 'berkshelf'
 Running verification for component 'test-kitchen'
 Running verification for component 'tk-policyfile-provisioner'
@@ -127,6 +126,110 @@ Verification of component 'git' succeeded.
 Verification of component 'chef-client' succeeded.
 Verification of component 'package installation' succeeded.
 Verification of component 'generated-cookbooks-pass-chefspec' succeeded.
-cisco@magoo-6:~$
+
 ```
 
+4 Generate the chef-repo and add the RSA keys
+
+```
+chef generate repo chef-repo
+cd chef-repo
+mkdir .chef
+scp user@chef-server:~/chef-keys/*.pem .chef/
+```
+
+5 Generate knife.rb
+
+Using a text editor create a knife configuration file named knife.rb in to your ~/chef-repo/.chef folder.
+```
+log_level                :info
+log_location             STDOUT
+node_name                'username'
+client_key               '~/chef-repo/.chef/username.pem'
+validation_client_name   'shortname-validator'
+validation_key           '~/chef-repo/.chef/shortname.pem'
+chef_server_url          'https://chef-server/organizations/shortname'
+syntax_check_cache_path  '~/chef-repo/.chef/syntax_check_cache'
+cookbook_path [ '~/chef-repo/cookbooks' ]
+```
+Replace username,shortname with the values used in the steps "Create a User and Organization"
+Move uo to the chef-repo and copy the needed SSL certificates from the server:
+
+```
+cd ..
+knife ssl fetch
+```
+Confirm that knife.rb is set up correctly by running the client list:
+
+```
+knife client list
+```
+This command should output the validator name.
+With both the server and a workstation configured, it is possible to bootstrap your first node.
+
+## Installing the client with ZTP and Bootsrap the node 
+Using ZTP we can install the Chef client directly inside the control plane LXC of IOS-XR
+
+```shell
+#!/bin/bash
+
+YUM_REPO="http://172.30.0.22/packages/chef"
+YUM_CHEF="/etc/yum/repos.d/chef.repo"
+CHEF_SRV="chef-cook.cisco.local"
+DOMAIN="cisco.local"
+DOMAIN_SRV=172.30.0.25
+HOSTNAME="ncs-5001-c"
+MGMT_IP="172.30.12.54 255.255.255.0"
+
+source ztp_helper.sh
+
+function create_repo(){
+   # Create local repository file for chef
+   echo "creating repo file in /etc/yum/repo.d"
+   echo "### created by ztp $(date +"%b %d %H:%M:%S") ###" > $YUM_CHEF
+   echo -ne "[chef]\nname=chef\nenabled=1\ngpgcheck=1\n" >> $YUM_CHEF
+   echo "baseurl=$YUM_REPO" >> $YUM_CHEF
+   echo "gpgkey=$YUM_REPO/chef.asc" >> $YUM_CHEF 
+}
+function install_chef(){
+   # Install chef
+   echo "installing chef from the local repo"
+   /usr/bin/yum clean all > /dev/null
+   /usr/bin/yum update > /dev/null
+   /usr/bin/yum install -y chef > /dev/null
+}
+function setup_resolver(){
+  echo " setting up the resolver"
+  local resolver=/etc/resolv.conf
+  echo "### created by ztp $(date +"%b %d %H:%M:%S") ###" > $resolver
+  echo "domain $DOMAIN" >> $resolver
+  echo "search $DOMAIN" >> $resolver
+  echo "nameserver $DOMAIN_SRV" >> $resolver  
+}
+function set_hostname(){
+  echo "setting up the device hostname"
+  xrapply_string_with_reason "ztp chef install" "hostname $HOSTNAME\n interface mgmtEth 0/RP0/CPU0/0\n ipv4 address $MGMT_IP \n"
+  /bin/hostname -f $HOSTNAME.$DOMAIN
+  echo $HOSTNAME > /etc/hostname  
+}
+function start_services(){
+   echo "starying services"
+  /etc/init.d/sshd_operns start
+  /etc/init.d/chef start
+}
+
+### script start
+set_hostname;
+setup_resolver;
+create_repo;
+install_chef;
+start_services;
+
+exit 0
+```
+
+On the workstation, we bootstrap the node using knife
+
+```
+knife bootstrap 172.30.12.54 --sudo -p 57722 -x admin -P cisco123 --node-name ncs-5001-c
+```
