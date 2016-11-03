@@ -232,4 +232,26 @@ On the workstation, we bootstrap the node using knife
 
 ```
 knife bootstrap 172.30.12.54 --sudo -p 57722 -x admin -P cisco123 --node-name ncs-5001-c
+Connecting to 172.30.12.54
+172.30.12.54 knife sudo password: 
+Enter your password: 
+172.30.12.54 
+172.30.12.54 -----> Existing Chef installation detected
+172.30.12.54 Starting the first Chef Client run...
+172.30.12.54 Starting Chef Client, version 12.15.19
+172.30.12.54 [2016-11-02T23:09:51+00:00] WARN: [inet] no ip address on fwdintf
+172.30.12.54 Creating a new client identity for ncs-5001-c using the validator key.
+172.30.12.54 resolving cookbooks for run list: []
+172.30.12.54 Synchronizing Cookbooks:
+172.30.12.54 Installing Cookbook Gems:
+172.30.12.54 Compiling Cookbooks...
+172.30.12.54 [2016-11-02T23:09:53+00:00] WARN: Node ncs-5001-c has an empty run list.
+172.30.12.54 Converging 0 resources
+172.30.12.54 
+172.30.12.54 Running handlers:
+172.30.12.54 Running handlers complete
+172.30.12.54 Chef Client finished, 0/0 resources updated in 04 seconds
+cisco@magoo-6:~/chef-repo/.chef$ knife node list
+ncs-5001-c
+
 ```
