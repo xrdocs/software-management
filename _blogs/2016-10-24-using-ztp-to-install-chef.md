@@ -326,6 +326,7 @@ ncs-5001-c:
 
 The execution will occur within the interval configured (300 sec in our case), Here is what the logs look like:
 
+```
 Starting Chef Client, version 12.15.19
 resolving cookbooks for run list: ["ios-xr::default"]
 Synchronizing Cookbooks:
