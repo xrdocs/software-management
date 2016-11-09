@@ -159,15 +159,24 @@ Replace username,shortname with the values used in the steps "Create a User and 
 Move uo to the chef-repo and copy the needed SSL certificates from the server:
 
 ```
-cd ..
-knife ssl fetch
+~/chef-repo/.chef$ cd ..
+~/chef-repo$ knife ssl fetch
+WARNING: Certificates from chef-cook will be fetched and placed in your trusted_cert
+directory (~/chef-repo/.chef/trusted_certs).
+
+Knife has no means to verify these are the correct certificates. You should
+verify the authenticity of these certificates after downloading.
+
+Adding certificate for chef-cook in ~/chef-repo/.chef/trusted_certs/chef-cook.crt
+
 ```
 Confirm that knife.rb is set up correctly by running the client list:
 
 ```
-knife client list
+~/chef-repo$ knife client list
+ciscolab-validator
 ```
-This command should output the validator name.
+This command should output the validator name (ciscolab in our case).
 With both the server and a workstation configured, it is possible to bootstrap your first node.
 
 ## Installing the client with ZTP and Bootsrap the node 
@@ -218,7 +227,8 @@ function set_hostname(){
 function start_services(){
   echo "starying services"
   /etc/init.d/sshd_operns start
-  /usr/bin/chef-client -daemonize -i 300
+  # Start chef client in daemon mode and schedule a run every 5 min
+  /usr/bin/chef-client -daemonize -i 300 -L /var/log/chef.log
 }
 
 ### script start
@@ -261,11 +271,11 @@ ncs-5001-c
 
 ## Creating a simple recipe
 
-We use the command "chef generate cookbook" to configure our cookbook, once create we change to the recipes folder and edit the default.rb recipe. 
+We use the command "chef generate cookbook" to configure our cookbook, once created, we change to the recipes folder and edit the default.rb recipe. 
 
 ```
 ~/chef-repo/cookbooks$ chef generate cookbook ios-xr
-Generating cookbook ciscolab
+Generating cookbook ios-xr
 - Ensuring correct cookbook file content
 - Ensuring delivery configuration
 - Ensuring correct delivery build cookbook content
@@ -284,6 +294,7 @@ If you'd prefer to dive right in, the default recipe can be found at:
 recipes/default.rb
 
 ```
+We create a simple recipe that will create a file in the home directory of the user (/disk0: for IOS-XR)
 
 ```
 ~/chef-repo/cookbooks$ cd ios-xr/recipes/
@@ -301,7 +312,7 @@ file "#{ENV['HOME']}/chef.txt" do
 end
 ```
 
-We push the recipe to the Chef server and add it to the run list for the node
+We push the recipe to the Chef server and add it to the run list for the ncs-5001-c node
 
 ```
 ~/chef-repo/cookbooks/ios-xr/recipes$ knife cookbook upload ios-xr
@@ -326,7 +337,7 @@ Recipe: ios-xr::default
   * file[/disk0:/chef.txt] action create
     - create new file /disk0:/chef.txt
     - update content in file /disk0:/chef.txt from none to ba4fda
-    --- /disk0:/schef.txt	2016-11-09 22:04:29.356188978 +0000
+    --- /disk0:/chef.txt	2016-11-09 22:04:29.356188978 +0000
     +++ /disk0:/.chef-chef20161109-16571-14v6aep.txt	2016-11-09 22:04:29.355188978 +0000
     @@ -1 +1,2 @@
     +Hello from Chef
