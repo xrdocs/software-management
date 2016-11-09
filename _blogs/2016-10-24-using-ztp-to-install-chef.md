@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 date: '2016-10-24 22:24 -0700'
 title: Using ZTP to install Chef
 author: Patrick Warichet
