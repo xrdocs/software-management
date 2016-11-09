@@ -66,7 +66,7 @@ sudo chef-server-ctl user-create username firstname lastname email password --fi
 ```
 sudo chef-server-ctl org-create shortname fullname --association_user username --filename ~/chef-keys/shortname.pem
 ```
-With the Chef server installed and the needed RSA keys generated, you can move on to configuring your workstation, where all major work will be performed for your Chef’s nodes.
+With the Chef server installed and the RSA keys generated, you can move on to configuring your workstation, where all major work will be performed for your Chef’s nodes.
 
 ### Installing and Setting up the Chef Workstation
 
@@ -141,7 +141,8 @@ scp user@chef-server:~/chef-keys/*.pem .chef/
 
 5 Generate knife.rb
 
-Using a text editor create a knife configuration file named knife.rb in to your ~/chef-repo/.chef folder.
+Using your favorite text editor create a knife configuration file named knife.rb in to your ~/chef-repo/.chef folder.
+
 ```
 log_level                :info
 log_location             STDOUT
@@ -169,7 +170,7 @@ This command should output the validator name.
 With both the server and a workstation configured, it is possible to bootstrap your first node.
 
 ## Installing the client with ZTP and Bootsrap the node 
-Using ZTP we can install the Chef client directly inside the control plane LXC of IOS-XR
+Using ZTP we can install the Chef client directly inside the control plane LXC of IOS-XR, here is a script example that will perform the installation during the initial bootup.
 
 ```shell
 #!/bin/bash
@@ -193,7 +194,7 @@ function create_repo(){
    echo "gpgkey=$YUM_REPO/chef.asc" >> $YUM_CHEF 
 }
 function install_chef(){
-   # Install chef
+   # Install chef from local repository
    echo "installing chef from the local repo"
    /usr/bin/yum clean all > /dev/null
    /usr/bin/yum update > /dev/null
@@ -214,9 +215,9 @@ function set_hostname(){
   echo $HOSTNAME > /etc/hostname  
 }
 function start_services(){
-   echo "starying services"
+  echo "starying services"
   /etc/init.d/sshd_operns start
-  /etc/init.d/chef start
+  /usr/bin/chef-client -daemonize -i 300
 }
 
 ### script start
@@ -229,7 +230,7 @@ start_services;
 exit 0
 ```
 
-On the workstation, we bootstrap the node using knife. It is important to note that since the Chef client will run inside the Linux shell. Inside the Linux shell the default port for the ssh server is 57722 and ssh using the root user is disabled. Fortunatly IOS-XR root-lr users are not root when they ssh into the system (see my previous blog [IOS-XR  Users and Groups](https://xrdocs.github.io/software-management/blogs/2016-10-17-ios-xr-users-and-groups-inside-linux/ "IOS-XR Users and Groups")) since we need root access to bootstrap the client we have to use --sudo and provide the user password.
+On the workstation, we bootstrap the node using knife. It is important to note that the Chef client will run inside the Linux shell. Inside the Linux shell the default port for the ssh server is 57722 and ssh using the root user is disabled. Fortunatly IOS-XR root-lr users are not root when they ssh into the system (see my previous blog [IOS-XR  Users and Groups](https://xrdocs.github.io/software-management/blogs/2016-10-17-ios-xr-users-and-groups-inside-linux/ "IOS-XR Users and Groups")). Since we need root access to bootstrap the client we have to use --sudo and provide the user password.
 
 ```
 knife bootstrap 172.30.12.54 --sudo -p 57722 -x admin -P cisco123 --node-name ncs-5001-c
@@ -252,7 +253,8 @@ Enter your password:
 172.30.12.54 Running handlers:
 172.30.12.54 Running handlers complete
 172.30.12.54 Chef Client finished, 0/0 resources updated in 04 seconds
-cisco@magoo-6:~/chef-repo/.chef$ knife node list
+
+knife node list
 ncs-5001-c
 ```
 
@@ -280,12 +282,11 @@ If you'd prefer to dive right in, the default recipe can be found at:
 
 recipes/default.rb
 
-~/chef-repo/cookbooks$ cd ios-xr/recipes/
-~/chef-repo/cookbooks$ vi default.rb
 ```
-Inside the recipe we can source IOS-XR ztp_helper.sh and use "xrcmd", "xrapply", etc.  
 
 ```
+~/chef-repo/cookbooks$ cd ios-xr/recipes/
+~/chef-repo/cookbooks$ vi default.rb
 #
 # Cookbook Name:: ios-xr
 # Recipe:: default
@@ -294,9 +295,17 @@ Inside the recipe we can source IOS-XR ztp_helper.sh and use "xrcmd", "xrapply",
 #
 # All rights reserved - Do Not Redistribute
 #
-execute "configure-lo0" do
-        command "source ztp_helper.sh && xrapply_string_with_reason \"First Chef recipe\"  \"interface Looopback0\n ip address 1.1.1.1/32\""
-        action :run
+remote_file '/root/demo_set.tar.gz' do
+   source 'http://chef-cook.cisco.local/demo_set.tar.gz'
+   owner 'root'
+   group 'root'
+   mode '0755'
+   action :create_if_missing
+end
+execute 'Untar demo set' do
+   command 'tar -zxf /root/demo_set.tar.gz'
+   cwd '/root/'
+   not_if { Dir.exists?("/root/demo_set/") }
 end
 ```
 
@@ -305,5 +314,3 @@ We push the recipe to the Chef server
 ~/chef-repo/cookbooks/ios-xr/recipes$ knife cookbook upload ios-xr
 Uploading ios-xr         [0.1.0]
 Uploaded 1 cookbook.
-
-
