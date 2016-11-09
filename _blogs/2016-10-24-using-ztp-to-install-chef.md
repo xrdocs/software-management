@@ -295,22 +295,42 @@ recipes/default.rb
 #
 # All rights reserved - Do Not Redistribute
 #
-remote_file '/root/demo_set.tar.gz' do
-   source 'http://chef-cook.cisco.local/demo_set.tar.gz'
-   owner 'root'
-   group 'root'
-   mode '0755'
-   action :create_if_missing
-end
-execute 'Untar demo set' do
-   command 'tar -zxf /root/demo_set.tar.gz'
-   cwd '/root/'
-   not_if { Dir.exists?("/root/demo_set/") }
+file "#{ENV['HOME']}/chef.txt" do
+  content 'Hello from Chef'
 end
 ```
 
-We push the recipe to the Chef server
+We push the recipe to the Chef server and add it to the run list for the node
 
+```
 ~/chef-repo/cookbooks/ios-xr/recipes$ knife cookbook upload ios-xr
 Uploading ios-xr         [0.1.0]
 Uploaded 1 cookbook.
+
+~/chef-repo/cookbooks/ios-xr$ knife node run_list set ncs-5001-c 'recipe[ios-xr::default]'
+ncs-5001-c:
+  run_list: recipe[ios-xr::default]
+```
+
+The execution will occur within the interval configured (300 sec in our case), Here is what the logs look like:
+
+Starting Chef Client, version 12.15.19
+resolving cookbooks for run list: ["ios-xr::default"]
+Synchronizing Cookbooks:
+  - ios-xr (0.1.0)
+Installing Cookbook Gems:
+Compiling Cookbooks...
+Converging 1 resources
+Recipe: ios-xr::default
+  * file[/disk0:/chef.txt] action create
+    - create new file /disk0:/chef.txt
+    - update content in file /disk0:/chef.txt from none to ba4fda
+    --- /disk0:/schef.txt	2016-11-09 22:04:29.356188978 +0000
+    +++ /disk0:/.chef-chef20161109-16571-14v6aep.txt	2016-11-09 22:04:29.355188978 +0000
+    @@ -1 +1,2 @@
+    +Hello from Chef
+
+Running handlers:
+Running handlers complete
+Chef Client finished, 1/1 resources updated in 03 seconds
+```
