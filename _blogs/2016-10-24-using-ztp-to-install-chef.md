@@ -27,13 +27,14 @@ Automated configuration management tools play a vital role in managing complex e
 
 ## Chef Infrastructure
 Chef requires the follwing components a server, one or more workastation and one or more nodes, The instruction below used Ubuntu Xenial for both the server and the workstation to mange the IOS-XR nodes.
+
 ### Installing the Chef Server
 
 The Chef server is the central place that govern interaction between all workstations and managed nodes. Changes made in the workstations are uploaded to the Chef server, which is then accessed by the chef-client and used to configure individual nodes.
 Installing Chef Server is easy as 1-2-3:
 
-1 Download the latest Chef server for your favorite distro [ http://downloads.chef.io/chef-server/.]( http://downloads.chef.io/chef-server/.):
-Example for Ubuntu Xenial(Chef version 12.9.1) 
+1 Download the latest [Chef Server]( http://downloads.chef.io/chef-server/.) for your favorite distro:
+Example for Ubuntu Xenial (Chef version 12.9.1) 
 
 ```
 wget https://packages.chef.io/stable/ubuntu/16.04/chef-server-core_12.9.1-1_amd64.deb
