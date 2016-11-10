@@ -86,8 +86,7 @@ sudo dpkg -i chefdk_*.deb
 3 Verify the components of the development kit:
 
 ```
-chef verify
-cisco@chef-workstation:~$ chef verify
+~$ chef verify
 Running verification for component 'berkshelf'
 Running verification for component 'test-kitchen'
 Running verification for component 'tk-policyfile-provisioner'
@@ -134,10 +133,10 @@ Verification of component 'generated-cookbooks-pass-chefspec' succeeded.
 4 Generate the chef-repo and add the RSA keys
 
 ```
-chef generate repo chef-repo
-cd chef-repo
-mkdir .chef
-scp user@chef-server:~/chef-keys/*.pem .chef/
+~$ chef generate repo chef-repo
+~$ cd chef-repo
+~/chef-repo$ mkdir .chef
+~/chef-repo$ scp user@chef-server:~/chef-keys/*.pem .chef/
 ```
 
 5 Generate knife.rb
@@ -244,7 +243,7 @@ exit 0
 On the workstation, we bootstrap the node using knife. It is important to note that the Chef client will run inside the Linux shell. Inside the Linux shell the default port for the ssh server is 57722 and ssh using the root user is disabled. Fortunatly IOS-XR root-lr users are not root when they ssh into the system (see my previous blog [IOS-XR  Users and Groups](https://xrdocs.github.io/software-management/blogs/2016-10-17-ios-xr-users-and-groups-inside-linux/ "IOS-XR Users and Groups")). Since we need root access to bootstrap the client we have to use --sudo and provide the user password.
 
 ```
-knife bootstrap 172.30.12.54 --sudo -p 57722 -x admin -P cisco123 --node-name ncs-5001-c
+~$ knife bootstrap 172.30.12.54 --sudo -p 57722 -x admin -P cisco123 --node-name ncs-5001-c
 Connecting to 172.30.12.54
 172.30.12.54 knife sudo password: 
 Enter your password: 
