@@ -497,8 +497,8 @@ Below is the example script for the boot menu, this example is adapted from [htt
 
 Each menu items can be associated with a shortcut key and navigation between items is done using the up and down arrows, for xrv9k image we have to use the sanboot option, for NCS-5K and NCS-5500 device we use the boot keyword.
 
-
 boot.ipxe.cfg
+
 ```
 #!ipxe
 
@@ -526,8 +526,8 @@ set initiator ${product} - ${serial}
 
 ```
 
-
 boot.ipxe
+
 ```
 !ipxe
 # Variables are specified in boot.ipxe.cfg
@@ -653,8 +653,7 @@ http://[fd:30::172:30:0:22]/boot.ipxe... ok                     <- boot script i
 /ipxe/pid-NCS-5001.ipxe... No such file or directory (http://ipxe.org/2d0c618e)
 http://172.30.0.22/menu.ipxe... Network unreachable (http://ipxe.org/280a6090)
 http://[fd:30::172:30:0:22]/menu.ipxe... ok                      <- boot menu is executed
- 
-<SNIP>
+
                  iPXE boot menu for NCS-5001 - FOC1947R143
  
 ------------------------- XRV9K Boot Menu ------------------------------ 
