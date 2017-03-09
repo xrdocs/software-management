@@ -497,7 +497,7 @@ Below is the example script for the boot menu, this example is adapted from [htt
 
 Each menu items can be associated with a shortcut key and navigation between items is done using the up and down arrows, for xrv9k image we have to use the sanboot option, for NCS-5K and NCS-5500 device we use the boot keyword.
 
-boot.ipxe.cfg
+**boot.ipxe.cfg**
 
 ```
 #!ipxe
@@ -526,7 +526,7 @@ set initiator ${product} - ${serial}
 
 ```
 
-boot.ipxe
+**boot.ipxe**
 
 ```
 !ipxe
