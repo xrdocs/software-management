@@ -36,7 +36,7 @@ yandex_site_verification :
 
 # Social Sharing
 twitter:
-  username               : &twitter "CiscoDevNet"
+  username               : &twitter "xrdocs"
 facebook:
   username               :
   app_id                 :
@@ -289,6 +289,9 @@ prose:
   ignore:
     - index.md
     - _config.yml
+    - _config.pdf.yml
+    - /_sass
+    - /_techdocs
     - /_layouts
     - /_includes
     - /_posts
@@ -456,5 +459,5 @@ compress_html:
   ignore:
     envs: development
 
-host: "0.0.0.0"
+host: "localhost"
 port: 4000
