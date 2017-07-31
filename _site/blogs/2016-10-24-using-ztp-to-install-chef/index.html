@@ -1,0 +1,846 @@
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+
+<meta charset="utf-8">
+
+
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>            Using ZTP to install Chef      IOS XR Software Management and ZTP @xrdocs      </title>
+
+
+
+
+
+
+
+<meta property="og:locale" content="en-US">
+<meta property="og:site_name" content="IOS XR Software Management and ZTP @xrdocs">
+<meta property="og:title" content="Using ZTP to install Chef">
+
+
+  <link rel="canonical" href="http://localhost:4000/blogs/2016-10-24-using-ztp-to-install-chef/">
+  <meta property="og:url" content="http://localhost:4000/blogs/2016-10-24-using-ztp-to-install-chef/">
+
+
+
+  <meta property="og:description" content="Installing Chef with Zero Touch Provisioning">
+
+
+
+  <meta name="twitter:site" content="@xrdocs">
+  <meta name="twitter:title" content="Using ZTP to install Chef">
+  <meta name="twitter:description" content="Installing Chef with Zero Touch Provisioning">
+  <meta name="twitter:url" content="http://localhost:4000/blogs/2016-10-24-using-ztp-to-install-chef/">
+
+  
+    <meta name="twitter:card" content="summary">
+    
+      <meta name="twitter:image" content="http://localhost:4000/images/packaging-xrdocs.jpg">
+    
+  
+
+  
+    <meta name="twitter:creator" content="@pwariche">
+  
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2016-10-25T05:24:00+00:00">
+  
+  
+    <link rel="prev" href="http://localhost:4000/blogs/2016-10-20-using-ztp-to-install-puppet/" title="Using ZTP to install Puppet">
+  
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Organization",
+      "url": "http://localhost:4000",
+      "logo": "http://localhost:4000/images/packaging-xrdocs.jpg"
+    }
+  </script>
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "person",
+      "name" : "Cisco Systems Inc",
+      "url" : "http://localhost:4000",
+      "sameAs" : ["https://twitter.com/CiscoDevNet"]
+    }
+  </script>
+
+
+
+
+
+
+<!-- end SEO -->
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="IOS XR Software Management and ZTP @xrdocs Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="jgRKKm6B9FwJJPXxpmc0-EP3D0Mh8JHXaJqoYIGj1ek" />
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<script>
+if (!(window.location.host.startsWith("127.0.0.1") || window.location.host.startsWith("localhost")) && (window.location.host.substr(-10) == '.github.io') && (window.location.protocol != "https:"))
+    window.location.protocol = "https";
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<meta http-equiv="cleartype" content="on">
+<style>
+.underline-on-hover:hover {
+    text-decoration: underline;
+}
+.searchForm{
+      border-radius:5px;
+      -moz-border-radius:5px;
+      -webkit-border-radius:5px;
+      width: 900px;
+   }
+#search_results{
+      display: table; margin:0 auto;
+   }
+</style>
+</style>
+
+    
+
+<!-- start custom head snippets -->
+
+<link href="http://localhost:4000/assets/css/lity.min.css" rel="stylesheet">
+<link href="http://localhost:4000/assets/css/cisco-sans.min.css" rel="stylesheet">
+<link href="http://localhost:4000/assets/css/material-scrolltop.css" rel="stylesheet">
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="http://localhost:4000/images/apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://localhost:4000/images/apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://localhost:4000/images/apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://localhost:4000/images/apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="60x60" href="http://localhost:4000/images/apple-touch-icon-60x60.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="http://localhost:4000/images/apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="76x76" href="http://localhost:4000/images/apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="http://localhost:4000/images/apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-196x196.png" sizes="196x196" />
+<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-16x16.png" sizes="16x16" />
+<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-128.png" sizes="128x128" />
+<link rel="shortcut icon" href="http://localhost:4000/images/favicon_cisco.ico" />
+<meta name="application-name" content="&nbsp;"/>
+<meta name="msapplication-TileColor" content="#FFFFFF" />
+<meta name="msapplication-TileImage" content="http://localhost:4000/images/mstile-144x144.png" />
+<meta name="msapplication-square70x70logo" content="http://localhost:4000/images/mstile-70x70.png" />
+<meta name="msapplication-square150x150logo" content="http://localhost:4000/images/mstile-150x150.png" />
+<meta name="msapplication-wide310x150logo" content="http://localhost:4000/images/mstile-310x150.png" />
+<meta name="msapplication-square310x310logo" content="http://localhost:4000/images/mstile-310x310.png" />
+
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <button><div class="navicon"></div></button>
+        <ul class="visible-links">
+          <li class="masthead__menu-item masthead__menu-item--lg"><a href="http://localhost:4000/">Software-Management</a></li>
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="https://xrdocs.github.io">@xrdocs</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item greedy-nav-active"><a href="http://localhost:4000/blogs/">Blogs</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="http://localhost:4000/tutorials/">Tutorials</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="http://localhost:4000/search">Search <i class="fa fa-search" aria-hidden="true"></i></a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="http://localhost:4000/tags/">Tags</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="http://localhost:4000/collection-archive/">Archive</a></li>
+                
+            
+
+
+          
+        </ul>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    
+
+
+
+<div id="main" role="main">
+  
+
+
+  <div class="sidebar sticky">
+  
+
+
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  <div class="author__avatar">
+    
+    	<img src="http://localhost:4000/images/pwariche_bio.jpg" class="author__avatar" alt="Patrick Warichet">
+    
+  </div>
+
+  <div class="author__content">
+    <h3 class="author__name">Patrick Warichet</h3>
+    <p class="author__bio">Technical Marketing Engineer, Web Solutions, Cisco.</p>
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+      
+      
+        <li><a href="mailto:pwariche@cisco.com"><i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email</a></li>
+      
+      
+      
+        <li><a href="http://twitter.com/pwariche"><i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Using ZTP to install Chef">
+    <meta itemprop="description" content="Installing Chef with Zero Touch Provisioning">
+    <meta itemprop="datePublished" content="October 25, 2016">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Using ZTP to install Chef
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  8 minutes read
+</p>
+          
+        </header>
+      
+
+    
+
+      <section class="page__content" itemprop="text">
+        <h2 id="introduction">Introduction</h2>
+<p>Chef is an automation platform that “turns infrastructure into code”, allowing users to manage and deploy resources across multiple servers, or nodes. Chef allows users to create and download recipes (stored in cookbooks) to automate content, configuration and policies on these nodes.</p>
+
+<p>Chef is comprised of a Chef server, one or more workstations, and a number of nodes that are managed by the chef-client installed on each node. You can download the <a href="https://packages.chef.io/stable/ios_xr/6/chef-12.15.19-1.ios_xr6.x86_64.rpm" title="IOS-XR Chef client package">IOS-XR Chef client package</a> from Chef and installed directly inside the control plane LXC of IOS-XR.</p>
+
+<p>Chef like Puppet (see my previous blog <a href="https://xrdocs.github.io/software-management/blogs/2016-10-20-using-ztp-to-install-puppet/" title="Using ZTP to install Puppet">Using ZTP to install Puppet</a>)</p>
+
+<p>Automated configuration management tools play a vital role in managing complex enterprise infrastructures. Amongst the many advantages, the ones pertinent to IOS-XR and network node in general are:</p>
+
+<p><strong>Consistency:</strong> It makes it easier for configuration changes to meet compliance and security requirements. By automating repeated tasks (like applying a SMU), it allows network administrators to concentrate on more important stuff.</p>
+
+<p><strong>Efficient change management:</strong>. Automated configuration management can remove delay when deploying new technologies, reducing the number of processes needed to manage change. Small change batches can be performed on a more regular basis.</p>
+
+<p><strong>Availability:</strong> Automatated configuration management tool help quickly restore service. Rather than troubleshooting an issue by hand, a system can be reset to well known working status.</p>
+
+<p><strong>Visibility:</strong> Configuration management tools include auditing and reporting capabilities, changes can be automatically logged in all relevant tracking systems.</p>
+
+<h2 id="chef-infrastructure">Chef Infrastructure</h2>
+<p>Chef requires the follwing components a server, one or more workastation and one or more nodes, The instruction below used Ubuntu Xenial for both the server and the workstation to mange the IOS-XR nodes.</p>
+
+<h3 id="installing-the-chef-server">Installing the Chef Server</h3>
+
+<p>The Chef server is the central place that govern interaction between all workstations and managed nodes. Changes made in the workstations are uploaded to the Chef server, which is then accessed by the chef-client and used to configure individual nodes.
+Installing Chef Server is easy as 1-2-3:</p>
+
+<p>1 Download the latest <a href="http://downloads.chef.io/chef-server/.">Chef Server</a> for your favorite distro:
+Example for Ubuntu Xenial (Chef version 12.9.1)</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>wget https://packages.chef.io/stable/ubuntu/16.04/chef-server-core_12.9.1-1_amd64.deb
+</code></pre>
+</div>
+<p>2 Install the server:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo dpkg -i chef-server-core_*.deb
+</code></pre>
+</div>
+<p>3 Run the chef-server-ctl command to start the Chef server services:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo chef-server-ctl reconfigure
+</code></pre>
+</div>
+
+<h3 id="create-a-user-and-organization">Create a User and Organization</h3>
+
+<p>1 In order to link workstations and nodes to the Chef server, an administrator and an organization need to be created with associated RSA private keys. create a directory to store the keys:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>mkdir ~/chef-keys
+</code></pre>
+</div>
+<p>2 Create an administrator. Change username to your desired username, firstname and lastname to your first and last name, email to your email, password to a secure password, and username.pem to your username followed by .pem:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo chef-server-ctl user-create username firstname lastname email password --filename ~/chef-keys/username.pem
+</code></pre>
+</div>
+<p>3 Create an organization. The shortname value should be a basic identifier for your organization with no spaces, whereas the fullname can be the full, proper name of the organization. The association_user value username refers to the username made in the step above:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo chef-server-ctl org-create shortname fullname --association_user username --filename ~/chef-keys/shortname.pem
+</code></pre>
+</div>
+<p>With the Chef server installed and the RSA keys generated, you can move on to configuring your workstation, where all major work will be performed for your Chef’s nodes.</p>
+
+<h3 id="installing-and-setting-up-the-chef-workstation">Installing and Setting up the Chef Workstation</h3>
+
+<p>Your Chef workstation will be where you create and configure any recipes, cookbooks, attributes, and other changes made to your Chef configurations. Although this can be the same machine that host the server, it is recommended to keep the server and the workstation seperated.</p>
+
+<p>1 Download the latest <a href="https://downloads.chef.io/chef-dk/" title="Chef Development Kit">Chef Development Kit</a>:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>wget https://packages.chef.io/stable/ubuntu/12.04/chefdk_0.19.6-1_amd64.deb
+</code></pre>
+</div>
+<p>2 Install ChefDK:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo dpkg -i chefdk_*.deb
+</code></pre>
+</div>
+<p>3 Verify the components of the development kit:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>~$ chef verify
+Running verification for component 'berkshelf'
+Running verification for component 'test-kitchen'
+Running verification for component 'tk-policyfile-provisioner'
+Running verification for component 'chef-client'
+Running verification for component 'chef-dk'
+Running verification for component 'chef-provisioning'
+Running verification for component 'chefspec'
+Running verification for component 'generated-cookbooks-pass-chefspec'
+Running verification for component 'rubocop'
+Running verification for component 'fauxhai'
+Running verification for component 'knife-spork'
+Running verification for component 'kitchen-vagrant'
+Running verification for component 'package installation'
+Running verification for component 'openssl'
+Running verification for component 'inspec'
+Running verification for component 'delivery-cli'
+Running verification for component 'git'
+Running verification for component 'opscode-pushy-client'
+Running verification for component 'chef-sugar'
+.................
+---------------------------------------------
+Verification of component 'test-kitchen' succeeded.
+Verification of component 'chef-dk' succeeded.
+Verification of component 'chefspec' succeeded.
+Verification of component 'rubocop' succeeded.
+Verification of component 'knife-spork' succeeded.
+Verification of component 'openssl' succeeded.
+Verification of component 'delivery-cli' succeeded.
+Verification of component 'opscode-pushy-client' succeeded.
+Verification of component 'berkshelf' succeeded.
+Verification of component 'fauxhai' succeeded.
+Verification of component 'inspec' succeeded.
+Verification of component 'chef-sugar' succeeded.
+Verification of component 'tk-policyfile-provisioner' succeeded.
+Verification of component 'chef-provisioning' succeeded.
+Verification of component 'kitchen-vagrant' succeeded.
+Verification of component 'git' succeeded.
+Verification of component 'chef-client' succeeded.
+Verification of component 'package installation' succeeded.
+Verification of component 'generated-cookbooks-pass-chefspec' succeeded.
+
+</code></pre>
+</div>
+
+<p>4 Generate the chef-repo and add the RSA keys</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>~$ chef generate repo chef-repo
+~$ cd chef-repo
+~/chef-repo$ mkdir .chef
+~/chef-repo$ scp user@chef-server:~/chef-keys/*.pem .chef/
+</code></pre>
+</div>
+
+<p>5 Generate knife.rb</p>
+
+<p>Using your favorite text editor create a knife configuration file named knife.rb in to your ~/chef-repo/.chef folder.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>log_level                :info
+log_location             STDOUT
+node_name                'username'
+client_key               '/home/cisco/chef-repo/.chef/username.pem'
+validation_client_name   'shortname-validator'
+validation_key           '/home/cisco/chef-repo/.chef/shortname.pem'
+chef_server_url          'https://chef-server/organizations/shortname'
+syntax_check_cache_path  '/home/cisco/chef-repo/.chef/syntax_check_cache'
+cookbook_path [ '/home/cisco/chef-repo/cookbooks' ]
+</code></pre>
+</div>
+<p>Replace username,shortname with the values used in the steps “Create a User and Organization”
+Move uo to the chef-repo and copy the needed SSL certificates from the server:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>~/chef-repo/.chef$ cd ..
+~/chef-repo$ knife ssl fetch
+WARNING: Certificates from chef-cook will be fetched and placed in your trusted_cert
+directory (~/chef-repo/.chef/trusted_certs).
+
+Knife has no means to verify these are the correct certificates. You should
+verify the authenticity of these certificates after downloading.
+
+Adding certificate for chef-cook in ~/chef-repo/.chef/trusted_certs/chef-cook.crt
+
+</code></pre>
+</div>
+<p>Confirm that knife.rb is set up correctly by running the client list:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>~/chef-repo$ knife client list
+ciscolab-validator
+</code></pre>
+</div>
+<p>This command should output the validator name (ciscolab in our case).
+With both the server and a workstation configured, it is possible to bootstrap your first node.</p>
+
+<h2 id="installing-the-client-with-ztp-and-bootsrap-the-node">Installing the client with ZTP and Bootsrap the node</h2>
+<p>Using ZTP we can install the Chef client directly inside the control plane LXC of IOS-XR, here is a script example that will perform the installation during the initial bootup.</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nv">YUM_REPO</span><span class="o">=</span><span class="s2">"http://172.30.0.22/packages/chef"</span>
+<span class="nv">YUM_CHEF</span><span class="o">=</span><span class="s2">"/etc/yum/repos.d/chef.repo"</span>
+<span class="nv">CHEF_SRV</span><span class="o">=</span><span class="s2">"chef-cook.cisco.local"</span>
+<span class="nv">DOMAIN</span><span class="o">=</span><span class="s2">"cisco.local"</span>
+<span class="nv">DOMAIN_SRV</span><span class="o">=</span>172.30.0.25
+<span class="nv">HOSTNAME</span><span class="o">=</span><span class="s2">"ncs-5001-c"</span>
+<span class="nv">MGMT_IP</span><span class="o">=</span><span class="s2">"172.30.12.54 255.255.255.0"</span>
+
+<span class="nb">source </span>ztp_helper.sh
+
+<span class="k">function </span>create_repo<span class="o">(){</span>
+   <span class="c"># Create local repository file for chef</span>
+   <span class="nb">echo</span> <span class="s2">"creating repo file in /etc/yum/repo.d"</span>
+   <span class="nb">echo</span> <span class="s2">"### created by ztp </span><span class="k">$(</span>date +<span class="s2">"%b %d %H:%M:%S"</span><span class="k">)</span><span class="s2"> ###"</span> &gt; <span class="nv">$YUM_CHEF</span>
+   <span class="nb">echo</span> -ne <span class="s2">"[chef]</span><span class="se">\n</span><span class="s2">name=chef</span><span class="se">\n</span><span class="s2">enabled=1</span><span class="se">\n</span><span class="s2">gpgcheck=1</span><span class="se">\n</span><span class="s2">"</span> &gt;&gt; <span class="nv">$YUM_CHEF</span>
+   <span class="nb">echo</span> <span class="s2">"baseurl=</span><span class="nv">$YUM_REPO</span><span class="s2">"</span> &gt;&gt; <span class="nv">$YUM_CHEF</span>
+   <span class="nb">echo</span> <span class="s2">"gpgkey=</span><span class="nv">$YUM_REPO</span><span class="s2">/chef.asc"</span> &gt;&gt; <span class="nv">$YUM_CHEF</span> 
+<span class="o">}</span>
+<span class="k">function </span>install_chef<span class="o">(){</span>
+   <span class="c"># Install chef from local repository</span>
+   <span class="nb">echo</span> <span class="s2">"installing chef from the local repo"</span>
+   /usr/bin/yum clean all &gt; /dev/null
+   /usr/bin/yum update &gt; /dev/null
+   /usr/bin/yum install -y chef &gt; /dev/null
+<span class="o">}</span>
+<span class="k">function </span>setup_resolver<span class="o">(){</span>
+  <span class="nb">echo</span> <span class="s2">" setting up the resolver"</span>
+  <span class="nb">local </span><span class="nv">resolver</span><span class="o">=</span>/etc/resolv.conf
+  <span class="nb">echo</span> <span class="s2">"### created by ztp </span><span class="k">$(</span>date +<span class="s2">"%b %d %H:%M:%S"</span><span class="k">)</span><span class="s2"> ###"</span> &gt; <span class="nv">$resolver</span>
+  <span class="nb">echo</span> <span class="s2">"domain </span><span class="nv">$DOMAIN</span><span class="s2">"</span> &gt;&gt; <span class="nv">$resolver</span>
+  <span class="nb">echo</span> <span class="s2">"search </span><span class="nv">$DOMAIN</span><span class="s2">"</span> &gt;&gt; <span class="nv">$resolver</span>
+  <span class="nb">echo</span> <span class="s2">"nameserver </span><span class="nv">$DOMAIN_SRV</span><span class="s2">"</span> &gt;&gt; <span class="nv">$resolver</span>  
+<span class="o">}</span>
+<span class="k">function </span>set_hostname<span class="o">(){</span>
+  <span class="nb">echo</span> <span class="s2">"setting up the device hostname"</span>
+  xrapply_string_with_reason <span class="s2">"ztp chef install"</span> <span class="s2">"hostname </span><span class="nv">$HOSTNAME</span><span class="se">\n</span><span class="s2"> interface mgmtEth 0/RP0/CPU0/0</span><span class="se">\n</span><span class="s2"> ipv4 address </span><span class="nv">$MGMT_IP</span><span class="s2"> </span><span class="se">\n</span><span class="s2">"</span>
+  /bin/hostname -f <span class="nv">$HOSTNAME</span>.<span class="nv">$DOMAIN</span>
+  <span class="nb">echo</span> <span class="nv">$HOSTNAME</span> &gt; /etc/hostname  
+<span class="o">}</span>
+<span class="k">function </span>start_services<span class="o">(){</span>
+  <span class="nb">echo</span> <span class="s2">"starying services"</span>
+  /etc/init.d/sshd_operns start
+  <span class="c"># Start chef client in daemon mode and schedule a run every 5 min</span>
+  /usr/bin/chef-client -daemonize -i 300 -L /var/log/chef.log
+<span class="o">}</span>
+
+<span class="c">### script start</span>
+set_hostname;
+setup_resolver;
+create_repo;
+install_chef;
+start_services;
+
+<span class="nb">exit </span>0
+</code></pre>
+</div>
+
+<p>On the workstation, we bootstrap the node using knife. It is important to note that the Chef client will run inside the Linux shell. Inside the Linux shell the default port for the ssh server is 57722 and ssh using the root user is disabled. Fortunatly IOS-XR root-lr users are not root when they ssh into the system (see my previous blog <a href="https://xrdocs.github.io/software-management/blogs/2016-10-17-ios-xr-users-and-groups-inside-linux/" title="IOS-XR Users and Groups">IOS-XR  Users and Groups</a>). Since we need root access to bootstrap the client we have to use –sudo and provide the user password.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>~$ knife bootstrap 172.30.12.54 --sudo -p 57722 -x admin -P cisco123 --node-name ncs-5001-c
+Connecting to 172.30.12.54
+172.30.12.54 knife sudo password: 
+Enter your password: 
+172.30.12.54 
+172.30.12.54 -----&gt; Existing Chef installation detected
+172.30.12.54 Starting the first Chef Client run...
+172.30.12.54 Starting Chef Client, version 12.15.19
+172.30.12.54 [2016-11-02T23:09:51+00:00] WARN: [inet] no ip address on fwdintf
+172.30.12.54 Creating a new client identity for ncs-5001-c using the validator key.
+172.30.12.54 resolving cookbooks for run list: []
+172.30.12.54 Synchronizing Cookbooks:
+172.30.12.54 Installing Cookbook Gems:
+172.30.12.54 Compiling Cookbooks...
+172.30.12.54 [2016-11-02T23:09:53+00:00] WARN: Node ncs-5001-c has an empty run list.
+172.30.12.54 Converging 0 resources
+172.30.12.54 
+172.30.12.54 Running handlers:
+172.30.12.54 Running handlers complete
+172.30.12.54 Chef Client finished, 0/0 resources updated in 04 seconds
+
+knife node list
+ncs-5001-c
+</code></pre>
+</div>
+
+<h2 id="creating-a-simple-recipe">Creating a simple recipe</h2>
+
+<p>We use the command “chef generate cookbook” to configure our cookbook, once created, we change to the recipes folder and edit the default.rb recipe.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>~/chef-repo/cookbooks$ chef generate cookbook ios-xr
+Generating cookbook ios-xr
+- Ensuring correct cookbook file content
+- Ensuring delivery configuration
+- Ensuring correct delivery build cookbook content
+
+Your cookbook is ready. Type `cd ios-xr` to enter it.
+
+There are several commands you can run to get started locally developing and testing your cookbook.
+Type `delivery local --help` to see a full list.
+
+Why not start by writing a test? Tests for the default recipe are stored at:
+
+test/recipes/default_test.rb
+
+If you'd prefer to dive right in, the default recipe can be found at:
+
+recipes/default.rb
+
+</code></pre>
+</div>
+<p>We create a simple recipe that will create a file in the home directory of the user (/disk0: for IOS-XR)</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>~/chef-repo/cookbooks$ cd ios-xr/recipes/
+~/chef-repo/cookbooks$ vi default.rb
+#
+# Cookbook Name:: ios-xr
+# Recipe:: default
+#
+# Copyright 2016, YOUR_COMPANY_NAME
+#
+# All rights reserved - Do Not Redistribute
+#
+file "#{ENV['HOME']}/chef.txt" do
+  content 'Hello from Chef'
+end
+</code></pre>
+</div>
+
+<p>We push the recipe to the Chef server and add it to the run list for the ncs-5001-c node</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>~/chef-repo/cookbooks/ios-xr/recipes$ knife cookbook upload ios-xr
+Uploading ios-xr         [0.1.0]
+Uploaded 1 cookbook.
+
+~/chef-repo/cookbooks/ios-xr$ knife node run_list set ncs-5001-c 'recipe[ios-xr::default]'
+ncs-5001-c:
+  run_list: recipe[ios-xr::default]
+</code></pre>
+</div>
+
+<p>The execution will occur within the interval configured (300 sec in our case), Here is what the logs look like:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Starting Chef Client, version 12.15.19
+resolving cookbooks for run list: ["ios-xr::default"]
+Synchronizing Cookbooks:
+  - ios-xr (0.1.0)
+Installing Cookbook Gems:
+Compiling Cookbooks...
+Converging 1 resources
+Recipe: ios-xr::default
+  * file[/disk0:/chef.txt] action create
+    - create new file /disk0:/chef.txt
+    - update content in file /disk0:/chef.txt from none to ba4fda
+    --- /disk0:/chef.txt	2016-11-09 22:04:29.356188978 +0000
+    +++ /disk0:/.chef-chef20161109-16571-14v6aep.txt	2016-11-09 22:04:29.355188978 +0000
+    @@ -1 +1,2 @@
+    +Hello from Chef
+
+Running handlers:
+Running handlers complete
+Chef Client finished, 1/1 resources updated in 03 seconds
+</code></pre>
+</div>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#cisco" class="page__taxonomy-item" rel="tag">cisco</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#iosxr" class="page__taxonomy-item" rel="tag">iosxr</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2016-10-25T05:24:00+00:00">October 25, 2016</time></p>
+        
+      </footer>
+
+      
+
+<section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=http://localhost:4000/blogs/2016-10-24-using-ztp-to-install-chef/" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/blogs/2016-10-24-using-ztp-to-install-chef/" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http://localhost:4000/blogs/2016-10-24-using-ztp-to-install-chef/" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/blogs/2016-10-24-using-ztp-to-install-chef/" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+
+    <br>
+    <br>
+    <br>
+</section>
+
+
+    </div>
+
+    
+      
+
+<div class="page__comments">
+  <h4 class="page__comments-title">Leave a Comment</h4>
+  
+    <section id="disqus_thread"></section>
+  
+</div>
+    
+  </article>
+
+  
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+      <li><a href="https://twitter.com/xrdocs"><i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+    
+    
+    
+      <li><a href="http://github.com/xrdocs"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Cisco Systems Inc. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+      </footer>
+    </div>
+
+    <script src="http://localhost:4000/assets/js/main.min.js"></script>
+<script src="http://localhost:4000/assets/js/scrollmenu.js"></script>
+
+
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-78256516-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+  
+  <script type="text/javascript">
+  	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  	var disqus_shortname = 'xrdocs';
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function() {
+  		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  	})();
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function () {
+  		var s = document.createElement('script'); s.async = true;
+  		s.type = 'text/javascript';
+  		s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  		(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  	}());
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+
+
+<!-- material-scrolltop button -->
+<button class="material-scrolltop" type="button"></button>
+
+<!-- material-scrolltop plugin -->
+<script src="http://localhost:4000/assets/js/material-scrolltop.js"></script>
+
+<!-- Initialize material-scrolltop with (minimal) -->
+<script>
+    $('body').materialScrollTop();
+</script>
+
+
+  </body>
+</html>
+

@@ -1,0 +1,970 @@
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+
+<meta charset="utf-8">
+
+
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>            Working with Zero Touch Provisioning      IOS XR Software Management and ZTP @xrdocs      </title>
+
+
+
+
+
+
+
+<meta property="og:locale" content="en-US">
+<meta property="og:site_name" content="IOS XR Software Management and ZTP @xrdocs">
+<meta property="og:title" content="Working with Zero Touch Provisioning">
+
+
+  <link rel="canonical" href="http://localhost:4000/tutorials/2016-08-26-working-with-ztp/">
+  <meta property="og:url" content="http://localhost:4000/tutorials/2016-08-26-working-with-ztp/">
+
+
+
+  <meta property="og:description" content="A brief introduction to Zero Touch Provisioning">
+
+
+
+  <meta name="twitter:site" content="@xrdocs">
+  <meta name="twitter:title" content="Working with Zero Touch Provisioning">
+  <meta name="twitter:description" content="A brief introduction to Zero Touch Provisioning">
+  <meta name="twitter:url" content="http://localhost:4000/tutorials/2016-08-26-working-with-ztp/">
+
+  
+    <meta name="twitter:card" content="summary">
+    
+      <meta name="twitter:image" content="http://localhost:4000/images/packaging-xrdocs.jpg">
+    
+  
+
+  
+    <meta name="twitter:creator" content="@pwariche">
+  
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2016-08-26T17:00:00+00:00">
+  
+  
+    <link rel="prev" href="http://localhost:4000/tutorials/2016-08-06-introduction-to-rpm/" title="IOS-XR and RPM Package Manager">
+  
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Organization",
+      "url": "http://localhost:4000",
+      "logo": "http://localhost:4000/images/packaging-xrdocs.jpg"
+    }
+  </script>
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "person",
+      "name" : "Cisco Systems Inc",
+      "url" : "http://localhost:4000",
+      "sameAs" : ["https://twitter.com/CiscoDevNet"]
+    }
+  </script>
+
+
+
+
+
+
+<!-- end SEO -->
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="IOS XR Software Management and ZTP @xrdocs Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="jgRKKm6B9FwJJPXxpmc0-EP3D0Mh8JHXaJqoYIGj1ek" />
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<script>
+if (!(window.location.host.startsWith("127.0.0.1") || window.location.host.startsWith("localhost")) && (window.location.host.substr(-10) == '.github.io') && (window.location.protocol != "https:"))
+    window.location.protocol = "https";
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<meta http-equiv="cleartype" content="on">
+<style>
+.underline-on-hover:hover {
+    text-decoration: underline;
+}
+.searchForm{
+      border-radius:5px;
+      -moz-border-radius:5px;
+      -webkit-border-radius:5px;
+      width: 900px;
+   }
+#search_results{
+      display: table; margin:0 auto;
+   }
+</style>
+</style>
+
+    
+
+<!-- start custom head snippets -->
+
+<link href="http://localhost:4000/assets/css/lity.min.css" rel="stylesheet">
+<link href="http://localhost:4000/assets/css/cisco-sans.min.css" rel="stylesheet">
+<link href="http://localhost:4000/assets/css/material-scrolltop.css" rel="stylesheet">
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="http://localhost:4000/images/apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://localhost:4000/images/apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://localhost:4000/images/apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://localhost:4000/images/apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="60x60" href="http://localhost:4000/images/apple-touch-icon-60x60.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="http://localhost:4000/images/apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="76x76" href="http://localhost:4000/images/apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="http://localhost:4000/images/apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-196x196.png" sizes="196x196" />
+<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-16x16.png" sizes="16x16" />
+<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-128.png" sizes="128x128" />
+<link rel="shortcut icon" href="http://localhost:4000/images/favicon_cisco.ico" />
+<meta name="application-name" content="&nbsp;"/>
+<meta name="msapplication-TileColor" content="#FFFFFF" />
+<meta name="msapplication-TileImage" content="http://localhost:4000/images/mstile-144x144.png" />
+<meta name="msapplication-square70x70logo" content="http://localhost:4000/images/mstile-70x70.png" />
+<meta name="msapplication-square150x150logo" content="http://localhost:4000/images/mstile-150x150.png" />
+<meta name="msapplication-wide310x150logo" content="http://localhost:4000/images/mstile-310x150.png" />
+<meta name="msapplication-square310x310logo" content="http://localhost:4000/images/mstile-310x310.png" />
+
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <button><div class="navicon"></div></button>
+        <ul class="visible-links">
+          <li class="masthead__menu-item masthead__menu-item--lg"><a href="http://localhost:4000/">Software-Management</a></li>
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="https://xrdocs.github.io">@xrdocs</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="http://localhost:4000/blogs/">Blogs</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item greedy-nav-active"><a href="http://localhost:4000/tutorials/">Tutorials</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="http://localhost:4000/search">Search <i class="fa fa-search" aria-hidden="true"></i></a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="http://localhost:4000/tags/">Tags</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="http://localhost:4000/collection-archive/">Archive</a></li>
+                
+            
+
+
+          
+        </ul>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    
+
+
+
+<div id="main" role="main">
+  
+
+
+  <div class="sidebar sticky">
+  
+
+
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  <div class="author__avatar">
+    
+    	<img src="http://localhost:4000/images/pwariche_bio.jpg" class="author__avatar" alt="Patrick Warichet">
+    
+  </div>
+
+  <div class="author__content">
+    <h3 class="author__name">Patrick Warichet</h3>
+    <p class="author__bio">Technical Marketing Engineer, Web Solutions, Cisco.</p>
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+      
+      
+        <li><a href="mailto:pwariche@cisco.com"><i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email</a></li>
+      
+      
+      
+        <li><a href="http://twitter.com/pwariche"><i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Working with Zero Touch Provisioning">
+    <meta itemprop="description" content="A brief introduction to Zero Touch Provisioning">
+    <meta itemprop="datePublished" content="August 26, 2016">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Working with Zero Touch Provisioning
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  12 minutes read
+</p>
+          
+        </header>
+      
+
+    
+
+      <section class="page__content" itemprop="text">
+        <aside class="sidebar__right">
+<nav class="toc">
+    <header><h4 class="nav__title"><i class="fa fa-table"></i> IOS-XR: Working with ZTP</h4></header>
+<ul class="toc__menu" id="markdown-toc">
+  <li><a href="#purpose-of-ztp" id="markdown-toc-purpose-of-ztp">Purpose of ZTP</a></li>
+  <li><a href="#how-ztp-works" id="markdown-toc-how-ztp-works">How ZTP works</a></li>
+  <li><a href="#ztp-requirement" id="markdown-toc-ztp-requirement">ZTP requirement</a>    <ul>
+      <li><a href="#dhcp-server-configuration" id="markdown-toc-dhcp-server-configuration">DHCP server configuration</a></li>
+      <li><a href="#http-server-requirement" id="markdown-toc-http-server-requirement">HTTP Server requirement</a></li>
+    </ul>
+  </li>
+  <li><a href="#ztp-utilities" id="markdown-toc-ztp-utilities">ZTP utilities</a>    <ul>
+      <li><a href="#ztphelpersh" id="markdown-toc-ztphelpersh">ztp_helper.sh</a></li>
+    </ul>
+  </li>
+  <li><a href="#ztp-cli-commands" id="markdown-toc-ztp-cli-commands">ZTP CLI Commands</a></li>
+  <li><a href="#ztp-logging" id="markdown-toc-ztp-logging">ZTP Logging</a>    <ul>
+      <li><a href="#simple-ztp-example" id="markdown-toc-simple-ztp-example">Simple ZTP Example</a></li>
+      <li><a href="#more-complex-example" id="markdown-toc-more-complex-example">More Complex Example</a></li>
+    </ul>
+  </li>
+</ul>
+
+  </nav>
+</aside>
+
+<h2 id="purpose-of-ztp">Purpose of ZTP</h2>
+<p>ZTP was designed to perform 2 different operations:</p>
+
+<ol>
+  <li>Download and apply an initial configuration.</li>
+  <li>Download and execute a shell script.</li>
+</ol>
+
+<h2 id="how-ztp-works">How ZTP works</h2>
+<p>The ZTP process is executed or invoked inside the control plane LXC Linux shell. Prior to IOS-XR 6.1.1 ZTP was executed within the default network namespace and could not access directly the data interfaces. Starting with IOS-XR 6.1.1, ZTP is executed inside the global-VRF network namespace with full access to all the data interfaces. This document is based on the IOS-XR 6.1.1 implementation.
+ZTP is launched from XR process manager (processmgr) when the system reaches level 999 (last processes to be scheduled for execution). At the beginning of its execution, ZTP will scan the configuration for the presence of a username. If there are no username configured, ZTP will fork a DHCP client on the management interface for IPv4 and IPv6 simultaneously, and wait for a response.</p>
+
+<p>If the DHCP response contains an option 67 (option 59 for IPv6), ZTP will download the file using the URI provided by option 67 (or option 59 for IPv6).
+If the file received is not a text file or the file is larger than 100 MB ZTP will erase the file and terminate its execution.
+Otherwise it will analyze the first line of the text file received, if the first line of the file starts with <strong>”!! IOS XR”</strong>, it will consider it as a configuration file and pass it to the command line interpreter for syntax verification and commit it.
+If the first line starts with <strong>”#!/bin/bash”</strong> or <strong>”#!/bin/sh”</strong> ZTP will assume this is a script and start the execution, as illustrate below.
+If the text file cannot be interpreted as a shell script or a configuration file, ZTP will erase the file and terminate its execution.
+The script can use all the Linux tools available in the Control Plane LXC and perform addition HTTP GET using wget or curl for example to install package and/or download and apply configuration blocks. 
+<img src="/images/ztp-flow.png" alt="ztp-flow.png" title="ZTP operation flow" /></p>
+
+<hr />
+<p><strong>Note:</strong> In IOS-XR release 6.1.1 ZTP can also be invoked from the command line interpreter in this case it will start its execution even if a username or a configuration is present in the system.</p>
+
+<hr />
+
+<h2 id="ztp-requirement">ZTP requirement</h2>
+<p>ZTP requires 2 external services: a DHCP server and an HTTP server, as illustrated above, the support for tftp has been dropped for security and reliability reasons.</p>
+
+<h3 id="dhcp-server-configuration">DHCP server configuration</h3>
+<p>The basic configuration described below provides a fixed IP address and a configuration file taking in account only the mac address of the management interface.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>host ncs-5001-rp0 {
+   hardware ethernet e4:c7:22:be:10:ba;
+   fixed-address 172.30.12.54;
+   filename "http://172.30.0.22/configs/ncs5001-1.config";
+}
+</code></pre>
+</div>
+
+<p>A more elaborate example that takes into account option 77 or option 15 for IPv6 (user-class) embedded in the dhcp request sent by the client, ZTP embed the string “exr-config” in the DHCP request as described below. The if statement also take into account the capability to re-image the system using iPXE (see <a href="https://xrdocs.github.io/software-management/tutorials/2016-07-27-ipxe-deep-dive/" title="iPXE deep dive">iPXE deep dive</a> document)</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>host ncs-5001-rp0 {
+   hardware ethernet e4:c7:22:be:10:ba;
+   fixed-address 172.30.12.54;
+   if exists user-class and option user-class = "iPXE" {
+      filename = "http://172.30.0.22/boot.ipxe";
+   } elsif exists user-class and option user-class = "exr-config" {
+      filename = "http://172.30.0.22/scripts/ncs-5001-rp0_ztp.sh";
+   }
+}
+</code></pre>
+</div>
+
+<p>Since ZTP does not require any intervention on the system, an easier way to provision the system is to use the serial number printed on the box and/or the RP, the configuration is then as follow:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>host ncs-5001-rp0 {
+   option dhcp-client-identifier "FOC1947R144";
+   fixed-address 172.30.12.54;
+   if exists user-class and option user-class = "iPXE" {
+      filename = "http://172.30.0.22/boot.ipxe";
+   } elsif exists user-class and option user-class = "exr-config" {
+      filename = "http://172.30.0.22/scripts/ncs-5001-rp0_ztp.sh";
+   }
+}
+</code></pre>
+</div>
+
+<hr />
+<p><strong>Note:</strong> The DHCP configuration examples described in this document use the open-source isc-dhcp-server syntax.</p>
+
+<hr />
+
+<h3 id="http-server-requirement">HTTP Server requirement</h3>
+<p>The HTTP server should be reachable from the management interface or from a data interface if invoked manually and should be readable.</p>
+
+<h2 id="ztp-utilities">ZTP utilities</h2>
+<p>ZTP includes a set of CLI commands and a set of shell utilities that can be sourced within the user script.</p>
+
+<h3 id="ztphelpersh">ztp_helper.sh</h3>
+<p>ztp_helper.sh is a shell script that can be sourced by the user script, it provides simple utilities to access some XR functionalities. These utilities are:</p>
+
+<p><strong>xrcmd:</strong> Runs an XR exec command</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>xrcmd “show running”
+</code></pre>
+</div>
+
+<p><strong>xrapply:</strong> Applies the block of configuration, specified in a file:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cat &gt;/tmp/config &lt;&lt;EOF
+!! XR config example
+hostname pluto
+EOF
+xrapply /tmp/config
+</code></pre>
+</div>
+
+<p><strong>xrapply_with_reason:</strong> Same as above, but specify a reason for commit history tracking</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cat &gt;/tmp/config &lt;&lt;EOF
+!! XR config example
+hostname saturn
+EOF
+xrapply_with_reason "this is an important name change" /tmp/config
+</code></pre>
+</div>
+
+<p><strong>xrapply_string:</strong> Applies a block of configuration specified in a string. Use “\n” to delimit line of configuration statement.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>xrapply_string "hostname mars\n interface TenGigE0/0/0/0\n ipv4 address 172.30.0.144/24\n”
+</code></pre>
+</div>
+
+<p><strong>xrapply_string_with_reason:</strong> As above, but specify a reason for commit history tracking:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>xrapply_string_with_reason ”system renamed again" "hostname venus\n interface TenGigE0/0/0/0\n ipv4 address 172.30.0.144/24\n”
+</code></pre>
+</div>
+
+<h2 id="ztp-cli-commands">ZTP CLI Commands</h2>
+<p><strong>ztp initiate:</strong> Invokes a new ZTP DHCP session, logs will go to the console and /disk0:/ztp/ztp.log</p>
+
+<p>ztp initiate allows the execution of a script even of the system has already been configured. This command is useful for testing ZTP without forcing a reload. This command is particularly useful to test scripts or if some manual operations are required before provisioning the box. With ZTP initiate you can specify any data interfaces on the system to be used for the whole ZTP process.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>RP/0/RP0/CPU0:venus#ztp initiate debug verbose interface TenGigE 0/0/0/0
+Invoke ZTP? (this may change your configuration) [confirm] [y/n] :
+</code></pre>
+</div>
+
+<p><strong>ztp terminate:</strong> Terminates any ZTP session in progress</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>RP/0/RP0/CPU0:venus#ztp terminate verbose
+Mon Oct 10 16:52:38.507 UTC
+Terminate ZTP? (this may leave your system in a partially configured state) [confirm] [y/n] :y
+ZTP terminated
+</code></pre>
+</div>
+
+<p><strong>ztp breakout:</strong> Performs a 4x10 breakout detection on all 40 Gig interfaces, by default if no link is detected on any of the four 10Gig interfaces, the port will remain in 40 Gig mode.
+The subcommand nosignal-stay-in-breakout-mode will force the port in breakout mode even if there is no link signal detected but will place the interfaces in shutdown mode. The subcommand nosignal-stay-in-state-noshut will leave the port in breakout mode but will place the four 10Gig interface in no shutdown mode.
+The command “ztp breakout” may not be supported on the ASR9K routers.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>RP/0/RP0/CPU0:venus#ztp breakout ?
+apply  XR configuration commands to apply(cisco-support)
+debug  Run with additional logging to the console(cisco-support)
+hostname  XR hostname to set(cisco-support)
+nosignal-stay-in-breakout-mode On no signal, prefer interfaces to remain in breakout mode(cisco-support)
+nosignal-stay-in-state-noshut  On no signal, prefer interfaces to be noshut(cisco-support)
+verbose  Run with logging to the console(cisco-support)                           
+</code></pre>
+</div>
+
+<p><strong>ztp clean:</strong> Remove all ZTP files saved on disk</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>RP/0/RP0/CPU0:venus#ztp clean verbose
+Mon Oct 10 17:03:43.581 UTC
+Remove all ZTP temporary files and logs? [confirm] [y/n] :y
+All ZTP files have been removed.
+If you now wish ZTP to run again from boot, do 'conf t/commit replace' followed by reload.
+</code></pre>
+</div>
+
+<h2 id="ztp-logging">ZTP Logging</h2>
+<p>ZTP logs its operation on the flash file system in the directory /disk0:/ztp/. ZTP logs all the transaction with the DHCP server and all the state transition. Prior executions of ZTP are also logged in /disk0:/ztp/old_logs/</p>
+
+<h3 id="simple-ztp-example">Simple ZTP Example</h3>
+<p>In the following example we will review the execution of a simple configuration script downloaded from a data interface using the command “ztp initiate interface Ten 0/0/0/0 verbose”, this script will unshut all the interfaces of the system and configure a load interval of 30 sec on all of them.</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="c">#############################################################################</span>
+<span class="c"># *** Be careful this is powerful and can potentially destroy your system ***</span>
+<span class="c">#                *** !!! Use at your own risk !!! ***</span>
+<span class="c">#</span>
+<span class="c"># Script file should be saved on the backend HTTP server</span>
+<span class="c">#</span>
+<span class="c"># Tested on NCS-5501 with IOS-XR 6.1.1</span>
+<span class="c">#</span>
+<span class="c">#############################################################################</span>
+
+<span class="nb">source </span>ztp_helper.sh
+<span class="nv">config_file</span><span class="o">=</span><span class="s2">"/tmp/config.txt"</span>
+<span class="nv">interfaces</span><span class="o">=</span><span class="k">$(</span>xrcmd <span class="s2">"show interfaces brief"</span><span class="k">)</span>
+
+<span class="k">function </span>activate_all_if<span class="o">(){</span>
+  <span class="nv">arInt</span><span class="o">=(</span><span class="k">$(</span><span class="nb">echo</span> <span class="nv">$interfaces</span> | grep -oE <span class="s1">'(Te|Fo|Hu)[0-9]*/[0-9]*/[0-9]*/[0-9]*'</span><span class="k">)</span><span class="o">)</span>
+  <span class="k">for </span>int <span class="k">in</span> <span class="k">${</span><span class="nv">arInt</span><span class="p">[*]</span><span class="k">}</span>; <span class="k">do
+    </span><span class="nb">echo</span> -ne <span class="s2">"interface </span><span class="nv">$int</span><span class="se">\n</span><span class="s2"> no shutdown</span><span class="se">\n</span><span class="s2"> load-interval 30</span><span class="se">\n</span><span class="s2">"</span> &gt;&gt; <span class="nv">$config_file</span>
+  <span class="k">done
+  </span>xrapply_with_reason <span class="s2">"Initial ZTP configuration"</span> <span class="nv">$config_file</span>
+<span class="o">}</span>
+
+<span class="c">### Script entry point</span>
+<span class="k">if</span> <span class="o">[</span> -f <span class="nv">$config_file</span> <span class="o">]</span>; <span class="k">then</span>
+  /bin/rm -f <span class="nv">$config_file</span>
+<span class="k">else</span>
+  /bin/touch <span class="nv">$config_file</span>
+<span class="k">fi
+</span>activate_all_if;
+<span class="nb">exit </span>0
+</code></pre>
+</div>
+
+<h3 id="more-complex-example">More Complex Example</h3>
+<p>In this example, the HTTP server hosts a CSV file that contains devices serial number followed by the hostname. The HTTP server also contains a basic configuration file that need to be applied. Finally a local repository accessible by HTTP contains IOS-XR and third party packages to be installed.</p>
+
+<p>After bootup ZTP will provide its serial number and query the back-end database using HTTP POST, once it obtains its hostname it will perform a version check, if the version on the system does not match the desired version, the system will change the boot order forcing a reboot using iPXE that will hopefully re-image the system to the desired version.</p>
+
+<p>If the system is running the correct version the script proceed by installing the k9sec package and create a generic RSA key for SSH. It will then add a local repository for third party packages and install midnight commander and its dependent packages. The script finishes its execution after downloading and applying the configuration.</p>
+
+<p><strong>ZTP Script</strong> ncs-5001-rp0_ztp.sh</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="c">#############################################################################</span>
+<span class="c"># *** Be careful this is powerful and can potentially destroy your system ***</span>
+<span class="c">#                *** !!! Use at your own risk !!! ***</span>
+<span class="c">#</span>
+<span class="c"># Script file should be saved on the backend HTTP server</span>
+<span class="c">#</span>
+<span class="c"># Tested on NCS-5501 with IOS-XR 6.1.1</span>
+<span class="c">#</span>
+<span class="c">#############################################################################</span>
+<span class="nb">export </span><span class="nv">LOGFILE</span><span class="o">=</span>/disk0:/ztp/user-script.log
+<span class="nb">export </span><span class="nv">HTTP_SERVER</span><span class="o">=</span>http://172.30.0.22
+<span class="nb">export </span><span class="nv">SYSLOG_SERVER</span><span class="o">=</span>172.30.0.22
+<span class="nb">export </span><span class="nv">SYSLOG_PORT</span><span class="o">=</span>514
+<span class="nb">export </span><span class="nv">CONFIG_PATH</span><span class="o">=</span>configs
+<span class="nb">export </span><span class="nv">SCRIPT_PATH</span><span class="o">=</span>scripts
+<span class="nb">export </span><span class="nv">RPM_PATH</span><span class="o">=</span><span class="s2">"packages/ncs5k/6.1.1"</span>
+<span class="nb">export </span><span class="nv">PHP_SCRIPT</span><span class="o">=</span><span class="s2">"php/device_name.php"</span>
+<span class="nb">export </span><span class="nv">DESIRED_VER</span><span class="o">=</span><span class="s2">"6.1.1"</span>
+<span class="nv">K9SEC_RPM</span><span class="o">=</span>ncs5k-k9sec-3.1.0.0-r611.x86_64.rpm
+
+<span class="c">## ztp_helper is inside the Fretta Code-base - ASSUMPTION</span>
+<span class="nb">source </span>ztp_helper.sh
+
+<span class="k">function </span>ztp_log<span class="o">()</span> <span class="o">{</span>
+    <span class="c"># Sends logging information to local file and syslog server</span>
+    syslog <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span>
+    <span class="nb">echo</span> <span class="s2">"</span><span class="k">$(</span>date +<span class="s2">"%b %d %H:%M:%S"</span><span class="k">)</span><span class="s2"> "</span><span class="nv">$1</span> &gt;&gt; <span class="nv">$LOGFILE</span>
+<span class="o">}</span>
+
+<span class="k">function </span>syslog<span class="o">()</span> <span class="o">{</span>
+    <span class="c"># Sends syslog messages with netcat (nc)</span>
+  <span class="nb">echo</span> <span class="s2">"ztp-script: "</span><span class="nv">$1</span> | nc -u -q1 <span class="nv">$SYSLOG_SERVER</span> <span class="nv">$SYSLOG_PORT</span>
+<span class="o">}</span>
+
+<span class="k">function </span>get_hostname<span class="o">(){</span>
+    <span class="c"># Uses serial number to query a remote database and get hostname using HTTP POST</span>
+    <span class="nb">local </span><span class="nv">sn</span><span class="o">=</span><span class="k">$(</span>dmidecode | grep -m 1 <span class="s2">"Serial Number:"</span> | awk <span class="s1">'{print $NF}'</span><span class="k">)</span>;
+    <span class="nb">local </span><span class="nv">result</span><span class="o">=</span><span class="s2">"</span><span class="sb">`</span>wget -O- --post-data<span class="o">=</span><span class="s2">"serial=</span><span class="nv">$sn</span><span class="s2">"</span> <span class="k">${</span><span class="nv">HTTP_SERVER</span><span class="k">}</span>/<span class="k">${</span><span class="nv">PHP_SCRIPT</span><span class="k">}</span><span class="sb">`</span><span class="s2">"</span>;
+    <span class="k">if</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$result</span><span class="s2">"</span> !<span class="o">=</span> <span class="s2">"Not found"</span> <span class="o">]</span>; <span class="k">then
+            </span><span class="nv">DEVNAME</span><span class="o">=</span><span class="nv">$result</span>;
+            <span class="k">return </span>0
+    <span class="k">else
+    	</span>ztp_log <span class="s2">"Serial </span><span class="nv">$sn</span><span class="s2"> not found, hostname not set"</span>;
+        <span class="k">return </span>1
+    <span class="k">fi</span>
+<span class="o">}</span>
+
+<span class="k">function </span>download_config<span class="o">(){</span>
+	<span class="c"># Downloads config using hostname</span>
+    ztp_log <span class="s2">"### Downloading system configuration ###"</span>;
+    /usr/bin/wget <span class="k">${</span><span class="nv">HTTP_SERVER</span><span class="k">}</span>/<span class="k">${</span><span class="nv">CONFIG_PATH</span><span class="k">}</span>/<span class="k">${</span><span class="nv">DEVNAME</span><span class="k">}</span>.config -O /disk0:/new-config 2&gt;&amp;1 &gt;&gt; <span class="nv">$LOGFILE</span>
+    <span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$?</span><span class="s2">"</span> !<span class="o">=</span> 0 <span class="o">]]</span>; <span class="k">then
+    	</span>ztp_log <span class="s2">"### Error downloading system configuration ###"</span>
+    <span class="k">else
+        </span>ztp_log <span class="s2">"### Downloading system configuration complete ###"</span>;
+    <span class="k">fi</span>
+<span class="o">}</span>
+
+<span class="k">function </span>apply_config<span class="o">(){</span>
+	<span class="c"># Applies initial configuration</span>
+    ztp_log <span class="s2">"### Applying initial system configuration ###"</span>;
+    xrapply_with_reason <span class="s2">"Initial ZTP configuration"</span> /disk0:/new-config 2&gt;&amp;1 &gt;&gt; <span class="nv">$LOGFILE</span>;
+    ztp_log <span class="s2">"### Checking for errors ###"</span>;
+    <span class="nb">local </span><span class="nv">config_status</span><span class="o">=</span><span class="k">$(</span>xrcmd <span class="s2">"show configuration failed"</span><span class="k">)</span>;
+    <span class="k">if</span> <span class="o">[[</span> <span class="nv">$config_status</span> <span class="o">]]</span>; <span class="k">then
+    	</span><span class="nb">echo</span> <span class="nv">$config_status</span>  &gt;&gt; <span class="nv">$LOGFILE</span>
+        ztp_log <span class="s2">"!!! Error encounter applying configuration file, review the log !!!!"</span>;
+    <span class="k">fi
+    </span>ztp_log <span class="s2">"### Applying system configuration complete ###"</span>;
+<span class="o">}</span>
+
+<span class="k">function </span>install_k9sec_pkg<span class="o">(){</span>
+    <span class="c"># Installs the k9sec package from repository, create a RSA key modulus 1024</span>
+    ztp_log <span class="s2">"### XR K9SEC INSTALL ###"</span>
+    /usr/bin/wget <span class="k">${</span><span class="nv">HTTP_SERVER</span><span class="k">}</span>/<span class="k">${</span><span class="nv">RPM_PATH</span><span class="k">}</span>/<span class="k">${</span><span class="nv">K9SEC_RPM</span><span class="k">}</span> -O /disk0:/<span class="nv">$K9SEC_RPM</span> 2&gt;&amp;1
+    <span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$?</span><span class="s2">"</span> !<span class="o">=</span> 0 <span class="o">]]</span>; <span class="k">then
+        </span>ztp_log <span class="s2">"### Error downloading </span><span class="nv">$K9SEC_RPM</span><span class="s2"> ###"</span>
+    <span class="k">else
+        </span>ztp_log <span class="s2">"### Downloading </span><span class="nv">$K9SEC_PKG</span><span class="s2"> complete ###"</span>;
+    <span class="k">fi
+  </span>xrcmd <span class="s2">"install update source /disk0:/ </span><span class="nv">$K9SEC_RPM</span><span class="s2">"</span> 2&gt;&amp;1 &gt;&gt; <span class="nv">$LOGFILE</span>
+  <span class="nb">local complete</span><span class="o">=</span>0
+  <span class="k">while</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$complete</span><span class="s2">"</span> <span class="o">=</span> 0 <span class="o">]</span>; <span class="k">do
+        </span><span class="nb">complete</span><span class="o">=</span><span class="sb">`</span>xrcmd <span class="s2">"show install active"</span> | grep k9sec | head -n1 | wc -l<span class="sb">`</span>
+        ztp_log <span class="s2">"Waiting for k9sec package to be activated"</span>
+        sleep 5
+    <span class="k">done
+    if</span> <span class="o">[[</span> -z <span class="k">$(</span>xrcmd <span class="s2">"show crypto key mypubkey rsa"</span><span class="k">)</span> <span class="o">]]</span>; <span class="k">then
+        </span><span class="nb">echo</span> <span class="s2">"1024"</span> | xrcmd <span class="s2">"crypto key generate rsa"</span>
+    <span class="k">else
+        </span><span class="nb">echo</span> -ne <span class="s2">"yes</span><span class="se">\n</span><span class="s2"> 1024</span><span class="se">\n</span><span class="s2">"</span> | xrcmd <span class="s2">"crypto key generate rsa"</span>
+    <span class="k">fi
+    </span>rm -f /disk0:/<span class="nv">$K9SEC_RPM</span>
+    ztp_log <span class="s2">"### XR K9SEC INSTALL COMPLETE ###"</span>
+<span class="o">}</span>
+
+<span class="k">function </span>check_version<span class="o">(){</span>
+	<span class="c"># returns 0 is version matches, 1 otherwise</span>
+    <span class="nb">local </span><span class="nv">current_ver</span><span class="o">=</span><span class="sb">`</span>xrcmd <span class="s2">"show version"</span> | grep Version | grep Cisco | cut -d <span class="s2">" "</span> -f 6<span class="sb">`</span>;
+    ztp_log <span class="s2">"current=</span><span class="nv">$current_ver</span><span class="s2">, desired=</span><span class="nv">$DESIRED_VER</span><span class="s2">"</span>;
+    <span class="k">if</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$DESIRED_VER</span><span class="s2">"</span> <span class="o">=</span> <span class="s2">"</span><span class="nv">$current_version</span><span class="s2">"</span> <span class="o">]</span>; <span class="k">then
+        return </span>0
+    <span class="k">else
+        return </span>1
+    <span class="k">fi</span>
+<span class="o">}</span>
+
+<span class="k">function </span>reboot_ipxe<span class="o">(){</span>
+    <span class="c"># Do not use in production, may not be supported on NCS-5508 </span>
+    ztp_log <span class="s2">"### Mounting EFIvar and changing boot order"</span>
+    <span class="nb">local </span><span class="nv">EFI_FILESYS</span><span class="o">=</span><span class="s2">"/sys/firmware/efi/efivars"</span>
+    <span class="k">if</span> <span class="o">[</span> ! -d <span class="nv">$EFI_FILESYS</span> <span class="o">]</span>; <span class="k">then
+        </span>ztp_log <span class="s2">"EFI mount point not present"</span>
+    <span class="k">fi</span> 
+    /bin/mount -t efivarfs efivarfs <span class="nv">$EFI_FILESYS</span>
+    <span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$?</span><span class="s2">"</span> !<span class="o">=</span> 0 <span class="o">]]</span>; <span class="k">then
+    </span>ztp_log <span class="s2">"Error mounting efivars filesystem"</span>;
+  <span class="k">fi
+  </span><span class="nb">local </span><span class="nv">iPXE</span><span class="o">=</span><span class="k">$(</span>/usr/sbin/efibootmgr | grep IPXE | awk -v <span class="nv">FS</span><span class="o">=</span><span class="s2">"(Boot|*)"</span> <span class="s1">'{print $2}'</span><span class="k">)</span>
+  <span class="nb">local </span><span class="nv">MMC</span><span class="o">=</span><span class="k">$(</span>/usr/sbin/efibootmgr | grep <span class="s2">"HS-SD/MMC"</span> | awk -v <span class="nv">FS</span><span class="o">=</span><span class="s2">"(Boot|*)"</span> <span class="s1">'{print $2}'</span><span class="k">)</span>
+  <span class="nb">local </span><span class="nv">Shell</span><span class="o">=</span><span class="k">$(</span>/usr/sbin/efibootmgr | grep Shell | awk -v <span class="nv">FS</span><span class="o">=</span><span class="s2">"(Boot|*)"</span> <span class="s1">'{print $2}'</span><span class="k">)</span>
+    /usr/sbin/efibootmgr -o <span class="nv">$iPXE</span>,<span class="nv">$MMC</span>,<span class="nv">$Shell</span>
+    <span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$?</span><span class="s2">"</span> !<span class="o">=</span> 0 <span class="o">]]</span>; <span class="k">then
+    </span>ztp_log <span class="s2">"Error changing boot order"</span>;
+  <span class="k">fi
+    </span>ztp_log <span class="s2">"### Resetting the system"</span>;
+    <span class="nb">echo </span>1 &gt; /proc/sys/kernel/sysrq 
+    <span class="nb">echo </span>b &gt; /proc/sysrq-trigger
+    ztp_log <span class="s2">"Unable to reset the system"</span>;
+<span class="o">}</span>
+
+<span class="k">function </span>add_repo<span class="o">(){</span>
+	<span class="c"># add a local repo to yum package manager</span>
+    /usr/bin/yum-config-manager --add-repo <span class="k">${</span><span class="nv">HTTP_SERVER</span><span class="k">}</span>/<span class="k">${</span><span class="nv">RPM_PATH</span><span class="k">}</span> 2&gt;&amp;1
+<span class="o">}</span>
+
+<span class="k">function </span>install_mc<span class="o">(){</span>
+	<span class="c"># uses yum to install packages and dependant package(s) automatically</span>
+    <span class="k">if</span> /usr/bin/yum list installed <span class="s2">"mc"</span> &gt;/dev/null 2&gt;&amp;1; <span class="k">then
+    	</span>ztp_log <span class="s2">"### Installing midnight commander"</span>;
+        /usr/bin/yum install mc -y 2&gt;&amp;1
+    <span class="k">else
+    	</span>ztp_log <span class="s2">"### Midnight commander already installed ###"</span>
+    <span class="k">fi</span>
+<span class="o">}</span>
+
+<span class="c"># ==== Script entry point ====</span>
+get_hostname;
+<span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$?</span><span class="s2">"</span> !<span class="o">=</span> 0 <span class="o">]]</span>; <span class="k">then
+    </span>ztp_log <span class="s2">"No valid hostname found terminating ZTP"</span>;
+    <span class="nb">exit </span>1
+<span class="k">fi
+</span>ztp_log <span class="s2">"Hello from </span><span class="k">${</span><span class="nv">DEVNAME</span><span class="k">}</span><span class="s2"> !!!"</span>;
+check_version;
+<span class="k">if</span>  <span class="o">[[</span> <span class="s2">"</span><span class="nv">$?</span><span class="s2">"</span> !<span class="o">=</span> 0 <span class="o">]]</span>; <span class="k">then
+    </span>ztp_log <span class="s2">"Version mismatch, we will upgrade using iPXE"</span>;
+    reboot_ipxe;
+<span class="k">else
+    </span>ztp_log <span class="s2">"Version match, proceeding to configuration"</span>;
+<span class="k">fi
+</span>ztp_log <span class="s2">"Starting autoprovision process..."</span>;
+install_k9sec_pkg;
+add_repo;
+install_mc;
+download_config;
+apply_config;
+ztp_log <span class="s2">"Autoprovision complete..."</span>;
+<span class="nb">exit </span>0
+</code></pre>
+</div>
+
+<p><strong>Backend PHP script</strong> device_name.php</p>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="nv">$file</span> <span class="o">=</span> <span class="s1">'inventory.txt'</span><span class="p">;</span>
+<span class="nv">$searchfor</span> <span class="o">=</span> <span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'serial'</span><span class="p">]);</span>
+<span class="c1">// the following line prevents the browser from parsing this as HTML.
+</span><span class="nb">header</span><span class="p">(</span><span class="s1">'Content-Type: text/plain'</span><span class="p">);</span>
+<span class="c1">// get the file contents, assuming the file to be readable (and exist)
+</span><span class="nv">$contents</span> <span class="o">=</span> <span class="nb">file_get_contents</span><span class="p">(</span><span class="nv">$file</span><span class="p">);</span>
+<span class="c1">// escape special characters in the query
+</span><span class="nv">$pattern</span> <span class="o">=</span> <span class="nb">preg_quote</span><span class="p">(</span><span class="nv">$searchfor</span><span class="p">,</span> <span class="s1">'/'</span><span class="p">);</span>
+<span class="c1">// finalise the regular expression, matching the whole line
+</span><span class="nv">$pattern</span> <span class="o">=</span> <span class="s2">"/^.*</span><span class="nv">$pattern</span><span class="s2">.*</span><span class="se">\$</span><span class="s2">/m"</span><span class="p">;</span>
+<span class="c1">// search, and store first matching occurences in $matches
+</span><span class="k">if</span><span class="p">(</span><span class="nb">preg_match</span><span class="p">(</span><span class="nv">$pattern</span><span class="p">,</span> <span class="nv">$contents</span><span class="p">,</span> <span class="nv">$matches</span><span class="p">)){</span>
+   <span class="c1">//match the last element of the  line
+</span>   <span class="nb">preg_match</span><span class="p">(</span><span class="s1">'/[^,]*$/'</span><span class="p">,</span> <span class="nv">$matches</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nv">$results</span><span class="p">);</span>
+   <span class="k">echo</span> <span class="nv">$results</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="k">else</span><span class="p">{</span>
+   <span class="k">echo</span> <span class="s2">"Not found"</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="cp">?&gt;</span>
+</code></pre>
+</div>
+
+<p><strong>CSV file</strong> inventory.txt</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>FOC2647D246,ncs-5001-a
+FOC1568P682,ncs-5001-b
+FOC1947R143,ncs-5001-c
+</code></pre>
+</div>
+
+<p><strong>Logging output</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Oct 11 11:05:38 172.30.0.54 ztp-script: Hello from ncs-5001-c !!!
+Oct 11 11:05:40 172.30.0.54 ztp-script: current=6.1.1, desired=6.1.1
+Oct 11 11:05:40 172.30.0.54 ztp-script: Version match, proceeding to configuration
+Oct 11 11:05:41 172.30.0.54 ztp-script: Starting autoprovision process...
+Oct 11 11:05:42 172.30.0.54 ztp-script: ### XR K9SEC INSTALL ###
+Oct 11 11:05:44 172.30.0.54 ztp-script: ### Downloading complete ###
+Oct 11 11:05:55 172.30.0.54 ztp-script: Waiting for k9sec package to be activated
+Oct 11 11:06:01 172.30.0.54 ztp-script: ### XR K9SEC INSTALL COMPLETE ###
+Oct 11 11:06:03 172.30.0.54 ztp-script: ### Installing midnight commander ###
+Oct 11 11:06:04 172.30.0.54 ztp-script: ### Downloading system configuration ###
+Oct 11 11:06:05 172.30.0.54 ztp-script: ### Downloading system configuration complete ###
+Oct 11 11:06:06 172.30.0.54 ztp-script: ### Applying initial system configuration ###
+Oct 11 11:06:11 172.30.0.54 ztp-script: !!! Checking for errors !!!
+Oct 11 11:06:14 172.30.0.54 ztp-script: ### Applying system configuration complete ###
+Oct 11 11:06:15 172.30.0.54 ztp-script: Autoprovision complete...
+</code></pre>
+</div>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#cisco" class="page__taxonomy-item" rel="tag">cisco</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#iosxr" class="page__taxonomy-item" rel="tag">iosxr</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2016-08-26T17:00:00+00:00">August 26, 2016</time></p>
+        
+      </footer>
+
+      
+
+<section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=http://localhost:4000/tutorials/2016-08-26-working-with-ztp/" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/tutorials/2016-08-26-working-with-ztp/" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http://localhost:4000/tutorials/2016-08-26-working-with-ztp/" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/tutorials/2016-08-26-working-with-ztp/" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+
+    <br>
+    <br>
+    <br>
+</section>
+
+
+    </div>
+
+    
+      
+
+<div class="page__comments">
+  <h4 class="page__comments-title">Leave a Comment</h4>
+  
+    <section id="disqus_thread"></section>
+  
+</div>
+    
+  </article>
+
+  
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+      <li><a href="https://twitter.com/xrdocs"><i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+    
+    
+    
+      <li><a href="http://github.com/xrdocs"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Cisco Systems Inc. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+      </footer>
+    </div>
+
+    <script src="http://localhost:4000/assets/js/main.min.js"></script>
+<script src="http://localhost:4000/assets/js/scrollmenu.js"></script>
+
+
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-78256516-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+  
+  <script type="text/javascript">
+  	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  	var disqus_shortname = 'xrdocs';
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function() {
+  		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  	})();
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function () {
+  		var s = document.createElement('script'); s.async = true;
+  		s.type = 'text/javascript';
+  		s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  		(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  	}());
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+
+
+<!-- material-scrolltop button -->
+<button class="material-scrolltop" type="button"></button>
+
+<!-- material-scrolltop plugin -->
+<script src="http://localhost:4000/assets/js/material-scrolltop.js"></script>
+
+<!-- Initialize material-scrolltop with (minimal) -->
+<script>
+    $('body').materialScrollTop();
+</script>
+
+
+  </body>
+</html>
+

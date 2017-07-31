@@ -1,0 +1,1221 @@
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+
+<meta charset="utf-8">
+
+
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>            iPXE Deep Dive      IOS XR Software Management and ZTP @xrdocs      </title>
+
+
+
+
+
+
+
+<meta property="og:locale" content="en-US">
+<meta property="og:site_name" content="IOS XR Software Management and ZTP @xrdocs">
+<meta property="og:title" content="iPXE Deep Dive">
+
+
+  <link rel="canonical" href="http://localhost:4000/tutorials/2016-07-27-ipxe-deep-dive/">
+  <meta property="og:url" content="http://localhost:4000/tutorials/2016-07-27-ipxe-deep-dive/">
+
+
+
+  <meta property="og:description" content="iPXE Deep Dive">
+
+
+
+  <meta name="twitter:site" content="@xrdocs">
+  <meta name="twitter:title" content="iPXE Deep Dive">
+  <meta name="twitter:description" content="iPXE Deep Dive">
+  <meta name="twitter:url" content="http://localhost:4000/tutorials/2016-07-27-ipxe-deep-dive/">
+
+  
+    <meta name="twitter:card" content="summary">
+    
+      <meta name="twitter:image" content="http://localhost:4000/images/packaging-xrdocs.jpg">
+    
+  
+
+  
+    <meta name="twitter:creator" content="@pwariche">
+  
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2016-07-27T20:58:00+00:00">
+  
+    <link rel="next" href="http://localhost:4000/tutorials/2016-08-06-introduction-to-rpm/" title="IOS-XR and RPM Package Manager">
+  
+  
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Organization",
+      "url": "http://localhost:4000",
+      "logo": "http://localhost:4000/images/packaging-xrdocs.jpg"
+    }
+  </script>
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "person",
+      "name" : "Cisco Systems Inc",
+      "url" : "http://localhost:4000",
+      "sameAs" : ["https://twitter.com/CiscoDevNet"]
+    }
+  </script>
+
+
+
+
+
+
+<!-- end SEO -->
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="IOS XR Software Management and ZTP @xrdocs Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="jgRKKm6B9FwJJPXxpmc0-EP3D0Mh8JHXaJqoYIGj1ek" />
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<script>
+if (!(window.location.host.startsWith("127.0.0.1") || window.location.host.startsWith("localhost")) && (window.location.host.substr(-10) == '.github.io') && (window.location.protocol != "https:"))
+    window.location.protocol = "https";
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<meta http-equiv="cleartype" content="on">
+<style>
+.underline-on-hover:hover {
+    text-decoration: underline;
+}
+.searchForm{
+      border-radius:5px;
+      -moz-border-radius:5px;
+      -webkit-border-radius:5px;
+      width: 900px;
+   }
+#search_results{
+      display: table; margin:0 auto;
+   }
+</style>
+</style>
+
+    
+
+<!-- start custom head snippets -->
+
+<link href="http://localhost:4000/assets/css/lity.min.css" rel="stylesheet">
+<link href="http://localhost:4000/assets/css/cisco-sans.min.css" rel="stylesheet">
+<link href="http://localhost:4000/assets/css/material-scrolltop.css" rel="stylesheet">
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="http://localhost:4000/images/apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://localhost:4000/images/apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://localhost:4000/images/apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://localhost:4000/images/apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="60x60" href="http://localhost:4000/images/apple-touch-icon-60x60.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="http://localhost:4000/images/apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="76x76" href="http://localhost:4000/images/apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="http://localhost:4000/images/apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-196x196.png" sizes="196x196" />
+<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-16x16.png" sizes="16x16" />
+<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-128.png" sizes="128x128" />
+<link rel="shortcut icon" href="http://localhost:4000/images/favicon_cisco.ico" />
+<meta name="application-name" content="&nbsp;"/>
+<meta name="msapplication-TileColor" content="#FFFFFF" />
+<meta name="msapplication-TileImage" content="http://localhost:4000/images/mstile-144x144.png" />
+<meta name="msapplication-square70x70logo" content="http://localhost:4000/images/mstile-70x70.png" />
+<meta name="msapplication-square150x150logo" content="http://localhost:4000/images/mstile-150x150.png" />
+<meta name="msapplication-wide310x150logo" content="http://localhost:4000/images/mstile-310x150.png" />
+<meta name="msapplication-square310x310logo" content="http://localhost:4000/images/mstile-310x310.png" />
+
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <button><div class="navicon"></div></button>
+        <ul class="visible-links">
+          <li class="masthead__menu-item masthead__menu-item--lg"><a href="http://localhost:4000/">Software-Management</a></li>
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="https://xrdocs.github.io">@xrdocs</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="http://localhost:4000/blogs/">Blogs</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item greedy-nav-active"><a href="http://localhost:4000/tutorials/">Tutorials</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="http://localhost:4000/search">Search <i class="fa fa-search" aria-hidden="true"></i></a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="http://localhost:4000/tags/">Tags</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="http://localhost:4000/collection-archive/">Archive</a></li>
+                
+            
+
+
+          
+        </ul>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    
+
+
+
+<div id="main" role="main">
+  
+
+
+  <div class="sidebar sticky">
+  
+
+
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  <div class="author__avatar">
+    
+    	<img src="http://localhost:4000/images/pwariche_bio.jpg" class="author__avatar" alt="Patrick Warichet">
+    
+  </div>
+
+  <div class="author__content">
+    <h3 class="author__name">Patrick Warichet</h3>
+    <p class="author__bio">Technical Marketing Engineer, Web Solutions, Cisco.</p>
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+      
+      
+        <li><a href="mailto:pwariche@cisco.com"><i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email</a></li>
+      
+      
+      
+        <li><a href="http://twitter.com/pwariche"><i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="iPXE Deep Dive">
+    <meta itemprop="description" content="iPXE Deep Dive">
+    <meta itemprop="datePublished" content="July 27, 2016">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">iPXE Deep Dive
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  20 minutes read
+</p>
+          
+        </header>
+      
+
+    
+
+      <section class="page__content" itemprop="text">
+        <aside class="sidebar__right">
+<nav class="toc">
+    <header><h4 class="nav__title"><i class="fa fa-table"></i> IOS-XR: iPXE Deep Dive</h4></header>
+<ul class="toc__menu" id="markdown-toc">
+  <li><a href="#introduction" id="markdown-toc-introduction">Introduction</a>    <ul>
+      <li><a href="#topology" id="markdown-toc-topology">Topology</a></li>
+    </ul>
+  </li>
+  <li><a href="#boot-process" id="markdown-toc-boot-process">Boot Process</a></li>
+  <li><a href="#ipxe-dhcpv4-request" id="markdown-toc-ipxe-dhcpv4-request">iPXE DHCPv4 Request</a></li>
+  <li><a href="#ipxe-dhcpv6-request" id="markdown-toc-ipxe-dhcpv6-request">iPXE DHCPv6 Request</a></li>
+  <li><a href="#ipxe-without-chainloading" id="markdown-toc-ipxe-without-chainloading">iPXE without Chainloading</a></li>
+  <li><a href="#dhcp-server-configuration" id="markdown-toc-dhcp-server-configuration">DHCP Server Configuration</a>    <ul>
+      <li><a href="#dhcpv4" id="markdown-toc-dhcpv4">DHCPv4</a></li>
+      <li><a href="#dhcpv6" id="markdown-toc-dhcpv6">DHCPv6</a></li>
+      <li><a href="#dynamic-scripting---embedding-ipxe-variables-in-url" id="markdown-toc-dynamic-scripting---embedding-ipxe-variables-in-url">Dynamic Scripting - Embedding iPXE variables in URL</a></li>
+    </ul>
+  </li>
+  <li><a href="#ipxe-with-chainloading" id="markdown-toc-ipxe-with-chainloading">iPXE with Chainloading</a>    <ul>
+      <li><a href="#ipxe-script" id="markdown-toc-ipxe-script">iPXE Script</a></li>
+    </ul>
+  </li>
+  <li><a href="#conclusions" id="markdown-toc-conclusions">Conclusions</a></li>
+</ul>
+
+  </nav>
+</aside>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>iPXE is an open source boot firmware (licensed under the GNU GPL with some portions under GPL-compatible licenses). It is fully backward compatible with PXE but include several enhancement. The enhancement that are important for IOS-XR are the following:</p>
+
+<ul>
+  <li>Boot from a web server via HTTP</li>
+  <li>control the boot process with scripts</li>
+  <li>control the boot process with menus</li>
+  <li>DNS support</li>
+</ul>
+
+<p>iPXE is included in the network card of the management interfaces only and support for iPXE boot is included in the system firmware (UEFI) of the NCS1K, NCS5k and NCS5500 series routers. All these systems are equipped with a UEFI 64-bits firmware (aka BIOS).</p>
+
+<p>iPXE can run on both IPv4 and IPv6 protocol but cannot use SLAAC for IPv6.</p>
+
+<p>iPXE enumerates all Ethernet interfaces net0, net1, net2, …</p>
+
+<h3 id="topology">Topology</h3>
+
+<p>In the following examples we will use a NCS-5001 router.  This device is equipped with 2 management interfaces but we will use only one of these two interfaces, It is recommended to place each interfaces in different subnet to facilitate the management process and improve redundancy.</p>
+
+<p>The following diagram show the topology used for all examples. Both the DHCP and HTTP server are on a different subnet than the NCS-5001.
+<img src="/images/topology.png" alt="topology.png" /></p>
+
+<h2 id="boot-process">Boot Process</h2>
+
+<p>The IOS-XR 6.0 boot process is illustrated below, iPXE requires two external services, a DHCP server (e.g. isc-dhcpd) and a HTTP server (e.g. Apache)</p>
+
+<p>It is important to note that a different dhcp client will start at the end of the boot process. This second dhcp client will facilitate auto provisioning the system.
+<img src="/images/boot-process.png" alt="boot-process.png" /></p>
+
+<p>By default all NCS series router boot from the local disk, there are 2 options to force the system to boot using iPXE: If the device is already booted you can issue the command “hw-module location <location> bootmedia network reload" in admin mode to force the system to reboot in iPXE mode.</location></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>RP/0/RP0/CPU0:ios#admin
+Sun Apr 10 00:56:08.037 UTC
+root connected from 127.0.0.1 using console on xr-vm_node0_RP0_CPU0
+sysadmin-vm:0_RP0# hw-module location all bootmedia network reload
+Sun Apr  10 00:56:24.167 UTC
+Reload hardware module ? [no,yes] yes
+result Card reload request on all succeeded.
+</code></pre>
+</div>
+
+<p>If the system is just being powered on, you can get to the device firmware by pressing <code class="highlighter-rouge">&lt;ESC&gt;</code> or <code class="highlighter-rouge">&lt;DEL&gt;</code> after it has completed the hardware diagnostic. You will be presented with the Boot selection menu. To force the device to boot using iPXE select the first entry “UEFI: Built-in EFI IPXE”
+<img src="/images/bios.png" alt="bios.png" /></p>
+
+<p>Once the option is selected, iPXE will initialize the management interfaces, display the features options that were included in the iPXE firmware and propose you to jump into the iPXE prompt by pressing <code class="highlighter-rouge">&lt;CTRL&gt;B</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>iPXE initialising devices...
+ok
+iPXE 1.0.0+ (aa070) -- Open Source Network Boot Firmware -- http://ipxe.org
+Features: DNS HTTP TFTP VLAN EFI ISO9660 NBI Menu
+Press Ctrl-B to drop to iPXE shell
+iPXE&gt;
+</code></pre>
+</div>
+
+<p>When presented with the iPXE command line, you are in the iPXE environment, there are multiple commands that can be used for manual booting and for diagnosing problems. Commands can also be used as part of an iPXE script (see section iPXE with chain loading).</p>
+
+<p>You can use the help command to show a list of all available commands. Full documentation for each command is provided in the iPXE command reference <a href="http://ipxe.org/cmd">http://ipxe.org/cmd</a>.</p>
+
+<h2 id="ipxe-dhcpv4-request">iPXE DHCPv4 Request</h2>
+
+<p>After Initializing the management Interface Ethernet driver, iPXE will send a DHCP request, DHCP will send both an IPv6 and an IPv4 request, The capture below show the initial IPv4 DHCP request sent by the system.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    Bootstrap Protocol
+        Message type: Boot Request (1)
+        Hardware type: Ethernet (0x01)
+        Hardware address length: 6
+        Hops: 0
+        Transaction ID: 0x20e69f64
+        Seconds elapsed: 4
+        Bootp flags: 0x8000 (Broadcast)
+            1... .... .... .... = Broadcast flag: Broadcast
+            .000 0000 0000 0000 = Reserved flags: 0x0000
+        Client IP address: 0.0.0.0 (0.0.0.0)
+        Your (client) IP address: 0.0.0.0 (0.0.0.0)
+        Next server IP address: 0.0.0.0 (0.0.0.0)
+        Relay agent IP address: 0.0.0.0 (0.0.0.0)
+        Client MAC address: 52:46:27:70:1a:67 (52:46:27:70:1a:67)
+        Client hardware address padding: 00000000000000000000
+        Server host name not given
+        Boot file name not given
+        Magic cookie: DHCP
+        Option: (53) DHCP Message Type
+            Length: 1
+            DHCP: Discover (1)
+        Option: (57) Maximum DHCP Message Size
+            Length: 2
+            Maximum DHCP Message Size: 1472
+        Option: (93) Client System Architecture
+            Length: 2
+            Client System Architecture: EFI x86-64 (9)
+        Option: (94) Client Network Device Interface
+            Length: 3
+            Major Version: 3
+            Minor Version: 10
+        Option: (60) Vendor class identifier
+            Length: 45
+            Vendor class identifier: PXEClient:Arch:00009:UNDI:003010:PID:NCS-5001
+        Option: (77) User Class Information
+            Length: 4
+            User Class identifier: iPXE
+        Option: (55) Parameter Request List
+            Length: 22
+            Parameter Request List Item: (1) Subnet Mask
+            Parameter Request List Item: (3) Router
+            Parameter Request List Item: (6) Domain Name Server
+            Parameter Request List Item: (7) Log Server
+            Parameter Request List Item: (12) Host Name
+            Parameter Request List Item: (15) Domain Name
+            Parameter Request List Item: (17) Root Path
+            Parameter Request List Item: (43) Vendor-Specific Information
+            Parameter Request List Item: (60) Vendor class identifier
+            Parameter Request List Item: (66) TFTP Server Name
+            Parameter Request List Item: (67) Bootfile name
+            Parameter Request List Item: (119) Domain Search
+            Parameter Request List Item: (128) PXE - undefined (vendor specific)
+            Parameter Request List Item: (129) PXE - undefined (vendor specific)
+            Parameter Request List Item: (130) PXE - undefined (vendor specific)
+            Parameter Request List Item: (131) PXE - undefined (vendor specific)
+            Parameter Request List Item: (132) PXE - undefined (vendor specific)
+            Parameter Request List Item: (133) PXE - undefined (vendor specific)
+            Parameter Request List Item: (134) PXE - undefined (vendor specific)
+            Parameter Request List Item: (135) PXE - undefined (vendor specific)
+            Parameter Request List Item: (175) Etherboot
+            Parameter Request List Item: (203) Unassigned
+        Option: (175) Etherboot
+            Length: 36
+    Value:2969895296,2248423659,50397184,385941796,16847617,19529985,654377248,
+    16848129,19267841
+        Option: (61) Client identifier
+            Length: 11
+            Hardware type: DUID (0xFF)
+            Client Identifier: 46:4f:43:31:39:34:37:52:31:34:33 (FOC1947R143)
+        Option: (97) UUID/GUID-based Client Identifier
+            Length: 17
+            Client Identifier (UUID): 9ed138b2-dc55-42b6-9c56-2cf6f63921d9
+        Option: (255) End
+            Option End: 255
+</code></pre>
+</div>
+
+<p>iPXE includes a number of options in the initial IPv4 DHCP request, the relevant ones are highlighted</p>
+
+<p><strong>Option 60:</strong> “vendor-class-identifier” Identify 4 elements separated by columns:
+1 The type of client: e.g.: PXEClient
+2 The architecture of The system (Arch): e.g.: 00009 Identify an EFI system using a x86-64 CPU
+3 The Universal Network Driver Interface (UNDI): e.g.: 003010 (first 3 octets identify the major version and last 3 octets identify the minor version)
+4 The Product Identifier (PID): e.g.: NCS-5001</p>
+
+<p><strong>Option 61:</strong> “dhcp-client-identifier” Identify the Serial Number of the system</p>
+
+<p><strong>Option 66 and 67:</strong> are used for TFTP, the first one request the TFTP server name while the second request the filename</p>
+
+<p><strong>Option 77:</strong> “user-class” Identify the mode of the system: e.g.: iPXE</p>
+
+<p><strong>Option 97:</strong> “uuid” Identify the Universally Unique Identifier a 128-bit value (not usable at this time)</p>
+
+<p><strong>Option 128 - 135:</strong> Reserved for PXE boot variables but not in use.</p>
+
+<p>In is response the DHCP server will place the bootfile URI in option 67 “filename” or “bootfile-name” e.g.:<a href="http://172.30.0.22/ncs5k/6.0.0/ncs5k-mini-x.iso-6.0.0">http://172.30.0.22/ncs5k/6.0.0/ncs5k-mini-x.iso-6.0.0</a></p>
+
+<h2 id="ipxe-dhcpv6-request">iPXE DHCPv6 Request</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    DHCPv6
+        Message type: Relay-forw (12)
+        Hopcount: 0
+        Link address: fd:30:12::1 (fd:30:12::1)
+        Peer address: fe80::c672:95ff:fea7:efc0 (fe80::c672:95ff:fea7:efc0)
+        Relay Message
+            Option: Relay Message (9)
+            Length: 88
+            Value: 011ac36d00010012000200000009464f4331393437523134...
+            DHCPv6
+                Message type: Solicit (1)
+                Transaction ID: 0x1ac36d
+                Client Identifier
+                    Option: Client Identifier (1)
+                    Length: 18
+                    Value: 000200000009464f43313934375231343300
+                    DUID: 000200000009464f43313934375231343300
+                    DUID Type: assigned by vendor based on Enterprise number (2)
+                    Enterprise ID: ciscoSystems (9)
+                    Identifier: 464f43313934375231343300 (FOC1947R143)
+                Identity Association for Non-temporary Address
+                    Option: Identity Association for Non-temporary Address (3)
+                    Length: 12
+                    Value: 1d4098ed0000000000000000
+                    IAID: 1d4098ed
+                    T1: 0
+                    T2: 0
+                Option Request
+                    Option: Option Request (6)
+                    Length: 8
+                    Value: 00170018003b003c
+                    Requested Option code: DNS recursive name server (23)
+                    Requested Option code: Domain Search List (24)
+                    Requested Option code: Bootfile URL(59)
+                    Requested Option code: Bootfile Prameters (60)
+                User Class
+                    Option: User Class (15)
+                    Length: 6
+                    Value: 000469505845 : "iPXE"
+                Vendor Class
+                    Option: Vendor Class (16)
+                    Length: 14
+                    Value: 0000000900084e43532d35303031
+                    Enterprise ID: ciscoSystems (9)
+                    vendor-class-data: NCS-5001
+                Elapsed time
+                    Option: Elapsed time (8)
+                    Length: 2
+                    Value: 0000
+                    Elapsed-time: 0 ms
+        Interface-Id
+            Option: Interface-Id (18)
+            Length: 4
+            Value: 0000001d
+            Interface-ID: 
+</code></pre>
+</div>
+
+<p>The initial DHCPv6 solicit has the relevant option highlighted</p>
+
+<p><strong>Option 1:</strong> “client-identifier” equivalent to DHCPv4 option 61 but with the following format:
+DUID Type: integer 16 e.g.: 0002 (assigned by vendor)
+Enterprise Id: integer 32 e.g.: 00000009 (Cisco Systems)
+Client Identifier: string e.g.: FOC1947R143</p>
+
+<p><strong>Option 15:</strong> “dhcp6.user-class” equivalent to DHCPv4 option 77 but the first 2 Octets define the length of the string</p>
+
+<p><strong>Option 16:</strong> “vendor-class-identifier” equivalent to DHCPv4 option 60 but with the following format:
+Enterprise Id: integer 32 e.g.:00000009 (Cisco Systems)
+Length: integer 16
+Vendor: string e.g.: NCS-5001</p>
+
+<p><strong>Option 59:</strong> “dhcp6.bootfile-url” equivalent to DHCPv4 option 67</p>
+
+<p><strong>Option 60:</strong> “dhcp6.bootfile-parameter”  required to be present but not in use.</p>
+
+<p>The DHCPv6 server will include option 59 “dhcp6.bootfile-url” in its response containing the full URL of the boot image e.g.: [http://[fd:30::172:30:0:22]/ncs5k/6.0.0/ncs5k-mini-x.iso-6.0.0] (http://[fd:30::172:30:0:22]/ncs5k/6.0.0/ncs5k-mini-x.iso-6.0.0)</p>
+
+<h2 id="ipxe-without-chainloading">iPXE without Chainloading</h2>
+
+<p>In this first examples, iPXE features are not used but the usage is similar to PXE boot. In the following examples we will rely solely on the DHCP server configuration to provide the elements necessary to identify the boot ISO for the device.</p>
+
+<h2 id="dhcp-server-configuration">DHCP Server Configuration</h2>
+
+<h3 id="dhcpv4">DHCPv4</h3>
+
+<p>Using the options above we can configure isc-dhcpd to adequately provide the URI to boot the system, the common statements for the network and the pool are shown below:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>######### Network 172.30.12.0/24 ################
+shared-network 172-30-12-0 {
+   subnet 172.30.12.0 netmask 255.255.255.0 {
+      option subnet-mask 255.255.255.0;
+      option broadcast-address 172.30.12.255;
+      option routers 172.30.12.1;
+      option domain-name-servers 172.30.0.25;
+      option domain-name "cisco.local";
+   }
+   ####### Pool #########
+        pool {
+           range 172.30.12.10 172.30.12.100;
+           next-server 172.30.0.22;
+           if exists user-class and option user-class = "iPXE" {
+              filename = "http://172.30.0.22/ncs5k-mini-4";
+           } else if exists user-class and option user-class = "exr-config" {
+              filename = "http://172.30.0.22/scripts/ncs-ztp.sh";
+           }
+</code></pre>
+</div>
+
+<p>In the example above option 77 is used to provide the bootfile to the system, the if-then-else statement is required to prevent the DHCP server to provide the (large) bootfile to the auto-configuration process. With this configuration all system in iPXE mode will receive a DHCP offer with identical bootfile URI.</p>
+
+<p>If we want to add more granularity to the process we can define a class and using option 60 to only target a specific product or a family of products using the PID embedded in the the request. in the match statement we first verify that the system is in iPXE mode by matching the beginning of the vendor-class-identifier “PXEClient” than we match the first 6 octets of the PID portion “NCS-50”, this will match all the NCS-5K routers (NCS-5001, NCS-5002, NCS-5011) and provide them the same bootfile URI, the “if” statement can be more specific to only match NCS-5001 product and additional “else-if” statement can be added to match other products.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>######### Class #########
+   class "ncs-5k" {
+      match if substring (option vendor-class-identifier, 0, 9) = "PXEClient";
+         if substring (option vendor-class-identifier, 37, 6) = "NCS-50" {
+            filename = "http://172.30.0.22/ncs5k-mini-3";
+         }
+      }
+</code></pre>
+</div>
+
+<p>Granularity of the boot image can be even more specific, the traditional approach is to use the mac address with a host definition inside the pool, as illustrated below</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>######## Hosts #########
+host ncs-5001-a {
+   hardware ethernet c4:72:95:a7:ef:c2;
+   if exists user-class and option user-class = "iPXE" {
+      filename = "http://172.30.0.22/ncs5k-mini-1";
+   }
+   fixed-address 172.30.12.50;
+}
+</code></pre>
+</div>
+
+<p>Using the host statement we provide a fixed address which can be useful for DNS, we still need to verify that option 77 is set to iPXE in the request to only provide the bootfile when required. The disadvantage of using the mac-address is that it is not necessary know in advance and is not written on the packaging box if this is the initial bootup of the system, another approach would be to use the uuid (option 97) or the serial number embedded in option 61.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>######## Hosts #########
+host ncs-5001-b {
+   option dhcp-client-identifier "FOC1947R144";
+   if exists user-class and option user-class = "iPXE" {
+      filename = "http://172.30.0.22/ncs5k-mini-2";
+   }
+   fixed-address 172.30.12.52;
+}
+</code></pre>
+</div>
+
+<p>Using the different options and the flexibility of the ISC dhcp server we can achieve various degrees of granularity for the system we want to iPXE boot, but using DHCP options does not scale and each change require to restart the DHCP service. It offers the advantage to be identical to PXE and is easy to do for small to medium size network.</p>
+
+<h3 id="dhcpv6">DHCPv6</h3>
+
+<p>The ISC-DHCP service is mono stack, to support IPv6 a second instance of the service needs to be launched, both instances should use different configuration file. The common configuration statement for the DHCPv6 is as follow:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>shared-network FD-30-12 {
+   subnet6 fd:30:12::/64 {
+      # Range for clients
+      range6 fd:30:12::1024 fd:30:12::1124;
+      # Range for clients requesting a temporary address
+      range6 fd:30:12::/64 temporary;
+      # Additional options
+      option dhcp6.name-servers fd:30::172:30:0:25;
+      option dhcp6.domain-search "cisco.local"; 
+      if exists dhcp6.user-class and substring(option dhcp6.user-class, 2, 4) = "iPXE" {
+         option dhcp6.bootfile-url = "http://[fd:30::172:30:0:22]/ncs5k-mini-4";
+      } else if exists dhcp6.user-class and substring(option dhcp6.user-class, 0, 10) = "exr-config" {
+         option dhcp6.bootfile-url = "http://[fd:30::172:30:0:22]/scripts/ncs-ztp.sh";
+      }
+   }
+}
+</code></pre>
+</div>
+
+<p>The DHCP configuration for IPv6 is similar to IPv4, the first 2 octets of the user-class define the length of the string, so we need to use the substring() statement to match “iPXE”. Another difference is the square brackets used to represent the IPv6 address in isc-dhcp configuration file. iPXE cannot used SLAAC and you need to disable SLAAC on the first hop router and force statefull IPv6 address assignment on the segment. For reference here is a snippet of an Cisco IOS configuration. since the DHCP and HTTP server are on a different subnet a helper-address and a relay address have been configured for DHCPv4 and DHCPv6.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>interface GigabitEthernet2/0
+   description ** Management Network **
+   ip dhcp relay information trusted
+   ip address 172.30.12.1 255.255.255.0
+   ip helper-address 172.30.0.25
+   ip virtual-reassembly in
+   ipv6 address FD:30:12::1/64
+   ipv6 nd managed-config-flag
+   ipv6 nd other-config-flag
+   ipv6 nd router-preference High
+   ipv6 dhcp relay destination FD:30::172:30:0:25 GigabitEthernet1/0
+end
+</code></pre>
+</div>
+
+<p>If there are no router present on the segment, you will have to launch the Router Advertisement Daemon (radvd) and force IPv6 routing on the DHCP server. An example of radvd.conf is as follow:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>interface eth1
+{
+   MinRtrAdvInterval 5;
+   MaxRtrAdvInterval 60;
+   AdvSendAdvert on;
+   AdvOtherConfigFlag on;
+   IgnoreIfMissing off;
+   prefix FD:30:12::/64 {
+   };
+};
+</code></pre>
+</div>
+
+<p>Granularity in identifying the boot image is similar to IPv4, A class that encompass all NCS-5K series can be defined as follow (ipv6 class support is available starting isc-dhcp-server 4.3.4):</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>######### Class #########
+class "ncs-5k" {
+   match if exists vendor-class-identifier and substring(vendor-class-identifier, 6, 6) = "NCS-50";
+   if exists dhcp6.user-class and substring(option dhcp6.user-class, 2, 4) = "iPXE" {
+      filename = "http://[fd:30::172.30.0.22]/ncs5k-mini-3";
+   }
+}
+</code></pre>
+</div>
+
+<p>Granularity to the host level can be achieve by using the serial number as identifier since the client sends the serial number as part of the client-id a simple solution is to match the complete hex data of the option.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>######## Hosts #########
+host ncs-5001-b {
+   host-identifier option dhcp6.client-id 00:02:00:00:00:09:46:4f:43:31:39:34:37:52:31:34:33:00;
+   if exists dhcp6.user-class and substring(option dhcp6.user-class, 2, 4) = "iPXE" {
+      option dhcp6.bootfile-url = "http://[fd:30::172:30:0:22]/ncs5k-mini-2";
+   }
+   fixed-address6 fd:30:12::172.30.12.52;
+}
+</code></pre>
+</div>
+
+<p>Refer to the section iPXE DHCPv6 Request on how to decode the dhcp6.client-id or use xxd to translate it in ascii.</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">cisco@galaxy-42$ </span><span class="nb">echo</span> <span class="s2">"00:02:00:00:00:09:46:4f:43:31:39:34:37:52:31:34:33"</span> | xxd -pe -r <span class="o">&amp;&amp;</span> <span class="nb">echo</span> -e
+        FOC1947R143
+<span class="gp">cisco@galaxy-42$ </span><span class="nb">echo</span> -n <span class="s2">"FOC1947R143"</span> | od -A n -t x1 | sed <span class="s1">'s/^ /00:02:00:00:00:09:/'</span> | sed <span class="s1">'s/ /:/g'</span>
+    00:02:00:00:00:09:46:4f:43:31:39:34:37:52:31:34:33
+</code></pre>
+</div>
+
+<h3 id="dynamic-scripting---embedding-ipxe-variables-in-url">Dynamic Scripting - Embedding iPXE variables in URL</h3>
+
+<p>The URL provided by the DHCP server does not have to be a static. For example, you could direct iPXE to boot from the URL</p>
+
+<p>http://172.30.0.22/boot.php?mac=${net0/mac}&amp;product=${product:uristring}&amp;serial=${serial:uristring}</p>
+
+<p>Which would expand to a URL such as</p>
+
+<p>http://172.30.0.22/boot.php?mac=c4:72:95:a7:ef:c0&amp;product=NCS5001&amp;serial=FOC1947R143</p>
+
+<p>The boot.php program running on the web server could dynamically generate a script based on the information provided in the URL. For example, boot.php could look up the serial number in a MySQL database to determine the correct target to boot from, and then dynamically generate a script such as</p>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+   <span class="nb">header</span> <span class="p">(</span> <span class="s2">"Content-type: text/plain"</span> <span class="p">);</span>
+   <span class="k">echo</span> <span class="s2">"#!ipxe </span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+   <span class="k">echo</span> <span class="s2">"set myURL http://172.30.0.22/Cisco/NCS/NCS5001/FOC1947R143 </span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+   <span class="k">echo</span> <span class="s2">"boot myURL </span><span class="se">\n</span><span class="s2">"</span><span class="p">;</span>
+<span class="cp">?&gt;</span>
+</code></pre>
+</div>
+
+<h2 id="ipxe-with-chainloading">iPXE with Chainloading</h2>
+
+<p>Chainloading is the capability to jump from one boot statement to another. Using chainloading and the embedded scripting capability of iPXE we can have a very detail and complex selection mechanism for the boot image. In the following example we will use the boot file structure illustrated below and we will use the initial DHCP configuration described earlier but in place of providing the URI for an ISO the DHCP server will provide the URI to a iPXE boot script (boot.ipxe).
+<img src="/images/chainloading.png" alt="chainloading.png" /></p>
+
+<p>The file boot.ipxe file is a script that will identify the correct image based on available iPXE variable, it starts with the “!ipxe” statement and include statement like chain isset, etc.. All the iPXE statements are documented in the iPXE command section <a href="http://ipxe.org/cmd">open source boot firmware</a></p>
+
+<p>The script is evaluated top to bottom and works for both IPv4 and IPv6</p>
+
+<h3 id="ipxe-script">iPXE Script</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>!ipxe
+ 
+# Global variables used by all other iPXE scripts
+chain --autofree boot.ipxe.cfg ||
+ 
+# Boot &lt;boot-url&gt;/&lt;boot-dir&gt;/hostname-&lt;hostname&gt;.ipxe
+# if hostname DHCP variable is set and script is present
+isset ${hostname} &amp;&amp; chain --replace --autofree ${boot-dir}hostname-${hostname}.ipxe ||
+ 
+# Boot &lt;boot-url&gt;/&lt;boot-dir&gt;/uuid-&lt;UUID&gt;.ipxe
+# if SMBIOS UUID variable is set and script is present (not usable see CSCuz28164)
+isset ${uuid} &amp;&amp; chain --replace --autofree ${boot-dir}uuid-${uuid}.ipxe ||
+ 
+# Boot &lt;boot-url&gt;/&lt;boot-dir&gt;/mac-010203040506.ipxe if script is present
+chain --replace --autofree ${boot-dir}mac-${mac:hexraw}.ipxe ||
+ 
+# Boot &lt;boot-url&gt;/&lt;boot-dir&gt;/serial-FOC1947R143.ipxe if script is present
+isset ${serial} &amp;&amp; chain --replace --autofree ${boot-dir}serial-${serial}.ipxe ||
+ 
+# Boot &lt;boot-url&gt;/&lt;boot-dir&gt;/pid-&lt;product&gt;.ipxe if script is present
+isset ${product} &amp;&amp; chain --replace --autofree ${boot-dir}pid-${product}.ipxe ||
+
+# Boot &lt;boot-url&gt;/menu.ipxe script if all other options have been exhausted
+chain --replace --autofree ${menu-url} ||
+chain --replace --autofree ${menu-url6} ||
+</code></pre>
+</div>
+
+<p>The first action of the script is to import a set of variables from boot.ipxe.cfg this will set ${boot-url} / ${boot-url6} and other variables.</p>
+
+<p>The script verify if a specific variable has been set either in the SMBIOS of the system or in the DHCP response from the server.</p>
+
+<p>If the variable has been set, the script attempts to jump to a secondary boot file. For example if the serial number is set “isset ${serial}”, the script will attempt to jump to the file <boot-dir>/serial-FOC1947R144.ipxe if the file exists. If the file exist iPXE will start executing statement from this boot script. If the file does not exist the script continue to the next statement until it reaches the menu statement, the last statement of the list.</boot-dir></p>
+
+<p>Here is an example of a secondary boot script based on the serial number of the device, as you can see this script points to the last element of the chain: the ISO boot file.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cisco@galaxy-42:/var/www/html/ipxe$ cat serial-FOC1947R143.ipxe
+#!ipxe
+echo
+echo Booting NCS5K Mini ISO 6.0.0 from ISO for ${initiator}
+chain --replace --autofree  ${boot-url}ncs5k-mini-x.iso-6.0.0 ||
+chain --replace --autofree  ${boot-url6}ncs5k-mini-x.iso-6.0.0
+</code></pre>
+</div>
+
+<p>Finally if all boot items have failed, the menu.ipxe script is executed and propose an interactive menu-driven list of boot options.</p>
+
+<p>Below is the example script for the boot menu, this example is adapted from <a href="https://gist.github.com/robinsmidsrod/2234639">https://gist.github.com/robinsmidsrod/2234639</a></p>
+
+<p>Each menu items can be associated with a shortcut key and navigation between items is done using the up and down arrows, for xrv9k image we have to use the sanboot option, for NCS-5K and NCS-5500 device we use the boot keyword.</p>
+
+<p><strong>boot.ipxe.cfg</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>#!ipxe
+
+# Base URL used to resolve most resources
+# Should always end with a slash
+set boot-url http://172.30.0.22/
+set boot-url6 http://[fd:30::172:30:0:22]/
+
+# What URL to use when sanbooting
+# Should always end with a slash
+set sanboot-url http://172.30.0.22/
+set sanboot-url6 http://[fd:30::172:30:0:22]/
+
+# Relative directory to boot.ipxe used to
+# override boot script for specific clients
+set boot-dir ipxe/
+
+# Absolute URL to the menu script, used by boot.ipxe
+# and commonly used at the end of simple override scripts
+# in ${boot-dir}.
+set menu-url ${boot-url}menu.ipxe
+set menu-url6 ${boot-url6}menu.ipxe
+
+set initiator ${product} - ${serial}
+
+</code></pre>
+</div>
+
+<p><strong>boot.ipxe</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>!ipxe
+# Variables are specified in boot.ipxe.cfg
+# Some menu defaults
+set menu-timeout 30000
+set submenu-timeout ${menu-timeout}
+isset ${menu-default} || set menu-default exit
+###################### MAIN MENU ####################################
+:start
+menu iPXE boot menu for ${initiator}
+item --gap --             ------------------------- XRV9K Boot Menu ------------------------------
+item --key a sunstone-mini              Boot xrv9k Mini 6.0.0 ISO
+item --key d sunstone-latest            Boot xrv9k Mini 6.1.1 ISO Latest build
+item --key e sunstone-disk              Boot xrv9k from local disk
+item --gap --             ------------------------ NCS5000 Boot Menu -----------------------------
+item --key f ncs5000-6.0.0              Boot ncs-5000 Mini 6.0.0 ISO
+item --key g ncs5000-6.1.1              Boot ncs-5000 Mini 6.1.1 ISO
+item --gap --             ------------------------ NCS5500 Boot Menu -----------------------------
+item --key h ncs5500-6.0.0              Boot ncs-5500 Mini 6.0.0 ISO
+item --key i ncs5500-6.1.1              Boot ncs-5500 Mini 6.1.1. Latest ISO
+item --gap --             ------------------------- Advanced options -----------------------------
+item --key j config                     Configure settings
+item shell                              Drop to iPXE shell
+item reboot                             Reboot System
+item
+item --key x exit                       Exit iPXE and continue BIOS boot
+choose --timeout ${menu-timeout} --default ${menu-default} selected || goto cancel
+set menu-timeout 0
+goto ${selected}
+ 
+:cancel
+echo You cancelled the menu, dropping you to a shell
+ 
+:shell
+echo Type 'exit' to get the back to the menu
+shell
+set menu-timeout 0
+set submenu-timeout 0
+goto start
+ 
+:failed
+echo Booting failed, dropping to shell
+goto shell
+ 
+:reboot
+reboot
+ 
+:exit
+exit
+    
+:config
+config
+goto start
+ 
+:back
+set submenu-timeout 0
+clear submenu-default
+goto start
+ 
+############ MAIN MENU ITEMS ############
+ 
+:sunstone-mini
+echo Booting XRV9K Mini 6.0.0 from ISO for ${initiator}
+sanboot ${sanboot-url}xrv9k-mini-x.iso-6.0.0 ||
+sanboot ${sanboot-url6}xrv9k-mini-x.iso-6.0.0 || goto failed
+goto start
+ 
+:sunstone-latest
+echo Booting XRV9K Mini 6.1.1 latest developer release from ISO for ${initiator}
+sanboot ${sanboot-url}xrv9k-mini-latest.iso ||
+sanboot ${sanboot-url6}xrv9k-mini-latest.iso || goto failed
+goto start
+ 
+:ncs5000-6.0.0
+echo
+echo Booting NCS-5K Mini ISO 6.0.0 from ISO for ${initiator}
+boot ${boot-url}ncs5000-mini.official ||
+boot ${boot-url6}ncs5000-mini.official || goto failed
+goto start
+ 
+:ncs5000-6.1.1
+echo
+echo Booting NCS-5K Mini ISO 6.1.1 from ISO for ${initiator}
+boot ${boot-url}ncs5000-mini.latest ||
+boot ${boot-url6}ncs5000-mini.latest || goto failed
+goto start
+ 
+:ncs5500-6.0.0
+echo
+echo Booting NCS-5500 Mini ISO 6.0.0 from ISO for ${initiator}
+boot ${boot-url}ncs5500-mini.official ||
+boot ${boot-url6}ncs5500-mini.official || goto failed
+goto start
+ 
+:ncs5500-6.1.1
+echo
+echo Booting NCS-5500 Mini ISO 6.1.1 from ISO for ${initiator}
+boot ${boot-url}ncs5500-mini.latest ||
+boot ${boot-url6}ncs5500-mini.latest || goto failed
+goto start
+ 
+:sunstone-disk
+echo Start XRV9K from disk
+sanboot --no-describe --drive 0x80 || goto failed  
+goto start
+</code></pre>
+</div>
+
+<p>Here is a screenshots of the boot process with only the DHCPv6 service active and no valid boot file present.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>iPXE&gt; autoboot net0                                             &lt;- autoboot from the mgmt interface 
+net0: c4:72:95:a7:ef:c0 using dh8900cc on PCI01:00.1 (open)
+  [Link:up, TX:108 TXE:0 RX:5188624 RXE:5186887]
+Configuring (net0 c4:72:95:a7:ef:c0).......... ok
+net0: fe80::c672:95ff:fea7:efc0/64
+net0: fd:30:12::1124/64 gw fe80::fa72:eaff:fe8b:ce80            &lt;- ipv6 statefull address assignment 
+Filename: http://[fd:30::172:30:0:22]/boot.ipxe                 &lt;- ipv6 boot URI from DHCPv6
+http://[fd:30::172:30:0:22]/boot.ipxe... ok                     &lt;- boot script is downloaded 
+/boot.ipxe.cfg... ok                                            &lt;- boot variable are chained
+/ipxe/uuid-03000200-0400-0500-0006-000700080009.ipxe... No such file or directory (http://ipxe.org/2d0c618e)
+/ipxe/mac-c47295a7efc0.ipxe... No such file or directory (http://ipxe.org/2d0c618e)
+/ipxe/serial-FOC1947R143.ipxe... No such file or directory (http://ipxe.org/2d0c618e)
+/ipxe/pid-NCS-5001.ipxe... No such file or directory (http://ipxe.org/2d0c618e)
+http://172.30.0.22/menu.ipxe... Network unreachable (http://ipxe.org/280a6090)
+http://[fd:30::172:30:0:22]/menu.ipxe... ok                      &lt;- boot menu is executed
+
+                 iPXE boot menu for NCS-5001 - FOC1947R143
+ 
+------------------------- XRV9K Boot Menu ------------------------------ 
+Boot xrv9k Mini 6.0.0 ISO
+Boot xrv9k Mini 6.1.1 ISO Latest build
+Boot xrv9k from local disk
+------------------------ NCS5000 Boot Menu -----------------------------
+Boot ncs-5000 Mini 6.0.0 ISO
+Boot ncs-5000 Mini 6.1.1 ISO Latest build
+------------------------ NCS5500 Boot Menu -----------------------------
+Boot ncs-5500 Mini 6.0.0 ISO
+Boot ncs-5500 Mini 6.1.1 Latest build
+------------------------- Advanced options -----------------------------
+Configure settings
+Drop to iPXE shell
+Reboot System
+ 
+Exit iPXE and continue BIOS boot
+</code></pre>
+</div>
+
+<p>If we select the entry “Boot ncs-5000 Mini 6.0.0 ISO”, the script will first attempt to boot using the IPv4 address, since our device did not receive a valid IPv4 address it will attempt to use the IPv6 address and start the NOS installation.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Booting Skywarp Mini ISO 6.0.0 from ISO for NCS-5001 - FOC1947R143
+http://172.30.0.22/ncs5000-mini.official... Network unreachable (http://ipxe.org/280a6090)
+http://[fd:30::172:30:0:22]/ncs5000-mini.official... ok
+Booting iso-image@0x42e2cb000(835930112), bzImage@0x42e2f7000(4473806)
+</code></pre>
+</div>
+
+<h2 id="conclusions">Conclusions</h2>
+
+<p>iPXE offers a wide variety of configuration paradigm that can be used in large deployment, with its scripting capability, iPXE is independent of DHCP configuration and can achieve very good granularity based on model number, serial number, mac-address, host name, etc.</p>
+
+<p>Creation of boot file can be automated easily on the back-end side without restarting any services. On the HTTP server symbolic link can be used to move devices from one ISO to another without reconfiguration. with its backward compatibility with PXE and its low resources requirement, it is a very good alternative to ONIE.</p>
+
+<p>Future enhancement to the boot process including secure boot will bring even more security to the iPXE without using HTTPS.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#cisco" class="page__taxonomy-item" rel="tag">cisco</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#iosxr" class="page__taxonomy-item" rel="tag">iosxr</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#ipxe" class="page__taxonomy-item" rel="tag">iPXE</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2016-07-27T20:58:00+00:00">July 27, 2016</time></p>
+        
+      </footer>
+
+      
+
+<section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=http://localhost:4000/tutorials/2016-07-27-ipxe-deep-dive/" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/tutorials/2016-07-27-ipxe-deep-dive/" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=http://localhost:4000/tutorials/2016-07-27-ipxe-deep-dive/" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/tutorials/2016-07-27-ipxe-deep-dive/" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+
+    <br>
+    <br>
+    <br>
+</section>
+
+
+    </div>
+
+    
+      
+
+<div class="page__comments">
+  <h4 class="page__comments-title">Leave a Comment</h4>
+  
+    <section id="disqus_thread"></section>
+  
+</div>
+    
+  </article>
+
+  
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+      <li><a href="https://twitter.com/xrdocs"><i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+    
+    
+    
+      <li><a href="http://github.com/xrdocs"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2017 Cisco Systems Inc. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+      </footer>
+    </div>
+
+    <script src="http://localhost:4000/assets/js/main.min.js"></script>
+<script src="http://localhost:4000/assets/js/scrollmenu.js"></script>
+
+
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-78256516-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+  
+  <script type="text/javascript">
+  	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  	var disqus_shortname = 'xrdocs';
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function() {
+  		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  	})();
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function () {
+  		var s = document.createElement('script'); s.async = true;
+  		s.type = 'text/javascript';
+  		s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  		(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  	}());
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+
+
+<!-- material-scrolltop button -->
+<button class="material-scrolltop" type="button"></button>
+
+<!-- material-scrolltop plugin -->
+<script src="http://localhost:4000/assets/js/material-scrolltop.js"></script>
+
+<!-- Initialize material-scrolltop with (minimal) -->
+<script>
+    $('body').materialScrollTop();
+</script>
+
+
+  </body>
+</html>
+
