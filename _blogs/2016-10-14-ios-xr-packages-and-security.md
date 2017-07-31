@@ -10,6 +10,9 @@ tags:
   - linux
   - RPM
 ---
+
+{% include toc icon="table" title="IOS-XR Packages and Security" %}
+
 ## Introduction
 
 With the Introduction of IOX XR 6.0, the complete IOS XR software architecture has migrated to a open source infrastructure centered around the Linux Operating System. With the Adoption of Linux and Linux Containers (LXCs) some major change have been introduce in several areas; The monolithic set of XR features has been dis-aggregated in a collection of RPM packages that can be upgraded trough local or remote repositories. The Linux environment comes with its own authentication mechanism and user privileges. With XR and Linux processes residing side-by-side inside the same namespace, it is important to control the installation and execution of these processes.

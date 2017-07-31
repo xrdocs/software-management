@@ -8,6 +8,9 @@ tags:
   - iosxr
   - cisco
 ---
+
+{% include toc icon="table" title="Using ZTP to install chef" %}
+
 ## Introduction
 Chef is an automation platform that "turns infrastructure into code", allowing users to manage and deploy resources across multiple servers, or nodes. Chef allows users to create and download recipes (stored in cookbooks) to automate content, configuration and policies on these nodes.
 

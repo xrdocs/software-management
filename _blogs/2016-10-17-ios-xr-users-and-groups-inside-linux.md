@@ -9,6 +9,9 @@ tags:
   - linux
 excerpt: How IOS-XR users and groups maps to Linux
 ---
+
+{% include toc icon="table" title="IOS-XR: Linux users and groups" %}  
+
 ## XR and Linux Users
 
 By default, any user created inside XR is automatically replicated including that user's password inside Linux using a unique UID and GID.

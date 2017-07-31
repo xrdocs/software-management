@@ -10,6 +10,9 @@ tags:
 author: Patrick Warichet
 excerpt: Installation of the puppet agent using ZTP
 ---
+
+{% include toc icon="table" title="Using ZTP to install Puppet" %}
+
 ## Introduction
 Puppet is a configuration management tool for information technology (IT) professionals. Puppet can potentically manage any resource defined on a node. Puppet can manage complex and distributed components to ensure service consistency and availability. In short, Puppet uses a configuration policy referred to as a "recipe" to bring systems into compliance.
 
