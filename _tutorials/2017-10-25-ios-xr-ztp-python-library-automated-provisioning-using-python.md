@@ -37,7 +37,10 @@ Apart from a new DHCPv4 option introduced in IOS-XR Release 6.2.25 (option 124),
 
 In this tutorial we will introduce a brand new ZTP library that enables users to write ZTP scripts directly in python without having to create wrappers around the native bash utilities available to interact with IOS-XR CLI ( The bash utilities are explained here: ([ZTP bash utilties]https://xrdocs.github.io/software-management/tutorials/2016-08-26-working-with-ztp/#ztp-utilities)
 
+Further, we'll go a step further and write an exhaustive ZTP script in python that handles XR config replace, installation of packages in XR, spin up a docker container and install puppet - all on a dual RP NCS5500. 
 
+Let's get started!
+{: .notice--success} 
 
-## Test
+## 
 
