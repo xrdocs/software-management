@@ -20,8 +20,11 @@ tags:
 ---
 
 {% include toc icon="table" title="IOS-XR ZTP Python" %}
+{% include base_path %}
 
 ## Introduction
+
+If you've been browsing through the blogs and tutorials in the [software-management]({{ base_path }}) section of xrdocs
 
 
 ## Test
