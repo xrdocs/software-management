@@ -24,8 +24,13 @@ tags:
 
 ## Introduction
 
-If you've been browsing through the blogs and tutorials in the [software-management]({{ base_path }}) section of xrdocs
+If you've not had a chance to play around with Zero Touch Provisioning (ZTP) on IOS-XR, then I would implore you take a look at the following blogs:
 
+*  **IOS-XR ZTP: Learning through Packet Captures**: Akshat Sharma tells you everything you need to know to understand the DHCP (v4 and v6) server setup and packet captures to illustrate the DHCP options that may be used for classification of devices during provisioning:
+>https://xrdocs.github.io/software-management/blogs/2017-09-21-ios-xr-ztp-learning-through-packet-captures/
+
+*  **Working with ZTP**: Patrick Warichet walks through the ZTP workflow and illustrates examples of bash scripts to accomplish zero touch provisioning using the ZTP bash utilities to interact with IOS-XR CLI.
+>https://xrdocs.github.io/software-management/tutorials/2016-08-26-working-with-ztp/
 
 ## Test
 
