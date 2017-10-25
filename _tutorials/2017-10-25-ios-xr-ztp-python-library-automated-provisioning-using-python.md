@@ -43,7 +43,7 @@ Further, we'll go a step further and write an exhaustive ZTP script in python th
   * Spin up a docker container 
   * install puppet
   * Set up a cron job
-  * All on a dual RP NCS5500 - so the ZTP script will do checkpointing of linux packages and files for us!
+  * All on a dual RP NCS5500 - so the ZTP script will do initial checkpointing of linux packages and files for us!
 
 
 **Let's get started!**
