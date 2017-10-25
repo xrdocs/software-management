@@ -32,5 +32,12 @@ If you've not had a chance to play around with Zero Touch Provisioning (ZTP) on 
 *  **Working with ZTP (bash scripts)**: Patrick Warichet walks through the ZTP workflow and illustrates examples of bash scripts for zero touch provisioning using the ZTP bash utilities that enable the bash script to interact with IOS-XR CLI.
 ><https://xrdocs.github.io/software-management/tutorials/2016-08-26-working-with-ztp/>
 
+Apart from a new DHCPv4 option introduced in IOS-XR Release 6.2.25 (option 124), both the articles above are valid for IOS-XR starting from release 6.1.2.
+
+
+In this tutorial we will introduce a brand new ZTP library that enables users to write ZTP scripts directly in python without having to create wrappers around the native bash utilities available to interact with IOS-XR CLI ( The bash utilities are explained here: ([ZTP bash utilties]https://xrdocs.github.io/software-management/tutorials/2016-08-26-working-with-ztp/#ztp-utilities)
+
+
+
 ## Test
 
