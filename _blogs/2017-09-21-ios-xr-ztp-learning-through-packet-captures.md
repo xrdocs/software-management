@@ -491,7 +491,7 @@ The cloudshark decode of the DHCP offer message in response to the request descr
  
 For DHCPv6, the primary option that the router needs from the Server is:
 
-*  **Boot File URL (Option 59)**: This Option is encodes the Boot file URL that is sent back to the router in response. **IOS-XR will accept this and download the target file based on it. This file may be a script or config and will be executed/applied accordingly.**
+*  **Boot File URL (Option 59)**: This Option encodes the Boot file URL that is sent back to the router in response. **IOS-XR will accept this and download the target file based on it. This file may be a script or config and will be executed/applied accordingly.**
 
 
 
@@ -500,15 +500,3 @@ The remaining two captures in <https://www.cloudshark.org/captures/eeedef4dd779>
 
 Hopefully, this blog is useful to anyone looking to deploy ZTP with IOS-XR. Do reach out if there are any concerns and we'll do our best to help out.
 {: .notice--success}
- 
-
-
-
-    
-    
- 
- 
- 
- 
- 
- 
