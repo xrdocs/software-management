@@ -37,9 +37,9 @@ If you've not had a chance to play around with Zero Touch Provisioning (ZTP) on 
 Apart from a new DHCPv4 option introduced in IOS-XR Release 6.2.25 (option 124), both the articles above are valid for IOS-XR starting from release 6.1.2.
 
 
-In Part 1 of this tutorial we will introduce a new ZTP library released as part of IOS-XR 6.2.25 that enables users to write ZTP scripts directly in python without having to create wrappers around the native bash utilities (The bash utilities were introduced in XR Release 6.1.2 and are explained here : [ZTP bash utilties](https://xrdocs.github.io/software-management/tutorials/2016-08-26-working-with-ztp/#ztp-utilities)). We will finish this tutorial with a simple python ZTP script that will create a root user in XR and exercise some of the methods available in the library. 
+In **Part 1** of this tutorial we will introduce a new ZTP library released as part of IOS-XR 6.2.25 that enables users to write ZTP scripts directly in python without having to create wrappers around the native bash utilities (The bash utilities were introduced in XR Release 6.1.2 and are explained here : [ZTP bash utilties](https://xrdocs.github.io/software-management/tutorials/2016-08-26-working-with-ztp/#ztp-utilities)). We will finish this tutorial with a simple python ZTP script that will create a root user in XR and exercise some of the methods available in the library. 
 
-In part 2 of this tutorial, we'll go a step further and write a much more exhaustive ZTP script, in python, that handles:
+In **Part 2** of this tutorial, we'll go a step further and write a much more exhaustive ZTP script, in python, that handles:
   * Installation of packages in XR : k9sec and mgbl RPMs
   * IOS-XR config replace
   * Spin up a docker container 
