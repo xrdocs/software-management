@@ -1,7 +1,7 @@
 ---
 published: true
 date: '2017-10-25 12:50 -0700'
-title: 'IOS-XR ZTP Python Library: Automated provisioning using python (6.2.2+)'
+title: 'IOS-XR ZTP Python Library: Automated provisioning using python (6.2.25+)'
 author: Akshat Sharma
 excerpt: >-
   Understand the Python ZTP library in IOS-XR, the available methods and build
@@ -47,7 +47,20 @@ Further, we'll go a step further and write an exhaustive ZTP script in python th
 
 
 **Let's get started!**
-{: .notice--success} 
+{: .notice--success}
 
-## 
+
+## NCS5508 ZTP setup
+
+
+We will be using an NCS5508 router running IOS-XR 6.2.25 CCO image. Bear in mind that the script we write will work perfectly fine on xrv9k (virtual IOS-XR) as well. This tutorial focuses on NCS5508 to have a dual RP setup to play with.
+
+
+
+
+
+
+
+
+
 
