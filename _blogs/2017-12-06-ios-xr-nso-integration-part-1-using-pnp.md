@@ -16,4 +16,10 @@ The NSO PnP Server is a NSO Component which enables management of Cisco PnP clie
 ## ZTP
 ZTP does not currently include PnP capabilities, in this article we describes a method to use the ZTP feature of IOS XR and Cisco PnP to automatically deploy a Day-0 configuration and register a device to NSO during its initial boot. NSO will then be able to initiate a connection to the device (through a Netconf NED or a CLI NED), execute a sync-from command and deploy a service thanks to reactive FASTMAP feature.
 
+ZTP allows you download and execute a shell script at first boot. This script (pre-agg.sh in our example) will do the following tasks:
 
+*Download and load a PnP Agent container on the device using Docker
+*Creating a configuration for the agent, apply XR configuration commands required
+*Run the container
+
+The PnP Agent will be in charge of notifying to NSO that the device has booted, doing a 4-way handshake. The PnP Server will first send a Day-0 configuration, the agent will apply it and the server will then register the device into NSO CDB. After the third PnP Work Request, the PnP Server package triggers a sync-from and the reactive FASTMAP mechanism to deploy services.
