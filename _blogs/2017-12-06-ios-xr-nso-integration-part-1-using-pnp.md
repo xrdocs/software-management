@@ -12,3 +12,8 @@ Using strict, standardized YANG models for both services and devices and a highl
 ## PnP
 
 The NSO PnP Server is a NSO Component which enables management of Cisco PnP clients. The NSO PnP Server provides the Cisco PnP clients with configuration, typically configuration needed at the first boot of the client (Day-0 configuration).
+
+## ZTP
+ZTP does not currently include PnP capabilities, in this article we describes a method to use the ZTP feature of IOS XR and Cisco PnP to automatically deploy a Day-0 configuration and register a device to NSO during its initial boot. NSO will then be able to initiate a connection to the device (through a Netconf NED or a CLI NED), execute a sync-from command and deploy a service thanks to reactive FASTMAP feature.
+
+
