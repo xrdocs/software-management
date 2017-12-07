@@ -28,4 +28,19 @@ ZTP allows you download and execute a shell script at first boot. This script (p
 
 The PnP Agent will be in charge of notifying the NSO server that the device has completed its booting sequence and performs a 4-way handshake with the NSO server. The PnP Server will first send a Day-0 configuration, the agent will apply it and the server will register the device into the NSO CDB. After the third PnP Work Request, the PnP Server package triggers a sync-from and the reactive FASTMAP mechanism to deploy services.
 
+## The PnP Agent
+
+PnP is a protocol that allows a day-0 configuration of a device thanks to a server that has a back-end configuration. The server identifies the device (or agent) with its serial number. This rxample does not use PnP credentials and has not been tested using HTTPS.
+
+The PnP Agent will look for a configuration file in /root/config/cisco-pnp-agent.conf that has been made available inside the container.
+
+PnP workflow that has been tested:
+
+* PnP Hello 4-way handshake between server and agent.
+
+* Agent sends PnP Work Request
+
+* Server sends the block of configuration lines.
+
+* Agent apply each line one by one and check for syntax error, incomplete command or commit error and sends a response to the server.
 
