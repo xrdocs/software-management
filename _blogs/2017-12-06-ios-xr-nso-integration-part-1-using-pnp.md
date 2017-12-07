@@ -26,4 +26,6 @@ ZTP allows you download and execute a shell script at first boot. This script (p
 
 * Launch the container
 
-The PnP Agent will be in charge of notifying to NSO that the device has booted, doing a 4-way handshake. The PnP Server will first send a Day-0 configuration, the agent will apply it and the server will then register the device into NSO CDB. After the third PnP Work Request, the PnP Server package triggers a sync-from and the reactive FASTMAP mechanism to deploy services.
+The PnP Agent will be in charge of notifying the NSO server that the device has completed its booting sequence and performs a 4-way handshake with the NSO server. The PnP Server will first send a Day-0 configuration, the agent will apply it and the server will register the device into the NSO CDB. After the third PnP Work Request, the PnP Server package triggers a sync-from and the reactive FASTMAP mechanism to deploy services.
+
+
