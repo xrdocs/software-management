@@ -82,3 +82,188 @@ host ncs-5001-1 {
   }
 }
 ```
+## ZTP script
+
+```
+#!/bin/bash
+#
+#  Copyright (c) 2017 Cisco Systems
+#  PnP with IOS XR ZTP
+#  Author: mtache and pwariche.
+#
+
+# Script
+export LOGFILE=/disk0:/ztp/user-script.log
+
+# HTTP Server
+export HTTP_SERVER=http://192.168.2.10
+export CONTAINER_PATH=containers
+export RPM_PATH=rpm
+export PNP_AGENT_TAR=cisco-pnp-agent.tar
+export K9SEC_RPM=ncs5k-k9sec-2.2.0.0-r62125I.x86_64.rpm
+
+# PnP Agent
+export PNP_SERVER=http://192.168.2.11:9455
+export XR_LOOPBACK_IP=1.1.1.1
+export PNP_CONF_PATH=/misc/app_host/etc/pnp-agent
+
+source ztp_helper.sh
+
+function ztp_log() {
+   # Sends logging information to local file
+   echo "$(date +"%b %d %H:%M:%S") "$1 | /usr/bin/tee -a $LOGFILE
+}
+
+function download_pnp(){
+   # Downloads Cisco PnP Agent container
+   ztp_log "### Downloading PnP Agent container ###";
+   /usr/bin/curl -L ${HTTP_SERVER}/${CONTAINER_PATH}/${PNP_AGENT_TAR} -o /disk0:/${PNP_AGENT_TAR} 2>&1 >> $LOGFILE
+   if [[ "$?" != 0 ]]; then
+      ztp_log "### Error downloading PnP Agent container ###"
+   else
+      ztp_log "### Downloading PnP Agent container complete ###";
+      ztp_log "### Adding PnP Agent container to Docker daemon ###";
+      export DOCKER_HOST=unix:///misc/app_host/docker.sock && /usr/bin/bunzip2 -c /disk0:/${PNP_AGENT_TAR} | /usr/bin/docker load 2>&1 >> $LOGFILE
+      if [[ "$?" != 0 ]]; then
+          ztp_log "### Error loading PnP Agent container into Docker daemon ###"
+      else
+          ztp_log "### Loaded PnP Agent container into Docker daemon successfully ###"
+          PNP_IMAGE_ID=$(docker images -q | sed -n 1p)
+      fi
+      /bin/rm -f /disk0:/${PNP_AGENT_TAR}
+   fi
+}
+
+function install_k9sec_pkg(){
+   # Installs the k9sec package from repository, create a RSA key modulus 1024
+   ztp_log "### Installing XR K9SEC package ###"
+   /usr/bin/wget ${HTTP_SERVER}/${RPM_PATH}/${K9SEC_RPM} -O /disk0:/$K9SEC_RPM 2>&1
+   if [[ "$?" != 0 ]]; then
+      ztp_log "### Error downloading $K9SEC_RPM ###"
+   else
+      ztp_log "### Downloading $K9SEC_PKG complete ###";
+   fi
+   xrcmd "install update source /disk0:/ $K9SEC_RPM" 2>&1 >> $LOGFILE
+   local complete=0
+   while [ "$complete" = 0 ]; do
+      complete=`xrcmd "show install active" | grep k9sec | head -n1 | wc -l`
+      ztp_log "Waiting for k9sec package to be activated"
+      sleep 5
+   done
+    if [[ -z $(xrcmd "show crypto key mypubkey rsa") ]]; then
+        echo "1024" | xrcmd "crypto key generate rsa"
+    else
+        echo -ne "yes\n 1024\n" | xrcmd "crypto key generate rsa"
+    fi
+    rm -f /disk0:/$K9SEC_RPM
+    ztp_log "### XR K9SEC package install complete ###"
+}
+
+function download_fsol(){
+    # Downloads FSOL module container
+    ztp_log "### Downloading FSOL container ###";
+    /usr/bin/curl -L ${HTTP_SERVER}/${CONTAINER_PATH}/${FSOL_TAR} -o /disk0:/${FSOL_TAR} 2>&1 >> $LOGFILE
+    if [[ "$?" != 0 ]]; then
+        ztp_log "### Error downloading FSOL container ###"
+    else
+        ztp_log "### Downloading FSOL container complete ###";
+        ztp_log "### Adding FSOL container to Docker daemon ###";
+        export DOCKER_HOST=unix:///misc/app_host/docker.sock && /usr/bin/bunzip2 -c /disk0:/${FSOL_TAR} | /usr/bin/docker load 2>&1 >> $LOGFILE
+        if [[ "$?" != 0 ]]; then
+            ztp_log "### Error loading FSOL container into Docker daemon ###"
+        else
+            ztp_log "### Loaded FSOL container into Docker daemon successfully ###"
+            FSOL_IMAGE_ID=$(docker images -q | sed -n 1p)
+        fi
+        /bin/rm -f /disk0:/${FSOL_TAR}
+    fi
+}
+
+function clean_serial_number(){
+    # Clean spaces in a string since the PnP Server do not handle spaces in serial numbers
+    s="$1"
+    echo ${s//[[:blank:]]/}
+}
+
+function generate_ssh_key() {
+    # Create a RSA key modulus 1024
+    ztp_log "### Generating SSH Key ###";
+    if [[ -z $(xrcmd "show crypto key mypubkey rsa") ]]; then
+        echo "1024" | xrcmd "crypto key generate rsa"
+    else
+        echo -ne "yes\n 1024\n" | xrcmd "crypto key generate rsa"
+    fi
+    ztp_log "### SSH Key generated ###";
+}
+
+function create_pnp_config() {
+    # Configures IOS XR for Cisco PnP Agent and creates the configration file
+    ztp_log "### Creating PnP Agent configuration ###";
+    CONF_FILE=${PNP_CONF_PATH}/cisco-pnp-agent.conf
+    #PNP_PASSWD=`cat /proc/sys/kernel/random/uuid`
+    PNP_PASSWD="cisco"
+    /bin/rm -f ${CONF_FILE}
+    /bin/mkdir -p ${PNP_CONF_PATH}
+    xrapply_string_with_reason "PnP Agent Configuration - Loopback Address" "ssh server v2\ninterface Loopback1\n description PnP Agent requires this interface to run\n ipv4 address ${XR_LOOPBACK_IP}/32\n"
+    xrapply_string_with_reason "PnP Agent Configuration - PnP User" "username pnp-user\n group root-lr\n group cisco-support\n secret ${PNP_PASSWD}\n"
+    echo "SERIAL_NUMBER=${SERIALNUMBER}" >> ${CONF_FILE}
+    echo "PNP_SERVER=${PNP_SERVER}" >> ${CONF_FILE}
+    echo "IOS_XR_LOOPBACK_ADDRESS=${XR_LOOPBACK_IP}" >> ${CONF_FILE}
+    echo "PNP_USER=pnp-user" >> ${CONF_FILE}
+    echo "PNP_PASSWORD=${PNP_PASSWD}" >> ${CONF_FILE}
+    # Forget password now
+    PNP_PASSWD=""
+    ztp_log "### PnP Agent configuration created ###";
+}
+
+function run_pnp(){
+    ztp_log "### Executing Cisco PnP Agent ###";
+    if [[ -z ${PNP_IMAGE_ID} ]]; then
+        ztp_log "### Did not find image ID, PnP Agent is not running ###";
+    else
+        create_pnp_config;
+        export DOCKER_HOST=unix:///misc/app_host/docker.sock && /usr/bin/docker run -dit --net=host --name cisco-pnp-agent -v ${PNP_CONF_PATH}:/root/config ${PNP_IMAGE_ID}
+    fi
+}
+
+function run_fsol(){
+    ztp_log "### Executing FSOL module###";
+    if [[ -z ${FSOL_IMAGE_ID} ]]; then
+        ztp_log "### Did not find image ID, FSOL module is not running ###";
+    else
+        export DOCKER_HOST=unix:///misc/app_host/docker.sock && /usr/bin/docker run --name fsol -dit --net=host --privileged -v /run/netns:/run/netns ${FSOL_IMAGE_ID} netopeer-server -v2
+    fi
+}
+
+function wait_pnp(){
+    COUNTER=0
+    MAX_COUNTER=36
+    SLEEP_TIME=5
+    complete=0
+    while [ "$complete" = 0 ]; do
+        sleep $SLEEP_TIME
+        complete=`xrcmd "show running-config" | grep username | grep -v pnp-user | grep -v ztp-user | wc -l`
+        COUNTER=$[$COUNTER +1]
+        ztp_log "Waiting for PnP Agent to apply Day-0 configuration : $(($COUNTER*$SLEEP_TIME))/$(($MAX_COUNTER*$SLEEP_TIME)) seconds";
+        if [ "$COUNTER" = "$MAX_COUNTER" ]; then # Timeout is 1 min
+            break
+        fi
+    done
+    if [ "$complete" = 0 ]; then
+        xrapply_string_with_reason "Revert PnP Agent Configuration" "no username pnp-user\n no ssh server v2\n no interface Loopback1\n"
+        ztp_log "Day-0 configuration not found, reverting PnP Agent configuration";
+    fi
+}
+
+# ==== Script entry point ====
+ztp_log "### Starting autoprovision process... ###";
+install_k9sec_pkg;
+download_fsol;
+download_pnp;
+run_pnp;
+ztp_log "### Waiting for PnP Agent to apply Day-0 configuration... ###";
+wait_pnp;
+run_fsol;
+ztp_log "### Autoprovision complete... ###"
+exit 0
+```
