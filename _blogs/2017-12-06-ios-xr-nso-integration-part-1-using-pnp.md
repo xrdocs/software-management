@@ -100,7 +100,7 @@ export HTTP_SERVER=http://192.168.2.10
 export CONTAINER_PATH=containers
 export RPM_PATH=rpm
 export PNP_AGENT_TAR=cisco-pnp-agent.tar
-export K9SEC_RPM=ncs5k-k9sec-2.2.0.0-r62125I.x86_64.rpm
+export K9SEC_RPM=ncs5k-k9sec-3.2.0.0-r6225.x86_64
 
 # PnP Agent
 export PNP_SERVER=http://192.168.2.11:9455
@@ -157,32 +157,6 @@ function install_k9sec_pkg(){
     fi
     rm -f /disk0:/$K9SEC_RPM
     ztp_log "### XR K9SEC package install complete ###"
-}
-
-function download_fsol(){
-    # Downloads FSOL module container
-    ztp_log "### Downloading FSOL container ###";
-    /usr/bin/curl -L ${HTTP_SERVER}/${CONTAINER_PATH}/${FSOL_TAR} -o /disk0:/${FSOL_TAR} 2>&1 >> $LOGFILE
-    if [[ "$?" != 0 ]]; then
-        ztp_log "### Error downloading FSOL container ###"
-    else
-        ztp_log "### Downloading FSOL container complete ###";
-        ztp_log "### Adding FSOL container to Docker daemon ###";
-        export DOCKER_HOST=unix:///misc/app_host/docker.sock && /usr/bin/bunzip2 -c /disk0:/${FSOL_TAR} | /usr/bin/docker load 2>&1 >> $LOGFILE
-        if [[ "$?" != 0 ]]; then
-            ztp_log "### Error loading FSOL container into Docker daemon ###"
-        else
-            ztp_log "### Loaded FSOL container into Docker daemon successfully ###"
-            FSOL_IMAGE_ID=$(docker images -q | sed -n 1p)
-        fi
-        /bin/rm -f /disk0:/${FSOL_TAR}
-    fi
-}
-
-function clean_serial_number(){
-    # Clean spaces in a string since the PnP Server do not handle spaces in serial numbers
-    s="$1"
-    echo ${s//[[:blank:]]/}
 }
 
 function generate_ssh_key() {
