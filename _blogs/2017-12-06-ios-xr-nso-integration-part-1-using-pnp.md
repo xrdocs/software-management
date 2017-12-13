@@ -103,10 +103,12 @@ export PNP_AGENT_TAR=cisco-pnp-agent.tar
 export K9SEC_RPM=ncs5k-k9sec-3.2.0.0-r6225.x86_64
 
 # PnP Agent
+export SERIAL_NUMBER = $(dmidecode | grep "Serial Number" | head -n1 | sed -n -e 's/^.*Serial Number: //p')
 export PNP_SERVER=http://192.168.2.11:9455
 export XR_LOOPBACK_IP=1.1.1.1
 export PNP_CONF_PATH=/misc/app_host/etc/pnp-agent
-export PNP_PASSWD="cisco"
+export PNP_USER=pnp-user
+export PNP_PASSWD="cisco123"
 
 source ztp_helper.sh
 
@@ -174,24 +176,22 @@ function create_pnp_config() {
   /bin/mkdir -p ${PNP_CONF_PATH}
   xrapply_string_with_reason "PnP Agent Configuration - Loopback Address" "ssh server v2\n interface Loopback1\n description Required by the PnP Agent\n ipv4 address ${XR_LOOPBACK_IP}/32\n"
   xrapply_string_with_reason "PnP Agent Configuration - PnP User" "username pnp-user\n group root-lr\n group cisco-support\n secret ${PNP_PASSWD}\n"
-  echo "SERIAL_NUMBER=${SERIALNUMBER}" >> ${CONF_FILE}
+  echo "SERIAL_NUMBER=${SERIAL_NUMBER}" >> ${CONF_FILE}
   echo "PNP_SERVER=${PNP_SERVER}" >> ${CONF_FILE}
   echo "IOS_XR_LOOPBACK_ADDRESS=${XR_LOOPBACK_IP}" >> ${CONF_FILE}
-  echo "PNP_USER=pnp-user" >> ${CONF_FILE}
+  echo "PNP_USER=${PNP_USER}" >> ${CONF_FILE}
   echo "PNP_PASSWORD=${PNP_PASSWD}" >> ${CONF_FILE}
-  # Forget password now
-  PNP_PASSWD=""
   ztp_log "### PnP Agent configuration created ###";
 }
 
 function run_pnp(){
-    ztp_log "### Executing Cisco PnP Agent ###";
-    if [[ -z ${PNP_IMAGE_ID} ]]; then
-        ztp_log "### Did not find image ID, PnP Agent is not running ###";
-    else
-        create_pnp_config;
-        export DOCKER_HOST=unix:///misc/app_host/docker.sock && /usr/bin/docker run -dit --net=host --name cisco-pnp-agent -v ${PNP_CONF_PATH}:/root/config ${PNP_IMAGE_ID}
-    fi
+  ztp_log "### Executing Cisco PnP Agent ###";
+  if [[ -z ${PNP_IMAGE_ID} ]]; then
+    ztp_log "### Did not find image ID, PnP Agent is not running ###";
+  else
+    create_pnp_config;
+    export DOCKER_HOST=unix:///misc/app_host/docker.sock && /usr/bin/docker run -dit --net=host --name cisco-pnp-agent -v ${PNP_CONF_PATH}:/root/config ${PNP_IMAGE_ID}
+  fi
 }
 
 function wait_pnp(){
