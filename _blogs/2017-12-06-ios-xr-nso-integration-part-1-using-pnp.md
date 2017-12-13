@@ -85,12 +85,13 @@ host ncs-5001-1 {
 ## ZTP script
 The ZTP script will do the following operations:
 
-1. Install the K9SEC package
-2. Create a general purpose key
-3. Apply a basic configuration that allow the PnP agent to communicate with the NSO server
-4. Create a simple configuration file for the PnP agent
-5. Import the PnP agent
+1. Install the K9SEC package.
+2. Create a general purpose key.
+3. Apply a basic configuration that allow the PnP agent to communicate with the NSO server.
+4. Create a simple configuration file for the PnP agent.
+5. Import the PnP agent.
 6. Launch the PnP agent.
+
 ```
 #!/bin/bash
 #
