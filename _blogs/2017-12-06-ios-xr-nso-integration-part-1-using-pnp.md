@@ -83,7 +83,14 @@ host ncs-5001-1 {
 }
 ```
 ## ZTP script
+The ZTP script will do the following operations:
 
+1. Install the K9SEC package
+2. Create a general purpose key
+3. Apply a basic configuration that allow the PnP agent to communicate with the NSO server
+4. Create a simple configuration file for the PnP agent
+5. Import the PnP agent
+6. Launch the PnP agent.
 ```
 #!/bin/bash
 #
@@ -107,6 +114,7 @@ export SERIAL_NUMBER = $(dmidecode | grep "Serial Number" | head -n1 | sed -n -e
 export PNP_SERVER=http://192.168.2.11:9455
 export XR_LOOPBACK_IP=1.1.1.1
 export PNP_CONF_PATH=/misc/app_host/etc/pnp-agent
+export PNP_CONF_FILE=${PNP_CONF_PATH}/cisco-pnp-agent.conf
 export PNP_USER=pnp-user
 export PNP_PASSWD="cisco123"
 
@@ -169,18 +177,17 @@ function generate_ssh_key() {
 }
 
 function create_pnp_config() {
-  # Configures IOS XR for Cisco PnP Agent and creates the configration file
+  # Configures IOS-XR for Cisco PnP agent and creates the configration file
   ztp_log "### Creating PnP Agent configuration ###";
-  CONF_FILE=${PNP_CONF_PATH}/cisco-pnp-agent.conf
-  /bin/rm -f ${CONF_FILE}
+  /bin/rm -f ${PNP_CONF_FILE}
   /bin/mkdir -p ${PNP_CONF_PATH}
   xrapply_string_with_reason "PnP Agent Configuration - Loopback Address" "ssh server v2\n interface Loopback1\n description Required by the PnP Agent\n ipv4 address ${XR_LOOPBACK_IP}/32\n"
   xrapply_string_with_reason "PnP Agent Configuration - PnP User" "username pnp-user\n group root-lr\n group cisco-support\n secret ${PNP_PASSWD}\n"
-  echo "SERIAL_NUMBER=${SERIAL_NUMBER}" >> ${CONF_FILE}
-  echo "PNP_SERVER=${PNP_SERVER}" >> ${CONF_FILE}
-  echo "IOS_XR_LOOPBACK_ADDRESS=${XR_LOOPBACK_IP}" >> ${CONF_FILE}
-  echo "PNP_USER=${PNP_USER}" >> ${CONF_FILE}
-  echo "PNP_PASSWORD=${PNP_PASSWD}" >> ${CONF_FILE}
+  echo "SERIAL_NUMBER=${SERIAL_NUMBER}" >> ${PNP_CONF_FILE}
+  echo "PNP_SERVER=${PNP_SERVER}" >> ${PNP_CONF_FILE}
+  echo "IOS_XR_LOOPBACK_ADDRESS=${XR_LOOPBACK_IP}" >> ${PNP_CONF_FILE}
+  echo "PNP_USER=${PNP_USER}" >> ${PNP_CONF_FILE}
+  echo "PNP_PASSWORD=${PNP_PASSWD}" >> ${PNP_CONF_FILE}
   ztp_log "### PnP Agent configuration created ###";
 }
 
