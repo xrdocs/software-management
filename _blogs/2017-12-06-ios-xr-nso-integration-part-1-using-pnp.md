@@ -243,6 +243,17 @@ admin@ncs(config)# pnp server ip-address 172.30.0.29
 admin@ncs(config)# pnp server port 9455
 admin@ncs(config)# devices authgroups group default umap system remote-name pnp-user remote-password cisco123
 admin@ncs(config)# devices authgroups group default umap admin remote-name pnp-user remote-password cisco123
-admin@ncs(config)# pnp map FOC1947R143 port 9455 device-name ncs5001-1 username pnp-user device-type cli ned-id cisco-iosxr
+admin@ncs(config)# pnp map FOC1947R143
+admin@ncs(config-map-FOC1947R143)# port 9455
+admin@ncs(config-map-FOC1947R143)# device-name ncs5001-1
+admin@ncs(config-map-FOC1947R143)# username pnp-user
+admin@ncs(config-map-FOC1947R143)# device-type cli
+admin@ncs(config-map-FOC1947R143)# ned-id cisco-iosxr
+admin@ncs(config-map-FOC1947R143)# day0-file ncs-5001-1_day0.conf
+```
 
+Then we have to create the Day-0 configuration file
+
+```
+vi ncs-run/packages/cisco-pnp/cfg/ncs-5001-1_day0.conf
 ```
