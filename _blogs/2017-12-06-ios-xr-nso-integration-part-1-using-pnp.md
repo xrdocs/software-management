@@ -235,3 +235,14 @@ wait_pnp;
 ztp_log "### Autoprovision complete... ###"
 exit 0
 ```
+## NSO PnP Configuration
+On the NSO server side we will have to install the pnp package, the ios-xr package and configure some credential.
+
+```
+admin@ncs(config)# pnp server ip-address 172.30.0.29
+admin@ncs(config)# pnp server port 9455
+admin@ncs(config)# devices authgroups group default umap system remote-name pnp-user remote-password cisco123
+admin@ncs(config)# devices authgroups group default umap admin remote-name pnp-user remote-password cisco123
+admin@ncs(config)# pnp map FOC1947R143 port 9455 device-name ncs5001-1 username pnp-user device-type cli ned-id cisco-iosxr
+
+```
