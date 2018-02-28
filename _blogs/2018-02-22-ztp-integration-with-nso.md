@@ -8,7 +8,9 @@ Network Services Orchestrator is a Cisco tool that provides end-to-end orchestra
 
 ## NSO
 NSO has a set of REST/RESTCONF northbound API that can be used to provision a devices using simple HTTP GET/PUT/POST request. In short only 3 operations are required:
-* 
+
+* Creating the device and associate it with the correct NED (Netconf/IOS-XR CLI)
+
 ## ZTP
 ZTP does not currently include PnP capabilities, in this article we will go other a method that use the ZTP feature of IOS-XR together with a Cisco PnP agent to automatically deploy a Day-0 configuration and register a new device to the NSO server.
 
