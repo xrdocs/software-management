@@ -10,25 +10,11 @@ Network Services Orchestrator is a Cisco tool that provides end-to-end orchestra
 NSO has a set of REST/RESTCONF northbound API that can be used to provision a devices using simple HTTP GET/PUT/POST request. In short only 3 operations are required:
 
 * Creating the device and associate it with the correct NED (Netconf/IOS-XR CLI)
+* Exchange the RSA keys between the device and NSO
+* synchronize the configuration with NSO
 
 ## ZTP
-ZTP does not currently include PnP capabilities, in this article we will go other a method that use the ZTP feature of IOS-XR together with a Cisco PnP agent to automatically deploy a Day-0 configuration and register a new device to the NSO server.
 
-At the end of this process, NSO will be able to initiate a connection to the device (through a Netconf NED or a CLI NED), execute a "sync-from" command and deploy a service thanks to the reactive FASTMAP feature.
-
-We will use the ZTP feature that allows to download and execute a shell script during initial bootup. This script (pnp_agent.sh in our example) will do the following tasks:
-
-* Downloads on the device a Docker container embedding the PnP agent.
-
-* Downloads and applies a basic configuration enabling netconf on the device.
-
-* Download and applies a configuration for the PnP agent.
-
-* Launch the container.
-
-The PnP agent will be in charge of notifying the NSO server that the device has completed its bootup sequence and will perform a 4-way handshake with the NSO server.
-The PnP server will start by sending a Day-0 configuration, the PnP agent will apply it and finally the server will register the device into the NSO CDB.
-After the third PnP Work Request, the PnP Server package triggers a sync-from and the reactive FASTMAP mechanism to deploy services.
 
 ## The PnP Agent
 
