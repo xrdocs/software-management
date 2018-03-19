@@ -16,7 +16,7 @@ NSO also provides 2 differents way to interacts with IOS-XR:
 The IOS-XR CLI NED for your version of NSO should be downloaded and installed as a packages.
 For the Netconf NED, there are 2 ways to create the package
 
-1. Download all the models supported by XR on github: https://github.com/YangModels/yang/tree/master/vendor/cisco/xr and use the ncs-make-package command to create the package, once created you can install the package inside NSO.
+1. Download all the models supported by XR on github: [Yang models for Cisco IOS-XR](https://github.com/YangModels/yang/tree/master/vendor/cisco/xr) and use the ncs-make-package command to create the package, once created you can install the package inside NSO.
 
 2. Use the NSO pioneer tool https://github.com/NSO-developer/pioneer to retrieve all the models from a device and create the package.
 
