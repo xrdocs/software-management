@@ -73,7 +73,52 @@ host ncs-5001-1 {
 ## ZTP script
 The ZTP script will do the following operations:
 
-1. Install the K9SEC package.
+1. Install the K9SEC and MGBL packages.
 2. Create a general purpose key.
 3. Apply a basic configuration that allow the netconf agent to communicate with the NSO server.
+4. Push the Device profile to NSO
+5. Push the RSA key to NSO
+6. synchronise the basic configuration with NSO
 
+### Device profile
+The device profile is described in a JSON template with the name and ip address of the device filled during the ZTP execution, the IOS-XR CLI based template looks like this:
+
+```
+myDevice = {
+    "device": {
+        "name": "XXXX",
+        "address": "XXXX",
+        "port": 22,
+        "state": {
+            "admin-state": "unlocked"
+        },
+        "authgroup": "ios-xr-default",
+        "device-type": {
+            "cli": {
+              "ned-id": "tailf-ned-cisco-ios-xr-id:cisco-ios-xr"
+            }
+        }
+    }
+}
+```
+
+The Netconf profile template will look like this:
+
+```
+myDevice = {
+    "device": {
+        "name": "XXXX",
+        "address": "XXXX",
+        "port": 22,
+        "state": {
+            "admin-state": "unlocked"
+        },
+        "authgroup": "ios-xr-default",
+        "device-type": {
+            "netconf": {
+              "ned-id": "tailf-ncs-ned:netconf"
+            }
+        }
+    }
+}
+```
