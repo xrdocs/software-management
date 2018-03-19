@@ -13,8 +13,17 @@ NSO has a set of REST/RESTCONF northbound API that can be used to provision a de
 * Exchange the RSA keys between the device and NSO
 * synchronize the configuration with NSO
 
-## ZTP
+NSO also provides 2 differents way to interacts with IOS-XR:
 
+* The IOS-XR CLI NED
+* The Netconf NED
+
+The IOS-XR CLI NED can be downloaded for your version of NSO and installed as a packages
+The Netconf NED package needs to be creatred either by downloading all the models supported by XR on github: https://github.com/YangModels/yang/tree/master/vendor/cisco/xr
+
+
+## ZTP
+ZTP has supports for both shell and python scripts, IOS-XR comes with an rich environment of shell tools and python libraries. In this example we will use a python based ZTP script and will leverage the python-netclient, python-json and the embedded ztp_helper libraries
 
 
 ## DHCP configuration
