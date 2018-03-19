@@ -1,7 +1,8 @@
 ---
-published: false
+published: true
 date: '2018-02-22 17:14 -0800'
 title: ZTP integration with NSO
+author: Patrick Warichet
 ---
 # Introduction
 Network Services Orchestrator is a Cisco tool that provides end-to-end orchestration that spans multiple domains in your network. Using strict, standardized YANG models for both services and devices and a highly efficient abstraction layer between your network services and the underlying infrastructure, the orchestrator lets you automate Cisco and other vendor's devices.
