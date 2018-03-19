@@ -28,6 +28,8 @@ NSO has a set of REST/RESTCONF northbound API that can be used to provision a de
 * Exchange the RSA keys between the device and NSO
 * synchronize the configuration with NSO
 
+The example in this blog uses REST, if you plan to use RESTCONF small modification in the URIs are required.
+
 To allow full configuration of device, NSO requires configuring the username and password (encrypted) in an authorization group, devices that belong to a specified authgroup shares the same username and password. In the example below the authgroup ios-xr-default has been created in advance on the NSO server.
 
 ```
@@ -44,6 +46,7 @@ To allow IOS-XR to communicate with NSO, it is required to install the K9 (Crypt
 ## ZTP
 
 ZTP has supports for both shell and python scripts, IOS-XR comes with an rich environment of shell tools and python libraries. In this example we will use a python based ZTP script and will leverage the python-netclient, python-json and the embedded ztp_helper libraries to provision the device in NSO.
+The python-netclient package provides us access to the urllib, urllib2 and base64 libraries, the python-json package allows us to manipulate json data efficiently.
 
 
 ## DHCP configuration
@@ -131,6 +134,45 @@ myDevice = {
         }
     }
 }
+```
+
+A simple function has been created that can handle all REST operation with NSO
+
+```
+def nso_rest(self, ressource=None, operation=None, data=None):
+   """
+   """
+   if data is not None:
+      request = urllib2.Request(ressource, data)
+   else:
+      request = urllib2.Request(ressource)
+          
+   request.add_header("Authorization", "Basic %s" % base64.encodestring('%s:%s' % (NSO_USER, NSO_PASSWD)).replace('\n', ''))
+   request.add_header('Content-Type', 'application/vnd.yang.data+json')
+   request.get_method = lambda: operation
+   try:
+      response = urllib2.urlopen(request)
+   except urllib2.HTTPError,error:
+      self.syslogger.info("REST operation error code: " + str(error.code()))
+      self.syslogger.info("REST response: " + error.read())
+   except URLError, error:
+      self.syslogger.info("URL error: " + str(error.code()))
+   else:
+      self.syslogger.info("REST operation status: " + str(response.code))
+      self.syslogger.info("REST return data: "  + response.read())
+   return {"status": response.code, "output" : response.read()}
+
+```
+
+This function will be called like this
+
+```
+ztp_script.syslogger.info("###### Pushing Device Profile ######")
+ztp_script.nso_rest(BASE_URI + '/devices/device/' + hostname, 'PUT', json.dumps(myDevice))
+ztp_script.syslogger.info("###### Pushing RSA key ######")
+ztp_script.nso_rest(BASE_URI + '/devices/device/' + hostname + '/ssh/_operations/fetch-host-keys/', 'POST')
+ztp_script.syslogger.info("###### Syncing configuration ######")
+ztp_script.nso_rest(BASE_URI + '/devices/device/' + hostname + '/_operations/sync-from', 'POST')
 ```
 
 The complete detail of the ZTP script is available on github [integrating IOS-XR with NSO](https://github.com/pwariche/ios-xr-ztp-nso.git)
