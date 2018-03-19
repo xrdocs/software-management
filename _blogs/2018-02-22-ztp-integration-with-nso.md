@@ -18,7 +18,9 @@ For the Netconf NED, there are 2 ways to create the package
 
 1. Download all the models supported by XR on github: https://github.com/YangModels/yang/tree/master/vendor/cisco/xr and use the ncs-make-package command to create the package, once created you can install the package inside NSO.
 
-2. Use the NSO pioneed tool to retrieve all the models from a device
+2. Use the NSO pioneer tool https://github.com/NSO-developer/pioneer to retrieve all the models from a device and create the package.
+
+The advantage of the second method is that you are certain that all the models are effectively supported by the device but the retrieve operation can take some time.
 
 NSO has a set of REST/RESTCONF northbound API that can be used to provision a devices using simple HTTP GET/PUT/POST request. In short only 3 operations are required:
 
@@ -27,7 +29,8 @@ NSO has a set of REST/RESTCONF northbound API that can be used to provision a de
 * synchronize the configuration with NSO
 
 ## ZTP
-ZTP has supports for both shell and python scripts, IOS-XR comes with an rich environment of shell tools and python libraries. In this example we will use a python based ZTP script and will leverage the python-netclient, python-json and the embedded ztp_helper libraries
+
+ZTP has supports for both shell and python scripts, IOS-XR comes with an rich environment of shell tools and python libraries. In this example we will use a python based ZTP script and will leverage the python-netclient, python-json and the embedded ztp_helper libraries to provision the device in NSO.
 
 
 ## DHCP configuration
@@ -59,10 +62,11 @@ host ncs-5001-1 {
   if exists user-class and option user-class = "iPXE" {
     filename = "http://192.168.2.10/ipxe/ncs5k.ipxe";
   } elsif exists user-class and option user-class = "exr-config" {
-    filename = "http://192.168.2.10/scripts/pnp_agent.sh";
+    filename = "http://192.168.2.10/scripts/ncs-5001_nso_ztp.py";
   }
 }
 ```
+
 ## ZTP script
 The ZTP script will do the following operations:
 
