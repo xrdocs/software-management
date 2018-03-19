@@ -39,7 +39,7 @@ devices authgroups group ios-xr-default
  
 ## IOS-XR
 
-To allow IOS-XR to communicate with NSO, it is required to install the K9 (Crypto support) package if you decide to use the CLI NED, you will have to also install the MGBL (SNMP/Netconf/telemetry, etc.) package if you device to use to use Netconf NED. A base configuration that enables these features should also be placed onto the device.
+To allow IOS-XR to communicate with NSO, it is required to install the K9 (Crypto support) package if you decide to use the CLI NED, you will have to also install the MGBL (SNMP/Netconf/telemetry, etc.) package if you device to use to use Netconf NED. A base configuration that enables these features should also be placed onto the device. The example described in this blog use the management interface to communicate with the NSO server, it is imperative to keep the ip address and device name constant after registring the device with NSO.
 
 ## ZTP
 
@@ -132,3 +132,5 @@ myDevice = {
     }
 }
 ```
+
+The complete detail of the ZTP script is available on github [integrating IOS-XR with NSO](https://github.com/pwariche/ios-xr-ztp-nso.git)
