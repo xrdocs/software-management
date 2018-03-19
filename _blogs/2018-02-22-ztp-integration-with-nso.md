@@ -18,7 +18,7 @@ For the Netconf NED, there are 2 ways to create the package
 
 1. Download all the models supported by XR on github: [Yang models for Cisco IOS-XR](https://github.com/YangModels/yang/tree/master/vendor/cisco/xr) and use the ncs-make-package command to create the package, once created you can install the package inside NSO.
 
-2. Use the NSO pioneer tool [Your Swiss army knife for NETCONF, YANG and NSO NEDs](https://github.com/NSO-developer/pioneer) to retrieve all the models from a device and create the package.
+2. Use the NSO pioneer tool available on github: [Your Swiss army knife for NETCONF, YANG and NSO NEDs](https://github.com/NSO-developer/pioneer) to retrieve all the models from a device and create the package.
 
 The advantage of the second method is that you are certain that all the models are effectively supported by the device but the retrieve operation can take some time.
 
@@ -28,8 +28,18 @@ NSO has a set of REST/RESTCONF northbound API that can be used to provision a de
 * Exchange the RSA keys between the device and NSO
 * synchronize the configuration with NSO
 
+To allow full configuration of device, NSO requires configuring the username and password (encrypted) in an authorization group, devices that belong to a specified authgroup shares the same username and password. In the example below the authgroup ios-xr-default has been created in advance on the NSO server.
+
+```
+devices authgroups group ios-xr-default
+ default-map remote-name cisco
+ default-map remote-password <encrypted password>
+
+```
+ 
 ## IOS-XR
-The base image of IOS-XR requires the installation of the K9 (Crypto support) package if you decide to use the CLI NED and the MGBL (SNMP/Netconf/telemetry, etc.) package if you device to use to use Netconf NED. A base configuration that enables these features should also be placed onto the device.
+
+To allow IOS-XR to communicate with NSO, it is required to install the K9 (Crypto support) package if you decide to use the CLI NED, you will have to also install the MGBL (SNMP/Netconf/telemetry, etc.) package if you device to use to use Netconf NED. A base configuration that enables these features should also be placed onto the device.
 
 ## ZTP
 
@@ -102,7 +112,7 @@ myDevice = {
 }
 ```
 
-The Netconf profile template will look like this:
+If you plan to use Netconf, the profile template will have to be modified:
 
 ```
 myDevice = {
