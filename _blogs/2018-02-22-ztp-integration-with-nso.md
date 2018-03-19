@@ -83,7 +83,7 @@ The ZTP script will do the following operations:
 ### Device profile
 The device profile is described in a JSON template with the name and ip address of the device filled during the ZTP execution, the IOS-XR CLI based template looks like this:
 
-```json
+```
 myDevice = {
     "device": {
         "name": "XXXX",
