@@ -28,6 +28,9 @@ NSO has a set of REST/RESTCONF northbound API that can be used to provision a de
 * Exchange the RSA keys between the device and NSO
 * synchronize the configuration with NSO
 
+## IOS-XR
+The base image of IOS-XR requires the installation of the K9 (Crypto support) package if you decide to use the CLI NED and the MGBL (SNMP/Netconf/telemetry, etc.) package if you device to use to use Netconf NED. A base configuration that enables these features should also be placed onto the device.
+
 ## ZTP
 
 ZTP has supports for both shell and python scripts, IOS-XR comes with an rich environment of shell tools and python libraries. In this example we will use a python based ZTP script and will leverage the python-netclient, python-json and the embedded ztp_helper libraries to provision the device in NSO.
