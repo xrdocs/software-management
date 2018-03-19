@@ -18,7 +18,7 @@ For the Netconf NED, there are 2 ways to create the package
 
 1. Download all the models supported by XR on github: [Yang models for Cisco IOS-XR](https://github.com/YangModels/yang/tree/master/vendor/cisco/xr) and use the ncs-make-package command to create the package, once created you can install the package inside NSO.
 
-2. Use the NSO pioneer tool https://github.com/NSO-developer/pioneer to retrieve all the models from a device and create the package.
+2. Use the NSO pioneer tool [Your Swiss army knife for NETCONF, YANG and NSO NEDs](https://github.com/NSO-developer/pioneer) to retrieve all the models from a device and create the package.
 
 The advantage of the second method is that you are certain that all the models are effectively supported by the device but the retrieve operation can take some time.
 
