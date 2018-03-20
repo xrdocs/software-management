@@ -1,5 +1,5 @@
 ---
-published: true
+published: false
 date: '2018-02-22 17:14 -0800'
 title: Using ZTP to integrate IOS-XR with NSO
 author: Patrick Warichet
