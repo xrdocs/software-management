@@ -40,7 +40,6 @@ To allow full configuration of device, NSO requires configuring the username and
 devices authgroups group ios-xr-default
  default-map remote-name cisco
  default-map remote-password <encrypted password>
-
 ```
 ## IOS-XR
 To allow IOS-XR to communicate with NSO, it is required to install the K9 (Crypto support) package if you decide to use the CLI NED, you will have to also install the MGBL (SNMP/Netconf/telemetry, etc.) package if you device to use to use Netconf NED. A base configuration that enables these features should also be placed onto the device. The example described in this blog use the management interface to communicate with the NSO server, it is imperative to keep the ip address and device name constant after registring the device with NSO.
@@ -131,9 +130,7 @@ myDevice = {
     }
 }
 ```
-
 A simple function has been created that can handle all REST operation with NSO
-
 ```
 def nso_rest(self, ressource=None, operation=None, data=None):
    """
@@ -157,11 +154,9 @@ def nso_rest(self, ressource=None, operation=None, data=None):
       self.syslogger.info("REST operation status: " + str(response.code))
       self.syslogger.info("REST return data: "  + response.read())
    return {"status": response.code, "output" : response.read()}
-
 ```
 
 This function will be called like this
-
 ```
 ztp_script.syslogger.info("###### Pushing Device Profile ######")
 ztp_script.nso_rest(BASE_URI + '/devices/device/' + hostname, 'PUT', json.dumps(myDevice))
