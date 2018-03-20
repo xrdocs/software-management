@@ -10,7 +10,6 @@ tags:
 ---
 # Introduction
 Network Services Orchestrator is a Cisco tool that provides end-to-end orchestration that spans multiple domains in your network. Using strict, standardized YANG models for both services and devices and a highly efficient abstraction layer between your network services and the underlying infrastructure, the orchestrator lets you automate Cisco and other vendor's devices.
-
 ## NSO
 NSO also provides 2 differents way to interacts with IOS-XR:
 
