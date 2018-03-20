@@ -8,7 +8,6 @@ author: Patrick Warichet
 Network Services Orchestrator is a Cisco tool that provides end-to-end orchestration that spans multiple domains in your network. Using strict, standardized YANG models for both services and devices and a highly efficient abstraction layer between your network services and the underlying infrastructure, the orchestrator lets you automate Cisco and other vendor's devices.
 
 ## NSO
-
 NSO also provides 2 differents way to interacts with IOS-XR:
 
 * The IOS-XR CLI NED for CLI configuration
@@ -39,17 +38,11 @@ devices authgroups group ios-xr-default
  default-map remote-password <encrypted password>
 
 ```
- 
 ## IOS-XR
-
 To allow IOS-XR to communicate with NSO, it is required to install the K9 (Crypto support) package if you decide to use the CLI NED, you will have to also install the MGBL (SNMP/Netconf/telemetry, etc.) package if you device to use to use Netconf NED. A base configuration that enables these features should also be placed onto the device. The example described in this blog use the management interface to communicate with the NSO server, it is imperative to keep the ip address and device name constant after registring the device with NSO.
-
 ## ZTP
-
 ZTP has supports for both shell and python scripts, IOS-XR comes with an rich environment of shell tools and python libraries. In this example we will use a python based ZTP script and will leverage the python-netclient, python-json and the embedded ztp_helper libraries to provision the device in NSO.
 The python-netclient package provides us access to the urllib, urllib2 and base64 libraries, the python-json package allows us to manipulate json data efficiently.
-
-
 ## DHCP configuration
 For ZTP to operate a valid IPv4/IPv6 address is required and the DHCP server must send a pointer to the configuration script via option 67. Here is an example of configuration
 
@@ -83,7 +76,6 @@ host ncs-5001-1 {
   }
 }
 ```
-
 ## ZTP script
 The ZTP script will do the following operations:
 
@@ -93,7 +85,6 @@ The ZTP script will do the following operations:
 4. Push the Device profile to NSO
 5. Push the RSA key to NSO
 6. synchronise the basic configuration with NSO
-
 ### Device profile
 The device profile is described in a JSON template with the name and ip address of the device filled during the ZTP execution, the IOS-XR CLI based template looks like this:
 
