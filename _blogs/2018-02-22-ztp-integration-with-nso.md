@@ -11,21 +11,21 @@ tags:
 # Introduction
 Network Services Orchestrator is a Cisco tool that provides end-to-end orchestration that spans multiple domains in your network. Using strict, standardized YANG models for both services and devices and a highly efficient abstraction layer between your network services and the underlying infrastructure, the orchestrator lets you automate Cisco and other vendor's devices.
 ## NSO
-NSO also provides 2 differents way to interacts with IOS-XR:
+NSO also provides 2 different way to interacts with IOS-XR:
 
 * The IOS-XR CLI NED for CLI configuration
 * The Netconf NED for Netconf/Yang configuration
 
-The IOS-XR CLI NED for your version of NSO should be downloaded and installed as a packages.
+The IOS-XR CLI NED for your version of NSO should be downloaded and installed as a package.
 For the Netconf NED, there are 2 ways to create the package
 
 1. Download all the models supported by XR on github: [Yang models for Cisco IOS-XR](https://github.com/YangModels/yang/tree/master/vendor/cisco/xr) and use the ncs-make-package command to create the package, once created you can install the package inside NSO.
 
 2. Use the NSO pioneer tool available on github: [Your Swiss army knife for NETCONF, YANG and NSO NEDs](https://github.com/NSO-developer/pioneer) to retrieve all the models from a device and create the package.
 
-The advantage of the second method is that you are certain that all the models are effectively supported by the device but the retrieve operation can take some time.
+The advantage of the second method is that you are certain that the device effectively supports all the models but the retrieve operation can take some time.
 
-NSO has a set of REST/RESTCONF northbound API that can be used to provision a devices using simple HTTP GET/PUT/POST request. In short only 3 operations are required:
+NSO has a set of REST/RESTCONF northbound API that can be used to provision a devices using simple HTTP GET/PUT/POST request. In short, only three operations are required:
 
 * Creating the device and associate it with the correct NED (Netconf/IOS-XR CLI)
 * Exchange the RSA keys between the device and NSO
@@ -41,7 +41,7 @@ devices authgroups group ios-xr-default
  default-map remote-password <encrypted password>
 ```
 ## IOS-XR
-To allow IOS-XR to communicate with NSO, it is required to install the K9 (Crypto support) package if you decide to use the CLI NED, you will have to also install the MGBL (SNMP/Netconf/telemetry, etc.) package if you device to use to use Netconf NED. A base configuration that enables these features should also be placed onto the device. The example described in this blog use the management interface to communicate with the NSO server, it is imperative to keep the ip address and device name constant after registring the device with NSO.
+To allow IOS-XR to communicate with NSO, it is required to install the K9 (Crypto support) package if you decide to use the CLI NED, you will have to also install the MGBL (SNMP/Netconf/telemetry, etc.) package if you decide to use the Netconf NED. A base configuration that enables these features should also be placed onto the device. The example described in this blog use the management interface to communicate with the NSO server, it is imperative to keep the ip address and device name constant after registering the device with NSO.
 ## ZTP
 ZTP has supports for both shell and python scripts, IOS-XR comes with an rich environment of shell tools and python libraries. In this example we will use a python based ZTP script and will leverage the python-netclient, python-json and the embedded ztp_helper libraries to provision the device in NSO.
 The python-netclient package provides us access to the urllib, urllib2 and base64 libraries, the python-json package allows us to manipulate json data efficiently.
@@ -82,11 +82,11 @@ host ncs-5001-1 {
 The ZTP script will do the following operations:
 
 1. Install the K9SEC and MGBL packages.
-2. Create a general purpose key.
+2. Create a general-purpose key.
 3. Apply a basic configuration that allow the netconf agent to communicate with the NSO server.
 4. Push the Device profile to NSO
 5. Push the RSA key to NSO
-6. synchronise the basic configuration with NSO
+6. Synchronize the basic configuration with NSO
 ### Device profile
 The device profile is described in a JSON template with the name and ip address of the device filled during the ZTP execution, the IOS-XR CLI based template looks like this:
 
