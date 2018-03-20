@@ -47,7 +47,7 @@ To allow IOS-XR to communicate with NSO, it is required to install the K9 (Crypt
 ZTP has supports for both shell and python scripts, IOS-XR comes with an rich environment of shell tools and python libraries. In this example we will use a python based ZTP script and will leverage the python-netclient, python-json and the embedded ztp_helper libraries to provision the device in NSO.
 The python-netclient package provides us access to the urllib, urllib2 and base64 libraries, the python-json package allows us to manipulate json data efficiently.
 ## Flow of Operation
-
+![ZTP-NSO.png]({{site.baseurl}}/images/ZTP-NSO.png)
 
 ## DHCP Configuration
 For ZTP to operate a valid IPv4/IPv6 address is required and the DHCP server must send a pointer to the configuration script via option 67. Here is an example of configuration
