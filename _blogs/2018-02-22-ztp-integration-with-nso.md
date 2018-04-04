@@ -12,12 +12,13 @@ tags:
 # Introduction
 Network Services Orchestrator is a Cisco tool that provides end-to-end orchestration that spans multiple domains in your network. Using strict, standardized YANG models for both services and devices and a highly efficient abstraction layer between your network services and the underlying infrastructure, the orchestrator lets you automate Cisco and other vendor's devices.
 ## NSO
-NSO also provides 2 different way to interacts with IOS-XR:
+To automate configuration of physical devices, NSO relies on add-ons packages called Network Element Driver (NED)
+NSO provides 2 different ways to interact with IOS-XR:
 
 * The IOS-XR CLI NED for CLI configuration
 * The Netconf NED for Netconf/Yang configuration
 
-The IOS-XR CLI NED for your version of NSO should be downloaded and installed as a package.
+The IOS-XR CLI NED must be purchased for your version of NSO. Once acquired, it should be installed inside NSO as a package.
 For the Netconf NED, there are 2 ways to create the package
 
 1. Download all the models supported by XR on github: [Yang models for Cisco IOS-XR](https://github.com/YangModels/yang/tree/master/vendor/cisco/xr) and use the ncs-make-package command to create the package, once created you can install the package inside NSO.
@@ -32,7 +33,7 @@ NSO has a set of REST/RESTCONF northbound API that can be used to provision a de
 * Exchange the RSA keys between the device and NSO
 * synchronize the configuration with NSO
 
-The example in this blog uses REST, if you plan to use RESTCONF small modification in the URIs are required.
+The example in this blog uses REST, if you plan to use RESTCONF, small modifications in the URIs are required.
 
 To allow full configuration of device, NSO requires configuring the username and password (encrypted) in an authorization group, devices that belong to a specified authgroup shares the same username and password. In the example below the authgroup ios-xr-default has been created in advance on the NSO server.
 
@@ -42,9 +43,10 @@ devices authgroups group ios-xr-default
  default-map remote-password <encrypted password>
 ```
 ## IOS-XR
-To allow IOS-XR to communicate with NSO, it is required to install the K9 (Crypto support) package if you decide to use the CLI NED, you will have to also install the MGBL (SNMP/Netconf/telemetry, etc.) package if you decide to use the Netconf NED. A base configuration that enables these features should also be placed onto the device. The example described in this blog use the management interface to communicate with the NSO server, it is imperative to keep the ip address and device name constant after registering the device with NSO.
+To allow IOS-XR to communicate with NSO using the CLI NED, it is required to install the K9 (Crypto support) package. If you decide to use the Netconf NED, you will have to also install the MGBL (SNMP/Netconf/telemetry, etc.) in addition to the K9 package.
+A base configuration that enables these features should also be placed onto the device. The example described in this blog use the management interface to communicate with the NSO server, it is imperative to keep the ip address and device name constant after registering the device with NSO.
 ## ZTP
-ZTP has supports for both shell and python scripts, IOS-XR comes with an rich environment of shell tools and python libraries. In this example we will use a python based ZTP script and will leverage the python-netclient, python-json and the embedded ztp_helper libraries to provision the device in NSO.
+ZTP has support for both shell and python scripts, IOS-XR comes with an rich environment of shell tools and python libraries. In this example we will use a python based ZTP script and will leverage the python-netclient, python-json and the embedded ztp_helper libraries to provision the device in NSO.
 The python-netclient package provides us access to the urllib, urllib2 and base64 libraries, the python-json package allows us to manipulate json data efficiently.
 ## Flow of Operation
 ![ZTP-NSO.png]({{site.baseurl}}/images/ZTP-NSO.png)
