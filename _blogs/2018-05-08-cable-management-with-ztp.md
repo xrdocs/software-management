@@ -9,6 +9,18 @@ A while ago I wanted to refresh my knowledge of Python and get familar with JSON
 ## Introduction
 Cable Management is a a key element of provisioning a device, after installing the device, inserting the optics and cabling everything, we would like to know if everything has been setup correctly before starting the configuration process. In this Blog I will go over the visualization part of the cable management, I will go over the verification process in part 2.
 
-In this blog the cable management will be done 
+This example replies on LLDP to obtain information from the neighbors, LLDP provides the following usefull information:
+1. The local/remote interfaces for each connection
+2. The neighbor chassis identification
+3. The neighbor device name
+4. The neighbor device description (PID and SW version if the neighbor is IOS-XR)
+5. The neighbor management IPv4/IPv6 address (if configured)
+
+
+
+
+
+
+## 
 
 Enter text in [Markdown](http://daringfireball.net/projects/markdown/). Use the toolbar above, or click the **?** button for formatting help.
