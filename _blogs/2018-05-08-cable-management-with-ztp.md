@@ -29,9 +29,69 @@ graph = {}
 graph['nodes'] = []
 graph['edges'] = []
 ```
+A node or an edge is a dictionary that has some mandatory and some optional keys. I decided to organize all the optional parameters in a dictionary under the attributes key.
+The label (name) and id (sequential number) keys are mandatory for both edges and nodes, for edges the source and target keys are also mandatory to define the origin node and the destination node of each edge.
+The following JSON dictionay describes an example of a node and edge.
 
+```
+node = {
+  "label": "",
+  "id": "",
+  "attributes": {
+     "title": "",
+     "chassis id": "",
+     "system description": "",
+     "mgmt address": {
+       "IPv4": "",
+       "IPv6": ""
+     }
+  }
+}
+```
 
-
+```
+edge = {
+      "label": "",
+      "source": "1",
+      "target": "",
+      "id": "",
+      "attributes": {
+         "remote interface": "",
+         "local interface": "",
+         "title": "",
+         "operational values": {
+            "speed": "",
+            "duplex": ""
+            },
+         "optics": {
+            "media type": "",
+            "vendor": "",
+            "PN": "",
+            "waveLength": "",
+            "DOM": {
+               "temp": "",
+               "voltage": "",
+               "lane 0": {
+                   "Tx power": "",
+                   "Rx power": ""
+                },
+                "lane 1": {
+                   "Tx power": "",
+                   "Rx power": ""
+                 },
+                 "lane 2": {
+                    "Tx power": "",
+                    "Rx power": ""
+                 },
+                 "lane 3": {
+                    "Tx power": "",
+                     "Rx power": ""
+                 }
+            }
+         }
+      }
+   }
+```
 
 
 ## 
