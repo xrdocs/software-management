@@ -29,8 +29,8 @@ graph = {}
 graph['nodes'] = []
 graph['edges'] = []
 ```
-A node or an edge is a dictionary that has some mandatory and some optional keys. I decided to organize all the optional parameters in a dictionary under the attributes key.
-The label (name) and id (sequential number) keys are mandatory for both edges and nodes, for edges the source and target keys are also mandatory to define the origin node and the destination node of each edge.
+A node or an edge is a dictionary that has some mandatory and some optional keys. I decided to organize all the optional parameters in a dictionary under the optional "attributes" key.
+The "label" (name) and "id" (sequential number) keys are mandatory for both edges and nodes, for edges the "source" and "target" keys are also mandatory to define the origin and destination node of each edge. Some of the key value pairs in the attribute dictionary are not taken from the "show lldp neighbor" output but from the "show controller interface" output and can vary from platform to platform. This can be customized to include any command output that you may find relevant.
 The following JSON dictionay describes an example of a node and edge.
 
 ```
@@ -52,7 +52,7 @@ node = {
 ```
 edge = {
       "label": "",
-      "source": "1",
+      "source": "",
       "target": "",
       "id": "",
       "attributes": {
