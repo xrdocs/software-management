@@ -19,7 +19,7 @@ This example replies on LLDP to obtain information from the neighbors, LLDP prov
 ## Graph
 Graph visualization is a way of representing structural information as diagrams of abstract graphs and networks. It has a wide range of application including database, bioinformatics software engineering and networking.
 
-Their are multiple formats use to describe graphs: DOT, GXL, GRAPHML and multiple tools to generate and process graph. In my research, I found Gephi to be the most used. Graphviz used the DOT language internally and includes a set of tools that can generate and/or process DOT files, it also can be enhanced using plugins and found out that there is a plugin that allow exporting DOT file in JSON
+Their are multiple formats use to describe graphs: DOT, GXL, GRAPHML and multiple tools to generate and process graph. In my research, I found Graphviz and Gephi to be the most used. Gephi used the [GEXF](https://gephi.org/gexf/format/) ((Graph Exchange XML Format) language internally and includes a set of tools that can generate and/or process [various format](https://gephi.org/users/supported-graph-formats/), it also can be enhanced using plugins and found out that there is a plugin that allow exporting DOT file in JSON
 
 
 
