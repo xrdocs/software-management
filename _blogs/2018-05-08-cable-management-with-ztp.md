@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 date: '2018-05-08 10:47 -0700'
 title: Cable Management with ZTP
 ---
