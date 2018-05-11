@@ -92,7 +92,7 @@ edge = {
       }
    }
 ```
-##Creating the Graph
+##Workflow
 The python script can be downloaded and executed trough the ZTP process. The script will perform the following tasks:
 
 1. Create a configuration file that enable all the relevant interfaces and activate LLDP
@@ -105,8 +105,3 @@ The python script can be downloaded and executed trough the ZTP process. The scr
 
 
 
-
-
-## 
-
-Enter text in [Markdown](http://daringfireball.net/projects/markdown/). Use the toolbar above, or click the **?** button for formatting help.
