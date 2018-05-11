@@ -22,15 +22,20 @@ Graph visualization is a way of representing structural information as diagrams 
 Their are multiple formats use to describe graphs: DOT, GXL, GRAPHML and multiple tools to generate and process graph. In my research, I found [Graphviz](https://www.graphviz.org/) and [Gephi](https://gephi.org/) to be the most used. Gephi used the [GEXF](https://gephi.org/gexf/format/) (Graph Exchange XML Format) language internally and includes a set of tools that can generate and/or process [various format](https://gephi.org/users/supported-graph-formats/), it also can be enhanced using plugins and found out that there is a [JSON export plugin](https://github.com/oxfordinternetinstitute/gephi-plugins/tree/jsonexporter-plugin/modules/JsonExporter).
 
 ### Edges and Nodes
-For network graph, we define a node as a LLDP speaking device and an edge as a connection between 2 nodes.
+For network graph, we define a node as a LLDP speaking device and an edge as an LLDP learned connection between 2 nodes.
 The JSON format exported by Gephi can be interpreted in python as a dictionary of an edges list and a nodes list.
 ```
 graph = {}
 graph['nodes'] = []
 graph['edges'] = []
 ```
-A node or an edge is a dictionary that has some mandatory and some optional keys. I decided to organize all the optional parameters in a dictionary under the optional "attributes" key.
-The "label" (name) and "id" (sequential number) keys are mandatory for both edges and nodes, for edges the "source" and "target" keys are also mandatory to define the origin and destination node of each edge. Some of the key/value pairs in the attribute dictionary are not taken from the "show lldp neighbor" output but from the "show controller interface" output and can vary from platform to platform. This can be customized to include any command output that you may find relevant.
+A node or an edge is represented in Python using a dictionary that has some mandatory and some optional keys. I decided to organize all the optional parameters in a dictionary under the optional "attributes" key.
+The "label" (name) and "id" (sequential number) keys are mandatory for both edges and nodes, for edges the "source" and "target" keys are also mandatory to define the origin and destination node of each edge. Some of the key/value pairs in the attribute dictionary are not taken from the "show lldp neighbor" output but from the "show controller interface" output and can vary from platform to platform.
+
+I included the Digital Optical Monitoring (DOM) parameters collected from the "show controller" command. Not all transceivers supports the DOM feature but if supported, it provides a good overview of the quality of the signal received on all the transceiver lanes. It also alow you to monitor the temperature and Vcc reported by the transceiver.
+
+The "attributes" dictionary can be customized to include any command output you may find relevant.
+
 The following JSON dictionay describes an example of a node and edge.
 
 ```
