@@ -30,7 +30,8 @@ graph['nodes'] = []
 graph['edges'] = []
 ```
 A node or an edge is represented in Python using a dictionary that has some mandatory and some optional keys. I decided to organize all the optional parameters in a dictionary under the optional "attributes" key.
-The "label" (name) and "id" (sequential number) keys are mandatory for both edges and nodes, for edges the "source" and "target" keys are also mandatory to define the origin and destination node of each edge. Some of the key/value pairs in the attribute dictionary are not taken from the "show lldp neighbor" output but from the "show controller interface" output and can vary from platform to platform.
+The "label" (name) and "id" (sequential number) keys are mandatory for both edges and nodes, for edges the "source" and "target" keys are also mandatory to define the origin and destination node of each edge.
+Some of the key/value pairs in the "attribute" dictionary are not taken from the "show lldp neighbor" output but from the "show controller interface" output and can vary from platform to platform.
 
 I included the Digital Optical Monitoring (DOM) parameters collected from the "show controller" command. Not all transceivers supports the DOM feature but if supported, it provides a good overview of the quality of the signal received on all the transceiver lanes. It also alow you to monitor the temperature and Vcc reported by the transceiver.
 
@@ -107,6 +108,77 @@ The python script can be downloaded and executed trough the ZTP process. The scr
 5. Save the graph on the local disk
 6. Export the graph via HTTP POST to a web server
 
+## Exporting the graph
+I wanted to export the JSON graph file directly from the device to an apache web server using HTTP POST, apache support PUT and POST if you allow these metodods in the configuration of the virtual server but you still need a way to process the request. I create a simple PHP handler for this purpose. The PHP script simply copy the file to a specified direactory and use the name provided in the HTTP POST form "file_contents". It return the status of the operation in JSON format for easier processing.
 
+```
+<?php
+$uploaddir = realpath('./datasources') . '/';
+$uploadfile = $uploaddir . basename($_FILES['file_contents']['name']);
+
+	if (move_uploaded_file($_FILES['file_contents']['tmp_name'], $uploadfile)) {
+		$data = array("status"=>"success","output"=>$_FILES);
+        echo json_encode($data);
+	} else {
+		$data = array("status"=>"error","output"=>$_FILES);
+        echo json_encode($data);
+	}
+	//echo 'Here is some more debugging info:';
+	//print_r($_FILES);
+?>
+```
+
+IOS-XR comes standard with urllib, urllib2 and httplib which can be used to perform an HTTP POST request. Unfortunatly neither urllib nor httplib directly support mime type "multipart/form-data", 
+
+```
+def post_multipart(self, host, selector, fields, files):
+  """
+  Post fields and files to an http host as multipart/form-data.
+  @param host: the hostname of the server to connect to.  e.g.: www.myserver.com
+  @param selector: where to go on the host. e.g.: cgi-bin/upload.php or datasources/upload, etc..
+  @param fields: a sequence of (name, value) elements for regular form fields.  For example:
+  [("vals", "16,18,19"), ("foo", "bar")]
+  @param files: a sequence of (name, file) elements for data to be uploaded as files. For example:
+[ ("Erebus", open("/images/me.jpg", "rb")) ]
+  @return: the server's response page.
+  """
+  content_type, body = ztp_script.encode_multipart_formdata(fields, files)
+  h = httplib.HTTPConnection(host)  
+  headers = {
+  'User-Agent': 'python_multipart_caller', 'Content-Type': content_type
+  }
+  h.request('POST', selector, body, headers)
+  res = h.getresponse()
+  return res.read() 
+
+def encode_multipart_formdata(self, fields, files):
+  """
+  @return: (content_type, body) ready for httplib.HTTP instance
+  """
+    
+  BOUNDARY = '----------ThIs_Is_tHe_bouNdaRY_$'
+  CRLF = '\r\n'
+  L = []
+  for (key, value) in fields:
+    L.append('--' + BOUNDARY)
+    L.append('Content-Disposition: form-data; name="%s"' % key)
+    L.append('')
+    L.append(value)
+  for (key, fd) in files:
+    file_size = os.fstat(fd.fileno())[stat.ST_SIZE]
+    filename = fd.name.split('/')[-1]
+    contenttype = 'application/octet-stream'
+    L.append('--%s' % BOUNDARY)
+    L.append('Content-Disposition: form-data; name="%s"; filename="%s"' % (key, filename))
+    L.append('Content-Type: %s' % contenttype)
+    fd.seek(0)
+    L.append('\r\n' + fd.read())
+  L.append('--' + BOUNDARY + '--')
+  L.append('')
+  body = CRLF.join(L)
+  content_type = 'multipart/form-data; boundary=%s' % BOUNDARY
+  return content_type, body
+```
+ 
 
 
