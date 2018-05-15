@@ -6,7 +6,7 @@ title: ZTP Workflow Part 2 The DHCP Server
 ## Introduction
 
 The most common way to provide a valid bootfile name (option 67/59) to a device being provisioned is to use the DHCP options. This document lists the relevant option sent by the client and example of usage to provision the device at the DHCP level.
-The ZTP client of IOS-XR uses the isc-dhclient version 4.3.0 and specific behavior of this client are described in the ISC document https://kb.isc.org/article/AA-00333 
+The ZTP client of IOS-XR uses the isc-dhclient version 4.3.0 and specific behavior of this client are described in the [ISC document](https://kb.isc.org/article/AA-00333 ) 
 The dhcp client send a list of requested option from the server in option 55 (IPv6 option 6) which of course include option 67 (IPv6 option 56) but also include a default gateway, a domain name, a host name and a DNS server(s) list. These options if provided by the server will be used by the client. Version 6.5.1 add IPv4 option 42 on data ports sourced discover.
 
 ### IPv4 example:
