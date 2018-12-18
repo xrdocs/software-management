@@ -36,3 +36,9 @@ feature_row3:
 {% include feature_row id="feature_row3" type="left" %}
 
 {% include feature_row id="feature_row2" type="left" %}
+
+<meta http-equiv="refresh" content="0; 
+url=https://xrdocs.io/device-lifecycle">
+
+<link rel="canonical" 
+href="https://xrdocs.io/device-lifecycle" />
