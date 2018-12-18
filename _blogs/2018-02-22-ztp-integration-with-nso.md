@@ -8,6 +8,15 @@ tags:
   - Orchestration
   - NSO
 ---
+
+
+<meta http-equiv="refresh" content="0; 
+url=https://xrdocs.io/device-lifecycle/blogs/2018-02-22-ztp-integration-with-nso/">
+
+<link rel="canonical" 
+href="https://xrdocs.io/device-lifecycle/blogs/2018-02-22-ztp-integration-with-nso/" />
+
+
 {% include toc icon="table" title="Using ZTP to integrate IOS-XR with NSO" %}
 # Introduction
 Network Services Orchestrator is a Cisco tool that provides end-to-end orchestration that spans multiple domains in your network. Using strict, standardized YANG models for both services and devices and a highly efficient abstraction layer between your network services and the underlying infrastructure, the orchestrator lets you automate Cisco and other vendor's devices.

@@ -8,6 +8,15 @@ tags:
   - iosxr
   - cisco
 ---
+
+
+<meta http-equiv="refresh" content="0; 
+url=https://xrdocs.io/device-lifecycle/tutorials/2016-08-26-working-with-ztp/">
+
+<link rel="canonical" 
+href="https://xrdocs.io/device-lifecycle/tutorials/2016-08-26-working-with-ztp/" />
+
+
 {% include toc icon="table" title="IOS-XR: Working with ZTP" %}
 
 ## Purpose of ZTP

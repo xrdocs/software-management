@@ -9,6 +9,14 @@ tags:
   - cisco
   - iPXE
 ---
+
+<meta http-equiv="refresh" content="0; 
+url=https://xrdocs.io/device-lifecycle/tutorials/2016-07-27-ipxe-deep-dive/">
+
+<link rel="canonical" 
+href="https://xrdocs.io/device-lifecycle/tutorials/2016-07-27-ipxe-deep-dive/" />
+
+
 {% include toc icon="table" title="IOS-XR: iPXE Deep Dive" %}
 
 ## Introduction

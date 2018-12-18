@@ -10,6 +10,12 @@ tags:
   - linux
   - RPM
 ---
+<meta http-equiv="refresh" content="0; 
+url=https://xrdocs.io/device-lifecycle/blogs/2016-10-14-ios-xr-packages-and-security/">
+
+<link rel="canonical" 
+href="https://xrdocs.io/device-lifecycle/blogs/2016-10-14-ios-xr-packages-and-security/" />
+
 
 {% include toc icon="table" title="IOS-XR Packages and Security" %}
 

@@ -10,6 +10,15 @@ tags:
   - rpm
   - yum
 ---
+
+
+<meta http-equiv="refresh" content="0; 
+url=https://xrdocs.io/device-lifecycle/tutorials/2016-08-06-introduction-to-rpm/">
+
+<link rel="canonical" 
+href="https://xrdocs.io/device-lifecycle/tutorials/2016-08-06-introduction-to-rpm/" />
+
+
 {% include toc icon="table" title="IOS-XR and RPM package manager" %}
 
 ## Introduction

@@ -9,6 +9,13 @@ tags:
   - cisco
 ---
 
+
+<meta http-equiv="refresh" content="0; 
+url=https://xrdocs.io/device-lifecycle/blogs/2016-10-24-using-ztp-to-install-chef/">
+
+<link rel="canonical" 
+href="https://xrdocs.io/device-lifecycle/blogs/2016-10-24-using-ztp-to-install-chef/" />
+
 {% include toc icon="table" title="Using ZTP to install chef" %}
 
 ## Introduction

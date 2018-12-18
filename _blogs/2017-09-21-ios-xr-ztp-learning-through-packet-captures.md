@@ -25,6 +25,12 @@ position: top
 ---
 
 
+<meta http-equiv="refresh" content="0; 
+url=https://xrdocs.io/device-lifecycle/blogs/2017-09-21-ios-xr-ztp-learning-through-packet-captures/">
+
+<link rel="canonical" 
+href="https://xrdocs.io/device-lifecycle/blogs/2017-09-21-ios-xr-ztp-learning-through-packet-captures/" />
+
 {% include toc %}
 
 # Introduction

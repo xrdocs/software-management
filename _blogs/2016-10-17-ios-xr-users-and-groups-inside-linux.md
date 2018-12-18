@@ -10,6 +10,15 @@ tags:
 excerpt: How IOS-XR users and groups maps to Linux
 ---
 
+<meta http-equiv="refresh" content="0; 
+url=https://xrdocs.io/device-lifecycle/blogs/2016-10-17-ios-xr-users-and-groups-inside-linux/">
+
+<link rel="canonical" 
+href="https://xrdocs.io/device-lifecycle/blogs/2016-10-17-ios-xr-users-and-groups-inside-linux/" />
+
+
+
+
 {% include toc icon="table" title="IOS-XR: Linux users and groups" %}  
 
 ## XR and Linux Users
