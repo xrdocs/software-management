@@ -1,2 +1,1 @@
-# software-management
-Blog posts, Tutorials and Techdocs on Cisco IOS-XR's software-management and ZTP infrastructure
+This repo is Deprecated. Please use device-lifecycle repo under XRdocs Org.
