@@ -1,0 +1,699 @@
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+
+<meta charset="utf-8">
+
+
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>            Using ZTP to integrate IOS-XR with NSO      IOS XR Software Management and ZTP @xrdocs      </title>
+
+
+
+
+
+
+
+<meta property="og:locale" content="en-US">
+<meta property="og:site_name" content="IOS XR Software Management and ZTP @xrdocs">
+<meta property="og:title" content="Using ZTP to integrate IOS-XR with NSO">
+
+
+  <link rel="canonical" href="https://xrdocs.io/software-management/blogs/2018-02-22-ztp-integration-with-nso/">
+  <meta property="og:url" content="https://xrdocs.io/software-management/blogs/2018-02-22-ztp-integration-with-nso/">
+
+
+
+  <meta property="og:description" content="">
+
+
+
+  <meta name="twitter:site" content="@xrdocs">
+  <meta name="twitter:title" content="Using ZTP to integrate IOS-XR with NSO">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:url" content="https://xrdocs.io/blogs/2018-02-22-ztp-integration-with-nso/">
+
+  
+    <meta name="twitter:card" content="summary">
+    
+      <meta name="twitter:image" content="https://xrdocs.io/software-management/images/packaging-xrdocs.jpg">
+    
+  
+
+  
+    <meta name="twitter:creator" content="@">
+  
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2018-02-23T01:14:00+00:00">
+  
+  
+    <link rel="prev" href="https://xrdocs.io/software-management/blogs/2017-09-21-ios-xr-ztp-learning-through-packet-captures/" title="IOS-XR ZTP: Learning through Packet Captures">
+  
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Organization",
+      "url": "https://xrdocs.io/software-management",
+      "logo": "https://xrdocs.io/software-management/images/packaging-xrdocs.jpg"
+    }
+  </script>
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "person",
+      "name" : "Cisco Systems Inc",
+      "url" : "https://xrdocs.io/software-management",
+      "sameAs" : ["https://twitter.com/CiscoDevNet"]
+    }
+  </script>
+
+
+
+
+
+
+<!-- end SEO -->
+
+<link href="https://xrdocs.io/software-management/feed.xml" type="application/atom+xml" rel="alternate" title="IOS XR Software Management and ZTP @xrdocs Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="jgRKKm6B9FwJJPXxpmc0-EP3D0Mh8JHXaJqoYIGj1ek" />
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<script>
+if (!(window.location.host.startsWith("127.0.0.1") || window.location.host.startsWith("localhost")) && (window.location.host.substr(-3) == '.io') && (window.location.protocol != "https:"))
+    window.location.protocol = "https";
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/software-management/assets/css/main.css">
+<meta http-equiv="cleartype" content="on">
+<style>
+.underline-on-hover:hover {
+    text-decoration: underline;
+}
+.searchForm{
+      border-radius:5px;
+      -moz-border-radius:5px;
+      -webkit-border-radius:5px;
+      width: 900px;
+   }
+#search_results{
+      display: table; margin:0 auto;
+   }
+</style>
+</style>
+
+    
+
+<!-- start custom head snippets -->
+
+<link href="https://xrdocs.io/software-management/assets/css/lity.min.css" rel="stylesheet">
+<link href="https://xrdocs.io/software-management/assets/css/cisco-sans.min.css" rel="stylesheet">
+<link href="https://xrdocs.io/software-management/assets/css/material-scrolltop.css" rel="stylesheet">
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="https://xrdocs.io/software-management/images/apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://xrdocs.io/software-management/images/apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://xrdocs.io/software-management/images/apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://xrdocs.io/software-management/images/apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="60x60" href="https://xrdocs.io/software-management/images/apple-touch-icon-60x60.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://xrdocs.io/software-management/images/apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="76x76" href="https://xrdocs.io/software-management/images/apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="https://xrdocs.io/software-management/images/apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="https://xrdocs.io/software-management/images/favicon-196x196.png" sizes="196x196" />
+<link rel="icon" type="image/png" href="https://xrdocs.io/software-management/images/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/png" href="https://xrdocs.io/software-management/images/favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="https://xrdocs.io/software-management/images/favicon-16x16.png" sizes="16x16" />
+<link rel="icon" type="image/png" href="https://xrdocs.io/software-management/images/favicon-128.png" sizes="128x128" />
+<link rel="shortcut icon" href="https://xrdocs.io/software-management/images/favicon_cisco.ico" />
+<meta name="application-name" content="&nbsp;"/>
+<meta name="msapplication-TileColor" content="#FFFFFF" />
+<meta name="msapplication-TileImage" content="https://xrdocs.io/software-management/images/mstile-144x144.png" />
+<meta name="msapplication-square70x70logo" content="https://xrdocs.io/software-management/images/mstile-70x70.png" />
+<meta name="msapplication-square150x150logo" content="https://xrdocs.io/software-management/images/mstile-150x150.png" />
+<meta name="msapplication-wide310x150logo" content="https://xrdocs.io/software-management/images/mstile-310x150.png" />
+<meta name="msapplication-square310x310logo" content="https://xrdocs.io/software-management/images/mstile-310x310.png" />
+
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu" style="padding-left:2em;">
+      <nav id="site-nav" class="greedy-nav">
+        <button><div class="navicon"></div></button>
+        <ul class="visible-links">
+          <img src="https://xrdocs.io/software-management/images/xrdocs_logo.png" width="45px" height="45px" alt="xrdocs logo" style="float:left;">
+          <li class="masthead__menu-item masthead__menu-item--lg"><a href="https://xrdocs.io">@xrdocs</a></li>
+          <li class="masthead__menu-item"><a href="https://xrdocs.io/software-management/">Software-Management</a></li>
+          
+            
+            
+                
+                    <li class="masthead__menu-item greedy-nav-active"><a href="https://xrdocs.io/software-management/blogs/">Blogs</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="https://xrdocs.io/software-management/tutorials/">Tutorials</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="https://xrdocs.io/software-management/search">Search <i class="fa fa-search" aria-hidden="true"></i></a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="https://xrdocs.io/software-management/tags/">Tags</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="https://xrdocs.io/software-management/collection-archive/">Archive</a></li>
+                
+            
+
+
+          
+        </ul>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    
+
+
+
+<div id="main" role="main">
+  
+
+
+  <div class="sidebar sticky">
+  
+
+
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  <div class="author__avatar">
+    
+    	<img src="https://xrdocs.io/software-management/images/pwariche_bio.jpg" class="author__avatar" alt="Patrick Warichet">
+    
+  </div>
+
+  <div class="author__content">
+    <h3 class="author__name">Patrick Warichet</h3>
+    <p class="author__bio">Technical Marketing Engineer, Cisco.</p>
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+      
+      
+        <li><a href="mailto:pwariche@cisco.com"><i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email</a></li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+  </div>
+  <br><button class="btn"><a href="//pdfcrowd.com/url_to_pdf/" style="color:white">Save as PDF</a></button>
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Using ZTP to integrate IOS-XR with NSO">
+    <meta itemprop="description" content="">
+    <meta itemprop="datePublished" content="February 23, 2018">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Using ZTP to integrate IOS-XR with NSO
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  4 minutes read
+</p>
+          
+        </header>
+      
+
+    
+
+      <section class="page__content" itemprop="text">
+        <meta http-equiv="refresh" content="0; 
+url=https://xrdocs.io/device-lifecycle/blogs/2018-02-22-ztp-integration-with-nso/" />
+
+<link rel="canonical" href="https://xrdocs.io/device-lifecycle/blogs/2018-02-22-ztp-integration-with-nso/" />
+
+<aside class="sidebar__right">
+<nav class="toc">
+    <header><h4 class="nav__title"><i class="fa fa-table"></i> Using ZTP to integrate IOS-XR with NSO</h4></header>
+<ul class="toc__menu" id="markdown-toc">
+  <li><a href="#introduction" id="markdown-toc-introduction">Introduction</a>    <ul>
+      <li><a href="#nso" id="markdown-toc-nso">NSO</a></li>
+      <li><a href="#ios-xr" id="markdown-toc-ios-xr">IOS-XR</a></li>
+      <li><a href="#ztp" id="markdown-toc-ztp">ZTP</a></li>
+      <li><a href="#flow-of-operation" id="markdown-toc-flow-of-operation">Flow of Operation</a></li>
+      <li><a href="#dhcp-configuration" id="markdown-toc-dhcp-configuration">DHCP Configuration</a></li>
+      <li><a href="#ztp-script" id="markdown-toc-ztp-script">ZTP Script</a>        <ul>
+          <li><a href="#device-profile" id="markdown-toc-device-profile">Device Profile</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+  </nav>
+</aside>
+<h1 id="introduction">Introduction</h1>
+<p>Network Services Orchestrator is a Cisco tool that provides end-to-end orchestration that spans multiple domains in your network. Using strict, standardized YANG models for both services and devices and a highly efficient abstraction layer between your network services and the underlying infrastructure, the orchestrator lets you automate Cisco and other vendor’s devices.</p>
+<h2 id="nso">NSO</h2>
+<p>To automate configuration of physical devices, NSO relies on add-ons packages called Network Element Driver (NED)
+NSO provides 2 different ways to interact with IOS-XR:</p>
+
+<ul>
+  <li>The IOS-XR CLI NED for CLI configuration</li>
+  <li>The Netconf NED for Netconf/Yang configuration</li>
+</ul>
+
+<p>The IOS-XR CLI NED must be purchased for your version of NSO. Once acquired, it should be installed inside NSO as a package.
+For the Netconf NED, there are 2 ways to create the package</p>
+
+<ol>
+  <li>
+    <p>Download all the models supported by XR on github: <a href="https://github.com/YangModels/yang/tree/master/vendor/cisco/xr">Yang models for Cisco IOS-XR</a> and use the ncs-make-package command to create the package, once created you can install the package inside NSO.</p>
+  </li>
+  <li>
+    <p>Use the NSO pioneer tool available on github: <a href="https://github.com/NSO-developer/pioneer">Your Swiss army knife for NETCONF, YANG and NSO NEDs</a> to retrieve all the models from a device and create the package.</p>
+  </li>
+</ol>
+
+<p>The advantage of the second method is that you are certain that the device effectively supports all the models but the retrieve operation can take some time.</p>
+
+<p>NSO has a set of REST/RESTCONF northbound API that can be used to provision a devices using simple HTTP GET/PUT/POST request. In short, only three operations are required:</p>
+
+<ul>
+  <li>Creating the device and associate it with the correct NED (Netconf/IOS-XR CLI)</li>
+  <li>Exchange the RSA keys between the device and NSO</li>
+  <li>synchronize the configuration with NSO</li>
+</ul>
+
+<p>The example in this blog uses REST, if you plan to use RESTCONF, small modifications in the URIs are required.</p>
+
+<p>To allow full configuration of device, NSO requires configuring the username and password (encrypted) in an authorization group, devices that belong to a specified authgroup shares the same username and password. In the example below the authgroup ios-xr-default has been created in advance on the NSO server.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>devices authgroups group ios-xr-default
+ default-map remote-name cisco
+ default-map remote-password &lt;encrypted password&gt;
+</code></pre></div></div>
+<h2 id="ios-xr">IOS-XR</h2>
+<p>To allow IOS-XR to communicate with NSO using the CLI NED, it is required to install the K9 (Crypto support) package. If you decide to use the Netconf NED, you will have to also install the MGBL (SNMP/Netconf/telemetry, etc.) in addition to the K9 package.
+A base configuration that enables these features should also be placed onto the device. The example described in this blog use the management interface to communicate with the NSO server, it is imperative to keep the ip address and device name constant after registering the device with NSO.</p>
+<h2 id="ztp">ZTP</h2>
+<p>ZTP has support for both shell and python scripts, IOS-XR comes with an rich environment of shell tools and python libraries. In this example we will use a python based ZTP script and will leverage the python-netclient, python-json and the embedded ztp_helper libraries to provision the device in NSO.
+The python-netclient package provides us access to the urllib, urllib2 and base64 libraries, the python-json package allows us to manipulate json data efficiently.</p>
+<h2 id="flow-of-operation">Flow of Operation</h2>
+<p><img src="/software-management/images/ZTP-NSO.png" alt="ZTP-NSO.png" /></p>
+
+<h2 id="dhcp-configuration">DHCP Configuration</h2>
+<p>For ZTP to operate a valid IPv4/IPv6 address is required and the DHCP server must send a pointer to the configuration script via option 67. Here is an example of configuration</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#
+# DHCP Server Configuration file.
+#
+allow bootp;
+allow booting;
+ddns-update-style interim;
+option time-offset -8;
+ignore client-updates;
+default-lease-time 300;
+log-facility local7;
+authoritative;
+
+subnet 192.168.1.0 netmask 255.255.255.0 {
+  option subnet-mask                  255.255.255.0;
+  option broadcast-address            192.168.1.255;
+  option routers                      192.168.1.1;
+  option domain-name-servers          192.168.1.10;
+  option domain-name                  "cisco.local";
+}
+host ncs-5001-1 {
+  option dhcp-client-identifier    "FOC2018R1QU";
+  fixed-address                    192.168.1.16;
+  if exists user-class and option user-class = "iPXE" {
+    filename = "http://192.168.2.10/ipxe/ncs5k.ipxe";
+  } elsif exists user-class and option user-class = "exr-config" {
+    filename = "http://192.168.2.10/scripts/ncs-5001_nso_ztp.py";
+  }
+}
+</code></pre></div></div>
+<h2 id="ztp-script">ZTP Script</h2>
+<p>The ZTP script will do the following operations:</p>
+
+<ol>
+  <li>Install the K9SEC and MGBL packages.</li>
+  <li>Create a general-purpose key.</li>
+  <li>Apply a basic configuration that allow the netconf agent to communicate with the NSO server.</li>
+  <li>Push the Device profile to NSO</li>
+  <li>Push the RSA key to NSO</li>
+  <li>Synchronize the basic configuration with NSO
+    <h3 id="device-profile">Device Profile</h3>
+    <p>The device profile is described in a JSON template with the name and ip address of the device filled during the ZTP execution, the IOS-XR CLI based template looks like this:</p>
+  </li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>myDevice = {
+    "device": {
+        "name": "XXXX",
+        "address": "XXXX",
+        "port": 22,
+        "state": {
+            "admin-state": "unlocked"
+        },
+        "authgroup": "ios-xr-default",
+        "device-type": {
+            "cli": {
+              "ned-id": "tailf-ned-cisco-ios-xr-id:cisco-ios-xr"
+            }
+        }
+    }
+}
+</code></pre></div></div>
+
+<p>If you plan to use Netconf, the profile template will have to be modified:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>myDevice = {
+    "device": {
+        "name": "XXXX",
+        "address": "XXXX",
+        "port": 22,
+        "state": {
+            "admin-state": "unlocked"
+        },
+        "authgroup": "ios-xr-default",
+        "device-type": {
+            "netconf": {
+              "ned-id": "tailf-ncs-ned:netconf"
+            }
+        }
+    }
+}
+</code></pre></div></div>
+<p>A simple function has been created that can handle all REST operation with NSO</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def nso_rest(self, ressource=None, operation=None, data=None):
+   """
+   """
+   if data is not None:
+      request = urllib2.Request(ressource, data)
+   else:
+      request = urllib2.Request(ressource)
+          
+   request.add_header("Authorization", "Basic %s" % base64.encodestring('%s:%s' % (NSO_USER, NSO_PASSWD)).replace('\n', ''))
+   request.add_header('Content-Type', 'application/vnd.yang.data+json')
+   request.get_method = lambda: operation
+   try:
+      response = urllib2.urlopen(request)
+   except urllib2.HTTPError,error:
+      self.syslogger.info("REST operation error code: " + str(error.code()))
+      self.syslogger.info("REST response: " + error.read())
+   except URLError, error:
+      self.syslogger.info("URL error: " + str(error.code()))
+   else:
+      self.syslogger.info("REST operation status: " + str(response.code))
+      self.syslogger.info("REST return data: "  + response.read())
+   return {"status": response.code, "output" : response.read()}
+</code></pre></div></div>
+
+<p>This function will be called like this</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ztp_script.syslogger.info("###### Pushing Device Profile ######")
+ztp_script.nso_rest(BASE_URI + '/devices/device/' + hostname, 'PUT', json.dumps(myDevice))
+ztp_script.syslogger.info("###### Pushing RSA key ######")
+ztp_script.nso_rest(BASE_URI + '/devices/device/' + hostname + '/ssh/_operations/fetch-host-keys/', 'POST')
+ztp_script.syslogger.info("###### Syncing configuration ######")
+ztp_script.nso_rest(BASE_URI + '/devices/device/' + hostname + '/_operations/sync-from', 'POST')
+</code></pre></div></div>
+
+<p>The complete detail of the ZTP script is available on github <a href="https://github.com/pwariche/ios-xr-ztp-nso.git">integrating IOS-XR with NSO</a></p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="https://xrdocs.io/software-management/tags/#iosxr" class="page__taxonomy-item" rel="tag">iosxr</a><span class="sep">, </span>
+    
+      
+      
+      <a href="https://xrdocs.io/software-management/tags/#nso" class="page__taxonomy-item" rel="tag">NSO</a><span class="sep">, </span>
+    
+      
+      
+      <a href="https://xrdocs.io/software-management/tags/#orchestration" class="page__taxonomy-item" rel="tag">Orchestration</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2018-02-23T01:14:00+00:00">February 23, 2018</time></p>
+        
+      </footer>
+
+      
+
+<section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=https://xrdocs.io/software-management/blogs/2018-02-22-ztp-integration-with-nso/" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https://xrdocs.io/software-management/blogs/2018-02-22-ztp-integration-with-nso/" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=https://xrdocs.io/software-management/blogs/2018-02-22-ztp-integration-with-nso/" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://xrdocs.io/software-management/blogs/2018-02-22-ztp-integration-with-nso/" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+
+    <br>
+    <br>
+    <br>
+</section>
+
+
+    </div>
+
+    
+      
+
+<div class="page__comments">
+  <h4 class="page__comments-title">Leave a Comment</h4>
+  
+    <section id="disqus_thread"></section>
+  
+</div>
+    
+  </article>
+
+  
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+      <li><a href="https://twitter.com/xrdocs"><i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+    
+    
+    
+      <li><a href="http://github.com/xrdocs"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    <li><a href="https://xrdocs.io/software-management/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">This site is maintained by Cisco Systems, Inc. employees. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    <script src="https://xrdocs.io/software-management/assets/js/main.min.js"></script>
+<script src="https://xrdocs.io/software-management/assets/js/scrollmenu.js"></script>
+
+
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-78256516-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+  
+  <script type="text/javascript">
+  	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  	var disqus_shortname = 'xrdocs';
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function() {
+  		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  	})();
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function () {
+  		var s = document.createElement('script'); s.async = true;
+  		s.type = 'text/javascript';
+  		s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  		(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  	}());
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+
+
+<!-- material-scrolltop button -->
+<button class="material-scrolltop" type="button"></button>
+
+<!-- material-scrolltop plugin -->
+<script src="https://xrdocs.io/software-management/assets/js/material-scrolltop.js"></script>
+
+<!-- Initialize material-scrolltop with (minimal) -->
+<script>
+    $('body').materialScrollTop();
+</script>
+
+
+  </body>
+</html>
+

@@ -1,0 +1,813 @@
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+
+<meta charset="utf-8">
+
+
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>            IOS-XR and RPM Package Manager      IOS XR Software Management and ZTP @xrdocs      </title>
+
+
+
+
+
+
+
+<meta property="og:locale" content="en-US">
+<meta property="og:site_name" content="IOS XR Software Management and ZTP @xrdocs">
+<meta property="og:title" content="IOS-XR and RPM Package Manager">
+
+
+  <link rel="canonical" href="https://xrdocs.io/software-management/tutorials/2016-08-06-introduction-to-rpm/">
+  <meta property="og:url" content="https://xrdocs.io/software-management/tutorials/2016-08-06-introduction-to-rpm/">
+
+
+
+  <meta property="og:description" content="Introduction to RPM Package Manager">
+
+
+
+  <meta name="twitter:site" content="@xrdocs">
+  <meta name="twitter:title" content="IOS-XR and RPM Package Manager">
+  <meta name="twitter:description" content="Introduction to RPM Package Manager">
+  <meta name="twitter:url" content="https://xrdocs.io/tutorials/2016-08-06-introduction-to-rpm/">
+
+  
+    <meta name="twitter:card" content="summary">
+    
+      <meta name="twitter:image" content="https://xrdocs.io/software-management/images/packaging-xrdocs.jpg">
+    
+  
+
+  
+    <meta name="twitter:creator" content="@">
+  
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2016-08-07T00:06:00+00:00">
+  
+    <link rel="next" href="https://xrdocs.io/software-management/tutorials/2016-08-26-working-with-ztp/" title="Working with Zero Touch Provisioning">
+  
+  
+    <link rel="prev" href="https://xrdocs.io/software-management/tutorials/2016-07-27-ipxe-deep-dive/" title="iPXE Deep Dive">
+  
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Organization",
+      "url": "https://xrdocs.io/software-management",
+      "logo": "https://xrdocs.io/software-management/images/packaging-xrdocs.jpg"
+    }
+  </script>
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "person",
+      "name" : "Cisco Systems Inc",
+      "url" : "https://xrdocs.io/software-management",
+      "sameAs" : ["https://twitter.com/CiscoDevNet"]
+    }
+  </script>
+
+
+
+
+
+
+<!-- end SEO -->
+
+<link href="https://xrdocs.io/software-management/feed.xml" type="application/atom+xml" rel="alternate" title="IOS XR Software Management and ZTP @xrdocs Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="jgRKKm6B9FwJJPXxpmc0-EP3D0Mh8JHXaJqoYIGj1ek" />
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<script>
+if (!(window.location.host.startsWith("127.0.0.1") || window.location.host.startsWith("localhost")) && (window.location.host.substr(-3) == '.io') && (window.location.protocol != "https:"))
+    window.location.protocol = "https";
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/software-management/assets/css/main.css">
+<meta http-equiv="cleartype" content="on">
+<style>
+.underline-on-hover:hover {
+    text-decoration: underline;
+}
+.searchForm{
+      border-radius:5px;
+      -moz-border-radius:5px;
+      -webkit-border-radius:5px;
+      width: 900px;
+   }
+#search_results{
+      display: table; margin:0 auto;
+   }
+</style>
+</style>
+
+    
+
+<!-- start custom head snippets -->
+
+<link href="https://xrdocs.io/software-management/assets/css/lity.min.css" rel="stylesheet">
+<link href="https://xrdocs.io/software-management/assets/css/cisco-sans.min.css" rel="stylesheet">
+<link href="https://xrdocs.io/software-management/assets/css/material-scrolltop.css" rel="stylesheet">
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="https://xrdocs.io/software-management/images/apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://xrdocs.io/software-management/images/apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://xrdocs.io/software-management/images/apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://xrdocs.io/software-management/images/apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="60x60" href="https://xrdocs.io/software-management/images/apple-touch-icon-60x60.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://xrdocs.io/software-management/images/apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="76x76" href="https://xrdocs.io/software-management/images/apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="https://xrdocs.io/software-management/images/apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="https://xrdocs.io/software-management/images/favicon-196x196.png" sizes="196x196" />
+<link rel="icon" type="image/png" href="https://xrdocs.io/software-management/images/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/png" href="https://xrdocs.io/software-management/images/favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="https://xrdocs.io/software-management/images/favicon-16x16.png" sizes="16x16" />
+<link rel="icon" type="image/png" href="https://xrdocs.io/software-management/images/favicon-128.png" sizes="128x128" />
+<link rel="shortcut icon" href="https://xrdocs.io/software-management/images/favicon_cisco.ico" />
+<meta name="application-name" content="&nbsp;"/>
+<meta name="msapplication-TileColor" content="#FFFFFF" />
+<meta name="msapplication-TileImage" content="https://xrdocs.io/software-management/images/mstile-144x144.png" />
+<meta name="msapplication-square70x70logo" content="https://xrdocs.io/software-management/images/mstile-70x70.png" />
+<meta name="msapplication-square150x150logo" content="https://xrdocs.io/software-management/images/mstile-150x150.png" />
+<meta name="msapplication-wide310x150logo" content="https://xrdocs.io/software-management/images/mstile-310x150.png" />
+<meta name="msapplication-square310x310logo" content="https://xrdocs.io/software-management/images/mstile-310x310.png" />
+
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu" style="padding-left:2em;">
+      <nav id="site-nav" class="greedy-nav">
+        <button><div class="navicon"></div></button>
+        <ul class="visible-links">
+          <img src="https://xrdocs.io/software-management/images/xrdocs_logo.png" width="45px" height="45px" alt="xrdocs logo" style="float:left;">
+          <li class="masthead__menu-item masthead__menu-item--lg"><a href="https://xrdocs.io">@xrdocs</a></li>
+          <li class="masthead__menu-item"><a href="https://xrdocs.io/software-management/">Software-Management</a></li>
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="https://xrdocs.io/software-management/blogs/">Blogs</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item greedy-nav-active"><a href="https://xrdocs.io/software-management/tutorials/">Tutorials</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="https://xrdocs.io/software-management/search">Search <i class="fa fa-search" aria-hidden="true"></i></a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="https://xrdocs.io/software-management/tags/">Tags</a></li>
+                
+            
+
+
+          
+            
+            
+                
+                    <li class="masthead__menu-item"><a href="https://xrdocs.io/software-management/collection-archive/">Archive</a></li>
+                
+            
+
+
+          
+        </ul>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    
+
+
+
+<div id="main" role="main">
+  
+
+
+  <div class="sidebar sticky">
+  
+
+
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  <div class="author__avatar">
+    
+    	<img src="https://xrdocs.io/software-management/images/pwariche_bio.jpg" class="author__avatar" alt="Patrick Warichet">
+    
+  </div>
+
+  <div class="author__content">
+    <h3 class="author__name">Patrick Warichet</h3>
+    <p class="author__bio">Technical Marketing Engineer, Cisco.</p>
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+      
+      
+        <li><a href="mailto:pwariche@cisco.com"><i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> Email</a></li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+  </div>
+  <br><button class="btn"><a href="//pdfcrowd.com/url_to_pdf/" style="color:white">Save as PDF</a></button>
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="IOS-XR and RPM Package Manager">
+    <meta itemprop="description" content="Introduction to RPM Package Manager">
+    <meta itemprop="datePublished" content="August 07, 2016">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">IOS-XR and RPM Package Manager
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  8 minutes read
+</p>
+          
+        </header>
+      
+
+    
+
+      <section class="page__content" itemprop="text">
+        <meta http-equiv="refresh" content="0; 
+url=https://xrdocs.io/device-lifecycle/tutorials/2016-08-06-introduction-to-rpm/" />
+
+<link rel="canonical" href="https://xrdocs.io/device-lifecycle/tutorials/2016-08-06-introduction-to-rpm/" />
+
+<aside class="sidebar__right">
+<nav class="toc">
+    <header><h4 class="nav__title"><i class="fa fa-table"></i> IOS-XR and RPM package manager</h4></header>
+<ul class="toc__menu" id="markdown-toc">
+  <li><a href="#introduction" id="markdown-toc-introduction">Introduction</a></li>
+  <li><a href="#xr-packages-installation" id="markdown-toc-xr-packages-installation">XR Packages Installation</a></li>
+  <li><a href="#xr-package-structure" id="markdown-toc-xr-package-structure">XR Package Structure</a></li>
+  <li><a href="#packages-installation-from-the-shell" id="markdown-toc-packages-installation-from-the-shell">Packages Installation from the Shell</a></li>
+  <li><a href="#analyzing-package-using-linux" id="markdown-toc-analyzing-package-using-linux">Analyzing Package Using Linux</a></li>
+</ul>
+
+  </nav>
+</aside>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>With IOS XR 6.0, the Package Installation Envelope (PIE) format has been discarded in favor of the RPM Package Manager (RPM) format. This move aligns IOS XR 6.0  and above more closely with RPM-based Linux distribution like Red Hat or Centos. RPM is a free software project and is released under GPL. Briefly, RPMs contain the following elements:</p>
+
+<ol>
+  <li>CPIO archive: Contains the absolute path of all the package’s files;</li>
+  <li>Metadata: Contains the package dependencies;</li>
+  <li>Scriptlets: Scripts that perform pre and post (un)installation tasks;</li>
+</ol>
+
+<p>The Metadata is a XML file that helps determine and resolve package dependencies, to facilitate dependencies resolution the metadata is used to poulate a small database located in /var/lib/rpm that can be queried using tools like YUM or RPM.
+A Software Maintenance Update (SMU) will be published in the form of tape archive (tar) format. The SMU will contain the following files:</p>
+
+<ol>
+  <li>A Readme.txt file describing the content of the SMU;</li>
+  <li>One or more RPMs;</li>
+  <li>A Package-mdata.txt that contains a MD5 checksum of all the packages in the tar file;</li>
+</ol>
+
+<p><img src="/software-management/images/RPM.png" alt="Anatomy of RPM" /></p>
+
+<h2 id="xr-packages-installation">XR Packages Installation</h2>
+<p>Within IOS-XR, two new CLI commands have been introduced that complement the existing ones: “install update” and “install upgrade”, described Table 1. These new commands require an external packages repository accessible through FTP/SFTP/SCP/TFTP or HTTP.</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Command</td>
+      <td>Description</td>
+    </tr>
+    <tr>
+      <td>install update source <repository></repository></td>
+      <td>When no package is specified, update latest SMUs of all installed packages.</td>
+    </tr>
+    <tr>
+      <td>install upgrade source <repository> version <ver_num></ver_num></repository></td>
+      <td>Upgrade the base image to the specified version. All installed packages are upgraded to same release as the base package.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RP/0/RP0/CPU0:pwa-rtr#install update source ?
+   WORD  Enter source directory for the package(s)   
+         Example: 
+          sftp://user@server/directory/
+          scp://user@server/directory/
+          ftp://user@server/directory/
+          tftp://server/directory/
+          http://server/directory/
+</code></pre></div></div>
+<p>In the example below the k9sec package is installed using the “install update” command. After initiating the command, you can issue a “show install request” to monitor the status of the package installation.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RP/0/RP0/CPU0:pwa-rtr#install update source http://192.168.122.1:8080/xrv9k xrv9k-k9sec
+Sat Feb 13 17:18:59.981 UTC
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Update in progress...
+Scheme : http
+Hostname : 192.168.122.1:8080
+Collecting software state..
+Update packages :
+    xrv9k-k9sec
+Fetching .... xrv9k-k9sec-1.0.0.0-r600.x86_64.rpm-6.0.0
+Adding packages
+    xrv9k-k9sec-1.0.0.0-r600.x86_64.rpm-6.0.0
+Feb 13 17:19:08 Install operation 22 started by root:
+install add source /misc/disk1/install_tmp_staging_area/6.0.0 xrv9k-k9sec-1.0.0.0-r600.x86_64.rpm-6.0.0
+Feb 13 17:19:09 Install operation will continue in the background
+
+Feb 13 17:19:12 Install operation 20 finished successfully
+Install add operation successful
+Activating xrv9k-k9sec-1.0.0.0-r600
+Feb 13 17:19:14 Install operation 23 started by root:
+  install activate pkg xrv9k-k9sec-1.0.0.0-r600
+Feb 13 17:19:14 Package list:
+Feb 13 17:19:14     xrv9k-k9sec-1.0.0.0-r600
+Feb 13 17:19:16 Install operation will continue in the background
+ 
+RP/0/RP0/CPU0:pwa-rtr#
+ 
+ 
+This product contains cryptographic features and is subject to United
+States and local country laws governing import, export, transfer and
+use. Delivery of Cisco cryptographic products does not imply third-party
+authority to import, export, distribute or use encryption. Importers,
+exporters, distributors and users are responsible for compliance with
+U.S. and local country laws. By using this product you agree to comply
+with applicable laws and regulations. If you are unable to comply with
+U.S. and local laws, return this product immediately.
+
+A summary of U.S. laws governing Cisco cryptographic products may be
+found at:
+http://www.cisco.com/wwl/export/crypto/tool/stqrg.html
+
+If you require further assistance please contact us by sending email to
+export@cisco.com.
+
+Feb 13 17:20:12 Install operation 21 finished successfully
+</code></pre></div></div>
+
+<p>All the install commands log their progress. You can enter “show install log” to review the installation log file. This command is useful for identifying the reason for any failure.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RP/0/RP0/CPU0:pwa-rtr#show install log 21
+Tue Feb 23 17:54:00.961 UTC
+Feb 23 17:51:14 Install operation 21 started by root:
+      install activate pkg xrv9k-k9sec-1.0.0.0-r600
+Feb 23 17:51:14 Package list:
+Feb 23 17:51:14     xrv9k-k9sec-1.0.0.0-r600
+Feb 23 17:51:15 Action 1: install prepare action started
+Feb 23 17:51:17 Install operation will continue in the background
+Feb 23 17:51:17 The prepared software is set to be activated with process restart
+Feb 23 17:51:18 Start preparing software for local installation
+Feb 23 17:51:19 Action 1: install prepare action finished successfully
+Feb 23 17:51:20 Action 2: install activate action started
+Feb 23 17:51:20 The software will be activated with process restart
+Feb 23 17:51:22 Activating XR packages
+Feb 23 17:51:58 0 processes affected at node 0/RP0/CPU0
+Feb 23 17:52:10 Action 2: install activate action finished successfully
+Feb 23 17:52:11 Install operation 21 finished successfully
+Feb 23 17:52:11 Ending operation 21
+Install add operation successful
+</code></pre></div></div>
+
+<h2 id="xr-package-structure">XR Package Structure</h2>
+<p>When you enter the Shell of the control plane (accessed by typing “bash” or “run” from the CLI) you are in a full Bash shell environment of the XR container with all the traditional Linux tools at your fingertips. (You can return to the IOS XR CLI by typing “exit”).
+Since all IOS XR packages used the RPM format, we will use the Linux rpm utility to inspect their content. The “-q” switch used below is used to query the installed packages database and the “-i” switch display the general information contained in the metadata of the RPM package.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RP/0/RP0/CPU0:pwa-rtr#run
+Wed Dec  2 03:04:32.231 UTC
+ [xr-vm_node0_RP0_CPU0:~]$rpm -qi xrv9k-k9sec
+Name        : xrv9k-k9sec        Relocations: /opt/cisco/XR/packages/xrv9k-k9sec-1.0.0.0-r600
+Version     : 1.0.0.0                           Vendor: (none)
+Release     : r600                          Build Date: Thu Dec 24 08:46:14 2015
+Install Date: Fri Mar  4 12:18:15 2016      Build Host: iox-lnx-009
+Group       : IOS-XR                        Source RPM: xrv9k-k9sec-1.0.0.0-r600.src.rpm
+Size        : 8616918                License: Copyright (c) 2015 Cisco Systems Inc. All rights reserved.
+Signature   : (none)
+Packager    : alnguyen
+Summary     : Bundle package for iosxr-security
+Architecture: x86_64
+Description :
+Bundle package for iosxr-security
+Build workspace: /auto/srcarchive16/production/6.0.0/xrv9k/workspace
+</code></pre></div></div>
+
+<p>We can also use RPM utilities to query the requirement of the package (“-R” switch), this information is also in the RPM metadata and is crucial for dependency checking. In the example below, the k9sec package depends on three packages, each of them within a certain version range.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[xr-vm_node0_RP0_CPU0:~]$rpm -qR xrv9k-k9sec
+/bin/sh
+/bin/sh
+/bin/sh
+/bin/sh
+xrv9k-iosxr-fwding &gt;= 1.0.0.0
+xrv9k-iosxr-fwding &lt; 2.0.0.0
+xrv9k-iosxr-infra &gt;= 1.0.0.0
+xrv9k-iosxr-infra &lt; 2.0.0.0
+xrv9k-iosxr-os &gt;= 1.0.0.0
+xrv9k-iosxr-os &lt; 2.0.0.0
+</code></pre></div></div>
+
+<p>All the Cisco packages are in a separate group named IOS-XR. With the “—queryformat” switch we specify the type of field we want to display and how we want to display them. The following command will query all the installed packages and display their groups and names we use the utility grep to filter the output and only display the package belonging to the IOS XR group. Enter the following command to query all the packages from that group:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[xr-vm_node0_RP0_CPU0:~]$rpm -qa --queryformat '%{group}   %{name}\n' | grep IOS-XR
+IOS-XR   xrv9k-spirit-boot
+IOS-XR   xrv9k-iosxr-routing
+IOS-XR   xrv9k-iosxr-fwding
+IOS-XR   xrv9k-iosxr-infra
+IOS-XR   xrv9k-base
+IOS-XR   xrv9k-bgp
+IOS-XR   xrv9k-common-pd-fib 
+IOS-XR   xrv9k-fwding
+IOS-XR   xrv9k-gcp-fwding
+IOS-XR   xrv9k-gdplane
+IOS-XR   xrv9k-iosxr-os
+IOS-XR   xrv9k-os-support
+IOS-XR   xrv9k-k9sec
+IOS-XR   xrv9k-mgbl
+</code></pre></div></div>
+
+<p>With the Help of standard Linux tools we can review the full history of installed IOS-XR packages:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[xr-vm_node0_RP0_CPU0:~]$rpm -qa --queryformat '%{installtime} %{group} %{name}-%{version}-%{release} %{installtime:date}\n' | grep IOS-XR | sort -nr | sed -e 's/^[0-9]*\ IOS-XR\ //'
+xrv9k-mgbl-2.0.0.0-r600 Fri Mar  4 12:33:59 2016
+xrv9k-k9sec-1.0.0.0-r600 Fri Mar  4 12:18:15 2016
+xrv9k-os-support-1.0.0.0-r600 Fri Jan 29 02:04:37 2016
+xrv9k-iosxr-os-1.0.0.0-r600 Fri Jan 29 02:04:35 2016
+xrv9k-gdplane-1.0.0.0-r600 Fri Jan 29 02:04:33 2016
+xrv9k-gcp-fwding-1.0.0.0-r600 Fri Jan 29 02:04:33 2016
+xrv9k-fwding-1.0.0.0-r600 Fri Jan 29 02:04:32 2016
+xrv9k-common-pd-fib-1.0.0.0-r600 Fri Jan 29 02:04:32 2016
+xrv9k-bgp-1.0.0.0-r600 Fri Jan 29 02:04:31 2016
+xrv9k-base-1.0.0.0-r600 Fri Jan 29 02:04:31 2016
+xrv9k-iosxr-infra-1.0.0.0-r600 Fri Jan 29 02:04:27 2016
+xrv9k-iosxr-fwding-2.0.0.0-r600 Fri Jan 29 02:04:25 2016
+xrv9k-spirit-boot-1.0.0.0-r600 Fri Jan 29 02:04:24 2016
+xrv9k-iosxr-routing-1.0.0.0-r600 Fri Jan 29 02:04:24 2016
+</code></pre></div></div>
+
+<p>With the “—requires” switch we can query the RPM database and display the version of installed packages that are fulfilling the dependency of another package. Using the following command we learn which packages requires xrv9k-iosxr-routing to be present in the system:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[xr-vm_node0_RP0_CPU0:~]$rpm -q --whatrequires xrv9k-iosxr-routing
+xrv9k-iosxr-fwding-2.0.0.0-r600.x86_64
+xrv9k-bgp-1.0.0.0-r600.x86_64
+xrv9k-mgbl-2.0.0.0-r600.x86_64
+</code></pre></div></div>
+
+<p>With following command we get the version of the package that provides the xrv9k-iosxr-routing functionality:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[xr-vm_node0_RP0_CPU0:~]$rpm -q --whatprovides xrv9k-iosxr-routing
+  xrv9k-iosxr-routing-1.0.0.0-r600.x86_64
+</code></pre></div></div>
+
+<h2 id="packages-installation-from-the-shell">Packages Installation from the Shell</h2>
+
+<p>You can use the install commands inside the Linux shell of the IOS-XR container to install packages using a shell script.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[xr-vm_node0_RP0_CPU0:~]$#install update source http://192.168.122.1:8080/xrv9k xrv9k-eigrp
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Update in progress...
+Scheme : http
+Hostname : 192.168.122.1:8080
+Collecting software state..
+
+Update packages :
+	xrv9k-eigrp
+Fetching .... xrv9k-eigrp-1.0.0.0-r600.x86_64.rpm-6.0.0
+Adding packages 
+	xrv9k-eigrp-1.0.0.0-r600.x86_64.rpm-6.0.0
+Mar 10 22:40:38 Install operation 24 started by root:
+ install add source /misc/disk1/install_tmp_staging_area/6.0.0 xrv9k-eigrp-1.0.0.0-r600.x86_64.rpm-6.0.0 
+Mar 10 22:40:40 Install operation will continue in the background
+Mar 10 22:40:43 Install operation 24 finished successfully
+
+Install add operation successful
+Activating xrv9k-eigrp-1.0.0.0-r600
+Mar 10 22:40:45 Install operation 30 started by root:
+  install activate pkg xrv9k-eigrp-1.0.0.0-r600 
+Mar 10 22:40:45 Package list:
+Mar 10 22:40:45     xrv9k-eigrp-1.0.0.0-r600
+Mar 10 22:40:48 Install operation will continue in the background
+Mar 10 22:40:43 Install operation 24 finished successfully
+Install add operation successful
+Activating xrv9k-eigrp-1.0.0.0-r600
+Mar 10 22:40:45 Install operation 25 started by root:
+  install activate pkg xrv9k-eigrp-1.0.0.0-r600 
+Mar 10 22:40:45 Package list:
+Mar 10 22:40:45     xrv9k-eigrp-1.0.0.0-r600
+Mar 10 22:40:48 Install operation will continue in the background
+Mar 10 22:41:49 Install operation 25 finished successfully
+</code></pre></div></div>
+
+<h2 id="analyzing-package-using-linux">Analyzing Package Using Linux</h2>
+
+<p>Any Linux distribution installed with the RPM utilities allows you to look at the content of packages, this is very useful to analyze dependencies and verify package integrity outside of the router. In this example we use the “-l” switch to display the full path of all the files inside the package.
+NOTE: Notice the extra -p switch used to query uninstalled packages.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cisco@compute:~<span class="nv">$ </span><span class="nb">cd</span> ~/web_server/xrv9k/
+cisco@compute:~/web_server/xrv9k<span class="nv">$ </span>rpm <span class="nt">-qpl</span> xrv9k-k9sec-1.0.0.0-r600.x86_64.rpm-6.0.0
+/
+/opt
+/opt/cisco
+/opt/cisco/XR
+/opt/cisco/XR/packages
+/opt/cisco/XR/packages/xrv9k-k9sec-1.0.0.0-r600
+/opt/cisco/XR/packages/xrv9k-k9sec-1.0.0.0-r600/all
+/opt/cisco/XR/packages/xrv9k-k9sec-1.0.0.0-r600/all/etc
+/opt/cisco/XR/packages/xrv9k-k9sec-1.0.0.0-r600/all/etc/compat-mdata
+&lt;SNIP&gt;
+cisco@compute:~/web_server/xrv9k<span class="nv">$ </span>rpm <span class="nt">-qpR</span> xrv9k-k9sec-1.0.0.0-r600.x86_64.rpm-6.0.0
+/bin/sh
+/bin/sh
+/bin/sh
+/bin/sh
+xrv9k-iosxr-fwding <span class="o">&gt;=</span> 2.0.0.0
+xrv9k-iosxr-fwding &lt; 3.0.0.0
+xrv9k-iosxr-infra <span class="o">&gt;=</span> 1.0.0.0
+xrv9k-iosxr-infra &lt; 2.0.0.0
+xrv9k-iosxr-os <span class="o">&gt;=</span> 1.0.0.0
+xrv9k-iosxr-os &lt; 2.0.0.0
+</code></pre></div></div>
+
+<hr />
+<p>NOTE: Run these RPM utilities off-box on any Linux system that has the RPM utility installed. Experiment with some of the RPM commands to create your own dependency management tool for XR packages.
+—</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="https://xrdocs.io/software-management/tags/#iosxr" class="page__taxonomy-item" rel="tag">iosxr</a><span class="sep">, </span>
+    
+      
+      
+      <a href="https://xrdocs.io/software-management/tags/#linux" class="page__taxonomy-item" rel="tag">linux</a><span class="sep">, </span>
+    
+      
+      
+      <a href="https://xrdocs.io/software-management/tags/#rpm" class="page__taxonomy-item" rel="tag">rpm</a><span class="sep">, </span>
+    
+      
+      
+      <a href="https://xrdocs.io/software-management/tags/#yum" class="page__taxonomy-item" rel="tag">yum</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2016-08-07T00:06:00+00:00">August 07, 2016</time></p>
+        
+      </footer>
+
+      
+
+<section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=https://xrdocs.io/software-management/tutorials/2016-08-06-introduction-to-rpm/" class="btn btn--twitter" title="Share on Twitter"><i class="fa fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https://xrdocs.io/software-management/tutorials/2016-08-06-introduction-to-rpm/" class="btn btn--facebook" title="Share on Facebook"><i class="fa fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url=https://xrdocs.io/software-management/tutorials/2016-08-06-introduction-to-rpm/" class="btn btn--google-plus" title="Share on Google Plus"><i class="fa fa-fw fa-google-plus" aria-hidden="true"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://xrdocs.io/software-management/tutorials/2016-08-06-introduction-to-rpm/" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fa fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+
+    <br>
+    <br>
+    <br>
+</section>
+
+
+    </div>
+
+    
+      
+
+<div class="page__comments">
+  <h4 class="page__comments-title">Leave a Comment</h4>
+  
+    <section id="disqus_thread"></section>
+  
+</div>
+    
+  </article>
+
+  
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+      <li><a href="https://twitter.com/xrdocs"><i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter</a></li>
+    
+    
+    
+      <li><a href="http://github.com/xrdocs"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    <li><a href="https://xrdocs.io/software-management/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">This site is maintained by Cisco Systems, Inc. employees. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    <script src="https://xrdocs.io/software-management/assets/js/main.min.js"></script>
+<script src="https://xrdocs.io/software-management/assets/js/scrollmenu.js"></script>
+
+
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-78256516-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+  
+  <script type="text/javascript">
+  	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  	var disqus_shortname = 'xrdocs';
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function() {
+  		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  		dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  	})();
+
+  	/* * * DON'T EDIT BELOW THIS LINE * * */
+  	(function () {
+  		var s = document.createElement('script'); s.async = true;
+  		s.type = 'text/javascript';
+  		s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  		(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+  	}());
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+
+
+<!-- material-scrolltop button -->
+<button class="material-scrolltop" type="button"></button>
+
+<!-- material-scrolltop plugin -->
+<script src="https://xrdocs.io/software-management/assets/js/material-scrolltop.js"></script>
+
+<!-- Initialize material-scrolltop with (minimal) -->
+<script>
+    $('body').materialScrollTop();
+</script>
+
+
+  </body>
+</html>
+
